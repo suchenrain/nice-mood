@@ -5,6 +5,7 @@
  * 
  */
 
+// eslint-disable-next-line import/no-commonjs
 const fs = require('fs');
 
 const dirName = process.argv[2];

@@ -4,14 +4,16 @@
  *  npm run tem '文件名‘
  */
 
+// eslint-disable-next-line import/no-commonjs
 const fs = require('fs')
+
 const dirName = process.argv[2]
 const capPirName = dirName.substring(0, 1).toUpperCase() + dirName.substring(1);
 
 if (!dirName) {
-  console.log('文件名不能为空');
-  console.log('用法：npm run page test');
-  process.exit(0);
+    console.log('文件名不能为空');
+    console.log('用法：npm run page test');
+    process.exit(0);
 }
 
 // 页面模板构建
