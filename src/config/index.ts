@@ -1,12 +1,12 @@
 /**
  * 真机线上接口
  */
-export const ONLINEHOST = '';
+export const ONLINEHOST = 'https://www.easy-mock.com/mock/5d38269ffb233553ab0d10ad';
 
 /**
  * mock 接口
  */
-export const MOCKHOST = 'http://localhost:3000';
+export const MOCKHOST = 'https://www.easy-mock.com/mock/5d38269ffb233553ab0d10ad';
 
 /**
  * 是否启用mock

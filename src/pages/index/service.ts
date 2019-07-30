@@ -1,5 +1,3 @@
+import Api from '../../utils/httpRequest';
 
-    import Api from '../../utils/request'
-    export const testApi = data => Api.test(
-        data
-    )
+export const getList = data => Api.getList(data);

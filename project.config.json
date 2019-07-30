@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "taro-ts-dva",
   "description": "taro scaffold",
-  "appid": "touristappid",
+  "appid": "wxb90d263ae339723c",
   "setting": {
     "urlCheck": true,
     "es6": false,
