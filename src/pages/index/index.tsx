@@ -1,11 +1,11 @@
 import Taro, { Component, Config } from '@tarojs/taro';
 import { View } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
-// import Api from '../../utils/httpRequest'
-// import Tips from '../../utils/tips'
+// import Api from '@/utils/httpRequest'
+// import Tips from '@/utils/tips'
 import { IndexProps, IndexState } from './index.interface';
 import './index.scss';
-// import {  } from '../../components'
+// import {  } from '@/components'
 @connect(({ index }) => ({
   ...index
 }))

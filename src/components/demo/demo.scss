@@ -1,0 +1,6 @@
+@import "@/assets/scss/variables";
+.#{$prefix} {
+  &-demo-wrap {
+    width: 100%;
+  }
+}

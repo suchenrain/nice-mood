@@ -16,46 +16,52 @@ if (!dirName) {
     process.exit(0);
 }
 
+const propInterface = `I${capPirName}Props`;
+const stateInterface = `I${capPirName}State`;
+
 // 页面模板构建
 
 const indexTep = `
-    import Taro, { Component, Config } from '@tarojs/taro'
-    import { View } from '@tarojs/components'
-    // import { connect } from '@tarojs/redux'
-    // import Api from '../../utils/httpRequest'
-    // import Tips from '../../utils/tips'
-    import { ${capPirName}Props, ${capPirName}State } from './${dirName}.interface'
-    import './${dirName}.scss'
-    // import {  } from '../../components'
-    // @connect(({ ${dirName} }) => ({
-    //     ...${dirName},
-    // }))
-    class ${capPirName} extends Component<${capPirName}Props,${capPirName}State > {
-    config:Config = {
-        navigationBarTitleText: '页面标题'
-    }
-    constructor(props: ${capPirName}Props) {
-        super(props)
-        this.state = {}
-    }
-    componentDidMount() {
-        
-    }
-    render() {
-        return (
-        <View className='fx-${dirName}-wrap'>
-            页面内容
-        </View>
-        )
-    }
-    }
-    export default ${capPirName}
+import Taro, { Component, Config } from '@tarojs/taro'
+import { View } from '@tarojs/components'
+// import { connect } from '@tarojs/redux'
+
+// import Api from '@/utils/httpRequest'
+// import Tips from '@/utils/tips'
+// import {  } from '@/components'
+import { ${propInterface}, ${stateInterface} } from './${dirName}.interface'
+
+import './${dirName}.scss'
+
+// @connect(({ ${dirName} }) => ({
+//     ...${dirName},
+// }))
+class ${capPirName} extends Component<${propInterface},${stateInterface} > {
+config:Config = {
+    navigationBarTitleText: '页面标题'
+}
+constructor(props: ${propInterface}) {
+    super(props)
+    this.state = {}
+}
+componentDidMount() {
+    
+}
+render() {
+    return (
+    <View className='fx-${dirName}-wrap'>
+        页面内容
+    </View>
+    )
+}
+}
+export default ${capPirName}
 `
 
 // scss 文件模板
 
 const scssTep = `
-    @import "../../assets/scss/variables";
+    @import "@/assets/scss/variables";
     .#{$prefix} {
         &-${dirName}-wrap {
             width: 100%;
@@ -75,7 +81,7 @@ const configTep = `
 // 接口请求模板
 
 const serviceTep = `
-    import Api from '../../utils/httpRequest'
+    import Api from '@/utils/httpRequest'
     export const testApi = data => Api.test(
         data
     )
@@ -103,16 +109,16 @@ const interfaceTep = `
  * ${dirName}.state 参数类型
  *
  * @export
- * @interface ${capPirName}State
+ * @interface ${stateInterface}
  */
-export interface ${capPirName}State {}
+export interface ${stateInterface} {}
 /**
  * ${dirName}.props 参数类型
  *
  * @export
- * @interface ${capPirName}Props
+ * @interface ${propInterface}
  */
-export interface ${capPirName}Props {}
+export interface ${propInterface} {}
 `
 
 fs.mkdirSync(`./src/pages/${dirName}`); // mkdir $1

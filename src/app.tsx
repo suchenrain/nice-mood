@@ -1,12 +1,13 @@
-import Taro, { Component, Config } from '@tarojs/taro';
 import '@tarojs/async-await';
+import Taro, { Component, Config } from '@tarojs/taro';
 import { Provider } from '@tarojs/redux';
+
+import models from '@/models';
 import Index from './pages/index';
-import dva from './utils/dva';
-import models from './models';
+import dva from '@/utils/dva';
+import { globalData } from '@/utils/common';
 
 import './app.scss';
-import { globalData } from './utils/common';
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：

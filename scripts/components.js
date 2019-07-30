@@ -1,7 +1,7 @@
 /**
  * pages页面快速生成脚本 
  * 
- * 用法：npm run com `文件名`
+ * 用法：npm run comp `文件名`
  * 
  */
 
@@ -15,21 +15,24 @@ if (!dirName) {
   console.log('示例：npm run comp test');
   process.exit(0);
 }
-
+const propInterface = `I${capPirName}Props`;
+const stateInterface = `I${capPirName}State`;
 //页面模板
 const indexTep = `import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { ${capPirName}Props, ${capPirName}State } from './${dirName}.interface'
+
+import { ${propInterface}, ${stateInterface} } from './${dirName}.interface'
 import './${dirName}.scss'
-class ${capPirName} extends Component<${capPirName}Props,${capPirName}State > {
-  constructor(props: ${capPirName}Props) {
+
+class ${capPirName} extends Component<${propInterface},${stateInterface} > {
+  constructor(props: ${propInterface}) {
     super(props)
     this.state = {}
   }
   static options = {
     addGlobalClass: true
   }
-  static defaultProps:${capPirName}Props = {}
+  static defaultProps:${propInterface} = {}
   render() {
     return (
       <View className='fx-${dirName}-wrap'>
@@ -41,7 +44,7 @@ export default ${capPirName}
 `
 
 // scss文件模版
-const scssTep = `@import "../../assets/scss/variables";
+const scssTep = `@import "@/assets/scss/variables";
 .#{$prefix} {
   &-${dirName}-wrap {
     width: 100%;
@@ -53,16 +56,16 @@ const interfaceTep = `/**
  * ${dirName}.state 参数类型
  *
  * @export
- * @interface ${capPirName}State
+ * @interface ${stateInterface}
  */
-export interface ${capPirName}State {}
+export interface ${stateInterface} {}
 /**
  * ${dirName}.props 参数类型
  *
  * @export
- * @interface ${capPirName}Props
+ * @interface ${propInterface}
  */
-export interface ${capPirName}Props {}
+export interface ${propInterface} {}
 `
 
 fs.mkdirSync(`./src/components/${dirName}`); // mkdir $1

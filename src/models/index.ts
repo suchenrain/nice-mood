@@ -1,3 +1,3 @@
-import index from '../pages/index/model';
+import index from '@/pages/index/model';
 
 export default [index];

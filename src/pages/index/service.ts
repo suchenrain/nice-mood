@@ -1,3 +1,5 @@
-import Api from '../../utils/httpRequest';
+import Api from '@/utils/httpRequest';
 
-export const getList = data => Api.getList(data);
+export const getList = data => {
+  return Api.getList(data);
+};

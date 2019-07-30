@@ -1,6 +1,7 @@
-import { commonParame, httpRequestConfig } from '../config/httpRequestConfig';
-import { MAINHOST, ISMOCK } from '../config';
 import Taro, { Component } from '@tarojs/taro';
+
+import { commonParame, httpRequestConfig } from '@/config/httpRequestConfig';
+import { MAINHOST, ISMOCK } from '@/config/index';
 import Tips from './tips';
 
 declare type Methods =

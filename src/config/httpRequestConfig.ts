@@ -1,4 +1,4 @@
-import index from '../pages/index/config'; // index的接口
+import index from '@/pages/index/config'; // index的接口
 /**
  * 请求公共参数
  */
