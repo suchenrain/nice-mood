@@ -1,3 +1,3 @@
 export default {
-  getList: '/getlist' //getlist接口
+  getList: '/news' //getlist接口
 };
