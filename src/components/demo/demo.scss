@@ -1,4 +1,6 @@
-@import "@/assets/scss/variables";
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
 .#{$prefix} {
   &-demo-wrap {
     width: 100%;

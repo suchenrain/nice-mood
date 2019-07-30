@@ -89,7 +89,7 @@ export class Request {
         url: `${MAINHOST}${httpRequestConfig.loginUrl}`,
         data: { code: code }
       });
-      if (data.code !== 0 || !data.data || data.data.token) {
+      if (data.code !== 0 || !data.data || !data.data.token) {
         reject();
         return;
       }

@@ -61,13 +61,15 @@ export default ${capPirName}
 // scss 文件模板
 
 const scssTep = `
-    @import "@/assets/scss/variables";
-    .#{$prefix} {
-        &-${dirName}-wrap {
-            width: 100%;
-            min-height: 100Vh;
-        }
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+.#{$prefix} {
+    &-${dirName}-wrap {
+        width: 100%;
+        min-height: 100Vh;
     }
+}
 `
 
 // config 接口地址配置模板

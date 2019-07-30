@@ -44,7 +44,9 @@ export default ${capPirName}
 `
 
 // scss文件模版
-const scssTep = `@import "@/assets/scss/variables";
+const scssTep = `@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
 .#{$prefix} {
   &-${dirName}-wrap {
     width: 100%;
