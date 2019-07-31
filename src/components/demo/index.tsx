@@ -1,8 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
-import { IDemoProps, IDemoState } from './demo.interface'
-import './demo.scss'
+import { IDemoProps, IDemoState } from './index.interface'
+import './index.scss'
 
 class Demo extends Component<IDemoProps,IDemoState > {
   constructor(props: IDemoProps) {

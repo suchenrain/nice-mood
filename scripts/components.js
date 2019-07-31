@@ -8,23 +8,35 @@
 // eslint-disable-next-line import/no-commonjs
 const fs = require('fs');
 
+function toCamel(s) {
+  return s.replace(/([-_][a-z])/ig, function ($1) {
+    return $1.toUpperCase()
+      .replace('-', '')
+      .replace('_', '');
+  });
+};
+
 const dirName = process.argv[2];
 const capPirName = dirName.substring(0, 1).toUpperCase() + dirName.substring(1);
+const camelName = toCamel(capPirName);
+
 if (!dirName) {
   console.log('文件夹名称不能为空！');
   console.log('示例：npm run comp test');
   process.exit(0);
 }
-const propInterface = `I${capPirName}Props`;
-const stateInterface = `I${capPirName}State`;
+const propInterface = `I${camelName}Props`;
+const stateInterface = `I${camelName}State`;
+// for the convenience of import
+const fileName = `index`;
 //页面模板
 const indexTep = `import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
-import { ${propInterface}, ${stateInterface} } from './${dirName}.interface'
-import './${dirName}.scss'
+import { ${propInterface}, ${stateInterface} } from './${fileName}.interface'
+import './${fileName}.scss'
 
-class ${capPirName} extends Component<${propInterface},${stateInterface} > {
+class ${camelName} extends Component<${propInterface},${stateInterface} > {
   constructor(props: ${propInterface}) {
     super(props)
     this.state = {}
@@ -40,7 +52,7 @@ class ${capPirName} extends Component<${propInterface},${stateInterface} > {
     )
   }
 }
-export default ${capPirName}
+export default ${camelName}
 `
 
 // scss文件模版
@@ -73,6 +85,6 @@ export interface ${propInterface} {}
 fs.mkdirSync(`./src/components/${dirName}`); // mkdir $1
 process.chdir(`./src/components/${dirName}`); // cd $1
 
-fs.writeFileSync(`${dirName}.tsx`, indexTep); //tsx
-fs.writeFileSync(`${dirName}.scss`, scssTep); // scss
-fs.writeFileSync(`${dirName}.interface.ts`, interfaceTep); // interface
+fs.writeFileSync(`${fileName}.tsx`, indexTep); //tsx
+fs.writeFileSync(`${fileName}.scss`, scssTep); // scss
+fs.writeFileSync(`${fileName}.interface.ts`, interfaceTep); // interface
