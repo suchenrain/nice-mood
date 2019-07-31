@@ -7,8 +7,9 @@
 // eslint-disable-next-line import/no-commonjs
 const fs = require('fs')
 
-const dirName = process.argv[2]
+const dirName = process.argv[2];
 const capPirName = dirName.substring(0, 1).toUpperCase() + dirName.substring(1);
+const camelName = require('./util').toCamel(capPirName);
 
 if (!dirName) {
     console.log('文件名不能为空');
@@ -16,8 +17,8 @@ if (!dirName) {
     process.exit(0);
 }
 
-const propInterface = `I${capPirName}Props`;
-const stateInterface = `I${capPirName}State`;
+const propInterface = `I${camelName}Props`;
+const stateInterface = `I${camelName}State`;
 
 // 页面模板构建
 
@@ -36,7 +37,7 @@ import './${dirName}.scss'
 // @connect(({ ${dirName} }) => ({
 //     ...${dirName},
 // }))
-class ${capPirName} extends Component<${propInterface},${stateInterface} > {
+class ${camelName} extends Component<${propInterface},${stateInterface} > {
 config:Config = {
     navigationBarTitleText: '页面标题'
 }
@@ -55,7 +56,7 @@ render() {
     )
 }
 }
-export default ${capPirName}
+export default ${camelName}
 `
 
 // scss 文件模板

@@ -8,17 +8,11 @@
 // eslint-disable-next-line import/no-commonjs
 const fs = require('fs');
 
-function toCamel(s) {
-  return s.replace(/([-_][a-z])/ig, function ($1) {
-    return $1.toUpperCase()
-      .replace('-', '')
-      .replace('_', '');
-  });
-};
+
 
 const dirName = process.argv[2];
 const capPirName = dirName.substring(0, 1).toUpperCase() + dirName.substring(1);
-const camelName = toCamel(capPirName);
+const camelName = require('./util').toCamel(capPirName);
 
 if (!dirName) {
   console.log('文件夹名称不能为空！');
