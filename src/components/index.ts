@@ -1,3 +1,3 @@
-import Demo from './demo';
+import OpenSetting from './open-setting';
 
-export { Demo };
+export { OpenSetting };
