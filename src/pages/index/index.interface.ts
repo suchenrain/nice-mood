@@ -4,7 +4,9 @@
  * @export
  * @interface IndexState
  */
-export interface IndexState {}
+export interface IndexState {
+  showOpenSetting: boolean;
+}
 /**
  * index.props 参数类型
  *

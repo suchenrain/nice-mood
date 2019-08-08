@@ -6,6 +6,18 @@
     width: 100%;
     min-height: 100vh;
 
+
+    .user-info {
+
+      &__avatar {
+        color: #333;
+      }
+
+      &__nickname {
+        color: rgb(44, 130, 230)
+      }
+    }
+
     .index {
       &-topbar {
         padding: 10rpx 50rpx;
@@ -44,5 +56,4 @@
       }
     }
   }
-
 }

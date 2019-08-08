@@ -14,7 +14,7 @@ export default class Tips {
   static toast(title: string, onHide?: () => void) {
     Taro.showToast({
       title: title,
-      icon: 'node',
+      icon: 'none',
       mask: true,
       duration: 1500
     });
