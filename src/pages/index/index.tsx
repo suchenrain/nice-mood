@@ -5,8 +5,9 @@ import { connect } from '@tarojs/redux';
 // import Tips from '@/utils/tips'
 import { IndexProps, IndexState } from './index.interface';
 import './index.scss';
-import { AtButton, AtAvatar } from 'taro-ui';
+import { AtAvatar } from 'taro-ui';
 import Tips from '@/utils/tips';
+import { OpenSetting } from '@/components';
 // import { Demo } from '@/components'
 @connect(({ index }) => ({
   ...index
@@ -21,7 +22,13 @@ class Index extends Component<IndexProps, IndexState> {
       showOpenSetting: false
     };
   }
-  componentWillMount() {
+
+  componentDidMount() {
+    this._askLocationAuthorize();
+    this.getList();
+  }
+
+  _askLocationAuthorize = () => {
     Taro.getSetting({
       success: res => {
         // 从未授权地理位置或者已经拒绝
@@ -36,10 +43,7 @@ class Index extends Component<IndexProps, IndexState> {
         }
       }
     });
-  }
-  componentDidMount() {
-    this.getList();
-  }
+  };
 
   // 用户同意地理位置授权
   _locationAccept = () => {
@@ -47,23 +51,14 @@ class Index extends Component<IndexProps, IndexState> {
   };
   // 用户拒绝地理位置授权
   _locationReject = () => {
-    Taro.showModal({
-      title: '提示',
-      content: '您已关闭地理位置授权，建议开启以提升体验哦！',
-      cancelText: '忽略',
-      cancelColor: '#FF4949',
-      confirmText: '去开启',
-      success: res => {
-        if (res.confirm) {
-          this.setState({
-            showOpenSetting: true
-          });
-        } else if (res.cancel) {
-          this.setState({
-            showOpenSetting: false
-          });
-        }
-      }
+    this.setState({
+      showOpenSetting: true
+    });
+  };
+
+  onHideOpenSetting = () => {
+    this.setState({
+      showOpenSetting: false
     });
   };
 
@@ -100,13 +95,10 @@ class Index extends Component<IndexProps, IndexState> {
           </View>
         </View>
         {showOpenSetting && (
-          <View className="at-row at-row__justify--center">
-            <View className="at-col at-col-8">
-              <AtButton type="primary" openType="openSetting">
-                打开设置页
-              </AtButton>
-            </View>
-          </View>
+          <OpenSetting
+            onCancel={this.onHideOpenSetting}
+            onOk={this.onHideOpenSetting}
+          />
         )}
         <View className="index-topbar">New资讯</View>
         <View className="index-data">
