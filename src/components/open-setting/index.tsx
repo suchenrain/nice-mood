@@ -1,5 +1,9 @@
 import Taro, { Component } from '@tarojs/taro';
+<<<<<<< HEAD
 import { View, Text } from '@tarojs/components';
+=======
+import { View } from '@tarojs/components';
+>>>>>>> 405b9f8d5f0ee24fcea5a44366fdf4c64787e64a
 
 import { IOpenSettingProps, IOpenSettingState } from './index.interface';
 import './index.scss';
