@@ -1,5 +1,5 @@
 import Api from '@/utils/httpRequest';
 
-export const getList = data => {
-  return Api.getList(data);
+export const getWeather = data => {
+  return Api.getWeather(data);
 };

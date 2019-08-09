@@ -12,6 +12,7 @@ export interface IOpenSettingState {}
  * @interface IOpenSettingProps
  */
 export interface IOpenSettingProps {
-  onCancel: () => void;
-  onOk: () => void;
+  isOpened: boolean;
+  onCancel: () => any;
+  onOk: () => any;
 }

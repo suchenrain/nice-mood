@@ -14,7 +14,10 @@ export const pad = (num: number, maxLength = 2) =>
 /**
  * 全局的公共变量
  */
-export let globalData: any = {};
+export let globalData: any = {
+  weatherKey: 'd798190309e54c4a9b6ca1c311368f9a',
+  xztqKey: 'SZifQZwj79AaYH8NL'
+};
 
 /**
  * 时间格式装换函数

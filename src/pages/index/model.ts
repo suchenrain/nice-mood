@@ -4,13 +4,13 @@ import * as indexApi from './service';
 export default {
   namespace: 'index',
   state: {
-    data: [],
+    weather: undefined,
     v: '1.0'
   },
 
   effects: {
-    *getList({ payload }, { select, call, put }) {
-      const { error, result } = yield call(indexApi.getList, {
+    *getWeather({ payload }, { select, call, put }) {
+      const { error, HeWeather6: result } = yield call(indexApi.getWeather, {
         ...payload
       });
       console.log('数据接口返回', result);
@@ -18,7 +18,7 @@ export default {
         yield put({
           type: 'save',
           payload: {
-            data: result.data
+            weather: result[0]
           }
         });
       }

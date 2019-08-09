@@ -50,7 +50,7 @@ componentDidMount() {
 }
 render() {
     return (
-    <View className='fx-${dirName}-wrap'>
+    <View className='fx-${dirName}'>
         页面内容
     </View>
     )
@@ -66,7 +66,7 @@ const scssTep = `
 @import "@/styles/mixins/index.scss";
 
 .#{$prefix} {
-    &-${dirName}-wrap {
+    &-${dirName} {
         width: 100%;
         min-height: 100Vh;
     }

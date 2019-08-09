@@ -103,7 +103,7 @@ export class Request {
     const res = await Taro.request(opts);
 
     // 是否mock
-    if (ISMOCK) return res.data;
+    //if (ISMOCK) return res.data;
 
     //请求失败
     if (res.data.code === 99999) {

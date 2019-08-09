@@ -2,14 +2,34 @@
 @import "@/styles/mixins/index.scss";
 
 .#{$prefix} {
-  &-open-setting-wrap {
-    display: block;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba($color: #000, $alpha: 0.3);
-    z-index: 999;
+  &-open-setting {
+
+    &__mask {
+      display: block;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba($color: #000, $alpha: 0.3);
+      z-index: 998;
+    }
+
+    &__container {
+      position: relative;
+      z-index: 999;
+    }
+
+    &__body {
+      text-align: center;
+      margin: 0 auto;
+      color: #fff;
+    }
+
+    &__action {
+      display: flex;
+      align-items: center;
+      justify-content: space-around
+    }
   }
 }

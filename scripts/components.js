@@ -41,7 +41,7 @@ class ${camelName} extends Component<${propInterface},${stateInterface} > {
   static defaultProps:${propInterface} = {}
   render() {
     return (
-      <View className='fx-${dirName}-wrap'>
+      <View className='fx-${dirName}'>
       </View>
     )
   }
@@ -54,7 +54,7 @@ const scssTep = `@import "@/styles/variables.scss";
 @import "@/styles/mixins/index.scss";
 
 .#{$prefix} {
-  &-${dirName}-wrap {
+  &-${dirName} {
     width: 100%;
   }
 }
