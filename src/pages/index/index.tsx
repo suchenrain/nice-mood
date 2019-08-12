@@ -5,13 +5,14 @@ import { connect } from '@tarojs/redux';
 // import Tips from '@/utils/tips'
 import { IndexProps, IndexState } from './index.interface';
 import './index.scss';
-import { AtAvatar } from 'taro-ui';
+import { AtAvatar, AtToast } from 'taro-ui';
 import Tips from '@/utils/tips';
 import { OpenSetting } from '@/components';
 import { globalData } from '@/utils/common';
 // import { Demo } from '@/components'
-@connect(({ index }) => ({
-  ...index
+@connect(({ index, loading }) => ({
+  ...index,
+  loading
 }))
 class Index extends Component<IndexProps, IndexState> {
   config: Config = {
@@ -33,32 +34,61 @@ class Index extends Component<IndexProps, IndexState> {
   // 对应微信小程序的onShow()
   componentDidShow() {}
 
-  _askLocationAuthorize = () => {
+  onHideOpenSetting = () => {
+    Taro.vibrateShort();
+    this.setState({
+      showOpenSetting: false
+    });
+  };
+  onPullDownRefresh = () => {
+    this._reloadPage();
+    Taro.stopPullDownRefresh();
+  };
+  // （重）加载页面数据
+  _reloadPage = () => {
+    this._setWeatherAndLocation();
+  };
+
+  /** 设置时钟 */
+  _setClock = () => {};
+
+  // 设置当前位置及天气信息
+  _setWeatherAndLocation = () => {
+    this._checkLocationPermission(this._getUserLocationInfo);
+  };
+  // 获取地理位置授权状态
+  _checkLocationPermission = (cb: () => void) => {
     Taro.getSetting({
       success: res => {
         // 从未授权地理位置或者已经拒绝
         if (!res.authSetting['scope.userLocation']) {
-          Taro.authorize({ scope: 'scope.userLocation' }).then(
-            this._locationAccept,
-            this._locationReject
-          );
+          Taro.vibrateShort();
+          Taro.authorize({ scope: 'scope.userLocation' }).then(() => {
+            this._locationAccept();
+            cb();
+          }, this._locationReject);
         } else {
           // 已授权过
-          this._getUserLocationInfo();
+          this.setState({
+            located: true
+          });
+          cb();
         }
       }
     });
   };
 
-
   // 用户同意地理位置授权
   _locationAccept = () => {
-    this._getUserLocationInfo();
+    this.setState({
+      located: true
+    });
   };
   // 用户拒绝地理位置授权
   _locationReject = () => {
     this.setState({
-      showOpenSetting: true
+      showOpenSetting: true,
+      located: false
     });
   };
 
@@ -70,38 +100,32 @@ class Index extends Component<IndexProps, IndexState> {
       success: res => {
         const latitude = res.latitude;
         const longitude = res.longitude;
-        Tips.toast(`您的经纬度: (${latitude},${longitude})`);
         this._getWeather(`${latitude},${longitude}`);
       }
     });
   };
-
+  // 获取天气及区域信息
   _getWeather = async (location: string) => {
+    Taro.vibrateShort();
     await this.props.dispatch({
       type: 'index/getWeather',
       payload: { location, key: globalData.weatherKey }
     });
   };
 
-  onHideOpenSetting = () => {
-    this.setState({
-      showOpenSetting: false
-    });
-  };
-  onPullDownRefresh = () => {
-    Tips.toast('下拉刷新');
-    Taro.stopPullDownRefresh();
-  };
-  // （重）加载页面数据
-  _reloadPage = () => {
-    
-  };
-
   render() {
-    const { weather } = this.props;
+    const { weather, loading } = this.props;
     const { showOpenSetting } = this.state;
     return (
       <View className="fx-index-wrap">
+        <View>
+          <AtToast
+            text="努力加载中..."
+            isOpened={loading.global}
+            status="loading"
+            duration={0}
+          />
+        </View>
         <View className="user-info at-row at-row__align--center at-row__justify--center">
           <View className="user-info__avatar">
             <AtAvatar circle openData={{ type: 'userAvatarUrl' }} />

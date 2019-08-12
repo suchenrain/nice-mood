@@ -10,7 +10,6 @@ class OpenSetting extends Component<IOpenSettingProps, IOpenSettingState> {
     super(props);
   }
 
-
   render() {
     const { onCancel, onOk, isOpened } = this.props;
     return (
@@ -19,11 +18,10 @@ class OpenSetting extends Component<IOpenSettingProps, IOpenSettingState> {
           检测到您已关闭地理位置授权，建议开启以提升体验哦！
         </AtModalContent>
         <AtModalAction>
-          {' '}
-          <Button onClick={onCancel}>忽略</Button>{' '}
+          <Button onClick={onCancel}>忽略</Button>
           <Button onClick={onOk} openType="openSetting">
             去开启
-          </Button>{' '}
+          </Button>
         </AtModalAction>
       </AtModal>
     );

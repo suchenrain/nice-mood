@@ -22,6 +22,7 @@ export interface IndexState {
  */
 export interface IndexProps {
   dispatch?: any;
+  loading?:any;
   weather?: WeatherInterface;
 }
 
