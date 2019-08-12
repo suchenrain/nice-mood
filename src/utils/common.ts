@@ -16,7 +16,9 @@ export const pad = (num: number, maxLength = 2) =>
  */
 export let globalData: any = {
   weatherKey: 'd798190309e54c4a9b6ca1c311368f9a',
-  xztqKey: 'SZifQZwj79AaYH8NL'
+  xztqKey: 'SZifQZwj79AaYH8NL',
+  unsplashClientId:
+    'ebecebfa0d4192a48cbccdbcb1304b25c613a604456a223e93904c7ebadf2170'
 };
 
 /**

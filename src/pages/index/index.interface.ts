@@ -1,3 +1,5 @@
+import { DvaLoading } from '@/types/dva-loading.interface';
+
 /**
  * index.state 参数类型
  *
@@ -7,12 +9,14 @@
 export interface IndexState {
   showOpenSetting: boolean;
   located: boolean;
+  bgLoaded: boolean;
   geo?: { city: string; district: string };
   weather?: {
     tmp: number;
     cond_txt: string;
     cond_code: number;
   };
+  ani: any;
 }
 /**
  * index.props 参数类型
@@ -22,11 +26,24 @@ export interface IndexState {
  */
 export interface IndexProps {
   dispatch?: any;
-  loading?:any;
-  weather?: WeatherInterface;
+  loading: DvaLoading;
+  weather?: IWeather;
+  bgImage?: IUnsplashImage;
 }
 
-export interface WeatherInterface {
+export interface IUnsplashImage {
+  alt: string;
+  color: string;
+  urls: { raw: string; regular: string };
+  user: {
+    name: string;
+  };
+  links: {
+    html: string;
+    download: string;
+  };
+}
+export interface IWeather {
   basic: {
     dmin_area: string;
     cid: string;

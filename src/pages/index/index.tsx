@@ -1,12 +1,11 @@
 import Taro, { Component, Config } from '@tarojs/taro';
-import { View, OpenData } from '@tarojs/components';
+import { View, OpenData, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 // import Api from '@/utils/httpRequest'
 // import Tips from '@/utils/tips'
 import { IndexProps, IndexState } from './index.interface';
 import './index.scss';
 import { AtAvatar, AtToast } from 'taro-ui';
-import Tips from '@/utils/tips';
 import { OpenSetting } from '@/components';
 import { globalData } from '@/utils/common';
 // import { Demo } from '@/components'
@@ -24,7 +23,10 @@ class Index extends Component<IndexProps, IndexState> {
     this.state = {
       showOpenSetting: false,
       // 是否已定位
-      located: false
+      located: false,
+      //背景图是否已加载完成
+      bgLoaded: false,
+      ani: {}
     };
   }
   // 对应微信小程序 onLoad()
@@ -41,14 +43,49 @@ class Index extends Component<IndexProps, IndexState> {
     });
   };
   onPullDownRefresh = () => {
-    this._reloadPage();
     Taro.stopPullDownRefresh();
+    this._reloadPage();
+    
+  };
+
+  onBgLoaded = () => {
+    this._easeInOut(1, 200, 3000);
+    this.setState({
+      bgLoaded: true
+    });
+  };
+
+  _easeInOut = (opacity: number, delay: number, duration: number) => {
+    let animation = Taro.createAnimation({
+      duration: duration,
+      timingFunction: 'ease',
+      delay: delay
+    });
+    animation.opacity(opacity).step();
+    this.setState({ ani: animation.export() });
   };
   // （重）加载页面数据
   _reloadPage = () => {
     this._setWeatherAndLocation();
+    this._setBackgroud();
   };
 
+  /** 设置背景图片 */
+  _setBackgroud = () => {
+    if (!this.state.bgLoaded) {
+      this._getDailyImage();
+    }
+  };
+
+  _getDailyImage = async () => {
+    await this.props.dispatch({
+      type: 'index/getDailyImage',
+      payload: {
+        collections: `8349391,8349361`,
+        client_id: globalData.unsplashClientId
+      }
+    });
+  };
   /** 设置时钟 */
   _setClock = () => {};
 
@@ -114,40 +151,51 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   render() {
-    const { weather, loading } = this.props;
-    const { showOpenSetting } = this.state;
+    const { weather, loading, bgImage } = this.props;
+    const { showOpenSetting, ani } = this.state;
     return (
       <View className="fx-index-wrap">
+        {bgImage && (
+          <Image
+            className="daily-image"
+            src={bgImage.urls.regular}
+            mode="aspectFill"
+            onLoad={this.onBgLoaded}
+            animation={ani}
+          />
+        )}
         <View>
           <AtToast
             text="努力加载中..."
-            isOpened={loading.global}
+            isOpened={loading.effects['index/getWeather']}
             status="loading"
             duration={0}
           />
         </View>
-        <View className="user-info at-row at-row__align--center at-row__justify--center">
-          <View className="user-info__avatar">
-            <AtAvatar circle openData={{ type: 'userAvatarUrl' }} />
+        <View className="content">
+          <View className="user-info at-row at-row__align--center at-row__justify--center">
+            <View className="user-info__avatar">
+              <AtAvatar circle openData={{ type: 'userAvatarUrl' }} />
+            </View>
+            <View className="user-info__nickname">
+              <OpenData type="userNickName" />
+            </View>
           </View>
-          <View className="user-info__nickname">
-            <OpenData type="userNickName" />
-          </View>
+          {weather && (
+            <View className="weather-info">
+              <View className="weather-info__location">{`${
+                weather.basic.parent_city
+              } ${weather.basic.location}`}</View>
+              <View className="weather-info__condTxt">
+                {weather.now.cond_txt}
+              </View>
+              <View className="weather-info__condIcon">
+                {weather.now.cond_code}
+              </View>
+              <View className="weather-info__tmp">{weather.now.tmp}</View>
+            </View>
+          )}
         </View>
-        {weather && (
-          <View className="weather-info">
-            <View className="weather-info__location">{`${
-              weather.basic.parent_city
-            } ${weather.basic.location}`}</View>
-            <View className="weather-info__condTxt">
-              {weather.now.cond_txt}
-            </View>
-            <View className="weather-info__condIcon">
-              {weather.now.cond_code}
-            </View>
-            <View className="weather-info__tmp">{weather.now.tmp}</View>
-          </View>
-        )}
         <OpenSetting
           isOpened={showOpenSetting}
           onCancel={this.onHideOpenSetting}

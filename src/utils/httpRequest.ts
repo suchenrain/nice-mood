@@ -113,7 +113,7 @@ export class Request {
 
     //请求成功
     if (res.data) {
-      return res.data;
+      return res.data.result ? res.data : { result: res.data };
     }
 
     const edata = {

@@ -6,16 +6,33 @@
     width: 100%;
     min-height: 100vh;
 
+    .daily-image {
+      position: fixed;
+      z-index: 2;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+    }
 
-    .user-info {
+    .content {
+      position: relative;
+      z-index: 2;
 
-      &__avatar {
-        color: #333;
-      }
+      .user-info {
 
-      &__nickname {
-        color: rgb(44, 130, 230)
+        &__avatar {
+          color: #333;
+        }
+
+        &__nickname {
+          color: rgb(44, 130, 230)
+        }
       }
     }
+
   }
 }
