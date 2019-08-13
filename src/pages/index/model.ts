@@ -6,6 +6,7 @@ export default {
   state: {
     weather: undefined,
     bgImage: undefined,
+    quote: undefined,
     v: '1.0'
   },
 
@@ -34,6 +35,20 @@ export default {
           type: 'save',
           payload: {
             bgImage: result
+          }
+        });
+      }
+    },
+    *getQuote({ payload }, { call, put }) {
+      const { error, result } = yield call(indexApi.getQuote, {
+        ...payload
+      });
+      console.log('一言接口返回', result);
+      if (!error) {
+        yield put({
+          type: 'save',
+          payload: {
+            quote: result
           }
         });
       }

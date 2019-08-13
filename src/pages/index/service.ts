@@ -7,3 +7,7 @@ export const getWeather = data => {
 export const getDailyImage = data => {
   return Api.getDailyImage(data);
 };
+
+export const getQuote = data => {
+  return Api.getQuote(data);
+};

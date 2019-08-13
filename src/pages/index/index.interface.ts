@@ -29,8 +29,16 @@ export interface IndexProps {
   loading: DvaLoading;
   weather?: IWeather;
   bgImage?: IUnsplashImage;
+  quote?: IQuote;
 }
-
+export type IQuote = {
+  id: number;
+  hitokoto: string;
+  type: string;
+  from: string;
+  creator: string;
+  created_at: number;
+};
 export interface IUnsplashImage {
   alt: string;
   color: string;

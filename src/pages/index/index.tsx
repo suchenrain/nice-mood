@@ -45,7 +45,6 @@ class Index extends Component<IndexProps, IndexState> {
   onPullDownRefresh = () => {
     Taro.stopPullDownRefresh();
     this._reloadPage();
-    
   };
 
   onBgLoaded = () => {
@@ -67,7 +66,8 @@ class Index extends Component<IndexProps, IndexState> {
   // （重）加载页面数据
   _reloadPage = () => {
     this._setWeatherAndLocation();
-    this._setBackgroud();
+    this._getQuote();
+    //this._setBackgroud();
   };
 
   /** 设置背景图片 */
@@ -77,12 +77,21 @@ class Index extends Component<IndexProps, IndexState> {
     }
   };
 
-  _getDailyImage = async () => {
-    await this.props.dispatch({
+  _getDailyImage = () => {
+    this.props.dispatch({
       type: 'index/getDailyImage',
       payload: {
         collections: `8349391,8349361`,
         client_id: globalData.unsplashClientId
+      }
+    });
+  };
+
+  _getQuote = () => {
+    this.props.dispatch({
+      type: 'index/getQuote',
+      payload: {
+        c: 'g'
       }
     });
   };
@@ -142,32 +151,31 @@ class Index extends Component<IndexProps, IndexState> {
     });
   };
   // 获取天气及区域信息
-  _getWeather = async (location: string) => {
+  _getWeather = (location: string) => {
     Taro.vibrateShort();
-    await this.props.dispatch({
+    this.props.dispatch({
       type: 'index/getWeather',
       payload: { location, key: globalData.weatherKey }
     });
   };
 
   render() {
-    const { weather, loading, bgImage } = this.props;
+    const { weather, loading, bgImage, quote } = this.props;
     const { showOpenSetting, ani } = this.state;
     return (
       <View className="fx-index-wrap">
-        {bgImage && (
-          <Image
-            className="daily-image"
-            src={bgImage.urls.regular}
-            mode="aspectFill"
-            onLoad={this.onBgLoaded}
-            animation={ani}
-          />
-        )}
+        <Image
+          className="daily-image"
+          src="https://source.unsplash.com/user/suchenrain/likes"
+          mode="aspectFill"
+          onLoad={this.onBgLoaded}
+          animation={ani}
+        />
         <View>
           <AtToast
             text="努力加载中..."
-            isOpened={loading.effects['index/getWeather']}
+            // isOpened={loading.effects['index/getWeather']}
+            isOpened={loading.models['index']}
             status="loading"
             duration={0}
           />
@@ -193,6 +201,12 @@ class Index extends Component<IndexProps, IndexState> {
                 {weather.now.cond_code}
               </View>
               <View className="weather-info__tmp">{weather.now.tmp}</View>
+            </View>
+          )}
+          {quote && (
+            <View className="quote-info">
+              <View className="quote-text">{quote.hitokoto}</View>
+              <View className="quote-from">{quote.from}</View>
             </View>
           )}
         </View>
