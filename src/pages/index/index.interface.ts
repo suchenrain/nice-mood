@@ -26,7 +26,7 @@ export interface IndexState {
  */
 export interface IndexProps {
   dispatch?: any;
-  loading: DvaLoading;
+  loading?: DvaLoading;
   weather?: IWeather;
   bgImage?: IUnsplashImage;
   quote?: IQuote;

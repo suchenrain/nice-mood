@@ -6,8 +6,9 @@ import { connect } from '@tarojs/redux';
 import { IndexProps, IndexState } from './index.interface';
 import './index.scss';
 import { AtAvatar, AtToast } from 'taro-ui';
-import { OpenSetting } from '@/components';
+import { OpenSetting, Clock } from '@/components';
 import { globalData } from '@/utils/common';
+import bgDog from '@/assets/bg/bg_dog.jpg';
 // import { Demo } from '@/components'
 @connect(({ index, loading }) => ({
   ...index,
@@ -34,7 +35,9 @@ class Index extends Component<IndexProps, IndexState> {
     this._reloadPage();
   }
   // 对应微信小程序的onShow()
-  componentDidShow() {}
+  componentDidShow() {
+    this._easeInOut(0.95, 200, 3000);
+  }
 
   onHideOpenSetting = () => {
     Taro.vibrateShort();
@@ -48,7 +51,7 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   onBgLoaded = () => {
-    this._easeInOut(1, 200, 3000);
+    this._easeInOut(0.95, 200, 3000);
     this.setState({
       bgLoaded: true
     });
@@ -164,22 +167,30 @@ class Index extends Component<IndexProps, IndexState> {
     const { showOpenSetting, ani } = this.state;
     return (
       <View className="fx-index-wrap">
-        <Image
-          className="daily-image"
-          src="https://source.unsplash.com/user/suchenrain/likes"
-          mode="aspectFill"
-          onLoad={this.onBgLoaded}
-          animation={ani}
-        />
+        <View
+          className="daily-image-bg"
+          style={{
+            background: `center/ cover no-repeat url(${bgDog})`
+          }}
+        >
+          <Image
+            className="daily-image"
+            src="https://source.unsplash.com/user/suchenrain/likes"
+            mode="aspectFill"
+            onLoad={this.onBgLoaded}
+            animation={ani}
+          />
+        </View>
         <View>
           <AtToast
             text="努力加载中..."
-            // isOpened={loading.effects['index/getWeather']}
-            isOpened={loading.models['index']}
+            isOpened={loading && loading.effects['index/getWeather']}
+            // isOpened={loading && loading.models['index']}
             status="loading"
-            duration={0}
+            duration={200}
           />
         </View>
+        <View className="title">每天好心情</View>
         <View className="content">
           <View className="user-info at-row at-row__align--center at-row__justify--center">
             <View className="user-info__avatar">
@@ -191,22 +202,36 @@ class Index extends Component<IndexProps, IndexState> {
           </View>
           {weather && (
             <View className="weather-info">
-              <View className="weather-info__location">{`${
-                weather.basic.parent_city
-              } ${weather.basic.location}`}</View>
-              <View className="weather-info__condTxt">
-                {weather.now.cond_txt}
+              <View className="weather-info__tmp">{weather.now.tmp}&deg;</View>
+              <View className="weather-info__wrap">
+                <View className="weather-info__cond">
+                  <View className="weather-info__cond--Txt">
+                    {weather.now.cond_txt}
+                  </View>
+                  <View className="weather-info__cond--Icon">
+                    <View
+                      className="weather-info__cond--Icon--del icon"
+                      style={{
+                        background: `center/ 100% 100% no-repeat url(https://cdn.heweather.com/cond_icon/${
+                          weather.now.cond_code
+                        }.png)`
+                      }}
+                    />
+                  </View>
+                </View>
+                <View>
+                  <View className="weather-info__location">{`${
+                    weather.basic.parent_city
+                  } ${weather.basic.location}`}</View>
+                </View>
               </View>
-              <View className="weather-info__condIcon">
-                {weather.now.cond_code}
-              </View>
-              <View className="weather-info__tmp">{weather.now.tmp}</View>
             </View>
           )}
+          <Clock />
           {quote && (
             <View className="quote-info">
-              <View className="quote-text">{quote.hitokoto}</View>
-              <View className="quote-from">{quote.from}</View>
+              <View className="quote-info__text">{quote.hitokoto}</View>
+              <View className="quote-info__from">{quote.from}</View>
             </View>
           )}
         </View>

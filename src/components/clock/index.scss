@@ -1,0 +1,22 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+.#{$prefix} {
+  &-clock {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .time-text {
+      color: #ffffff;
+      font-size: 500%;
+    }
+
+    .greeting-text {
+      color: #ffffff;
+      font-size: 150%;
+    }
+  }
+}

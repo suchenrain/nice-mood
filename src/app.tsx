@@ -34,9 +34,9 @@ class App extends Component {
     pages: ['pages/index/index'],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#fff',
+      navigationBarBackgroundColor: '#ddd',
       navigationBarTitleText: 'WeChat',
-      navigationBarTextStyle: 'black',
+      navigationBarTextStyle: 'white',
       navigationStyle: 'custom'
     },
     permission: {
