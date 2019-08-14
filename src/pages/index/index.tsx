@@ -1,5 +1,5 @@
 import Taro, { Component, Config } from '@tarojs/taro';
-import { View, OpenData, Image } from '@tarojs/components';
+import { View, OpenData, Text, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 // import Api from '@/utils/httpRequest'
 // import Tips from '@/utils/tips'
@@ -168,7 +168,7 @@ class Index extends Component<IndexProps, IndexState> {
     return (
       <View className="fx-index-wrap">
         <View
-          className="daily-image-bg"
+          className="daily-image-wrap"
           style={{
             background: `center/ cover no-repeat url(${bgDog})`
           }}
@@ -181,36 +181,22 @@ class Index extends Component<IndexProps, IndexState> {
             animation={ani}
           />
         </View>
-        <View>
-          <AtToast
-            text="努力加载中..."
-            isOpened={loading && loading.effects['index/getWeather']}
-            // isOpened={loading && loading.models['index']}
-            status="loading"
-            duration={200}
-          />
-        </View>
-        <View className="title">每天好心情</View>
-        <View className="content">
-          <View className="user-info at-row at-row__align--center at-row__justify--center">
-            <View className="user-info__avatar">
-              <AtAvatar circle openData={{ type: 'userAvatarUrl' }} />
-            </View>
-            <View className="user-info__nickname">
-              <OpenData type="userNickName" />
-            </View>
-          </View>
-          {weather && (
-            <View className="weather-info">
-              <View className="weather-info__tmp">{weather.now.tmp}&deg;</View>
-              <View className="weather-info__wrap">
-                <View className="weather-info__cond">
-                  <View className="weather-info__cond--Txt">
+
+        <View className="content-wrap">
+          <Text className="index-title">每天好心情</Text>
+          <View className="weather-wrap">
+            {weather && (
+              <View className="weather-info">
+                <Text className="weather-info__tmp">
+                  {weather.now.tmp}&deg;
+                </Text>
+                <View className="">
+                  <Text className="weather-info__cond">
                     {weather.now.cond_txt}
-                  </View>
-                  <View className="weather-info__cond--Icon">
+                  </Text>
+                  <View className="weather-info__icon">
                     <View
-                      className="weather-info__cond--Icon--del icon"
+                      className="weather-info__icon--del color-icon"
                       style={{
                         background: `center/ 100% 100% no-repeat url(https://cdn.heweather.com/cond_icon/${
                           weather.now.cond_code
@@ -218,23 +204,29 @@ class Index extends Component<IndexProps, IndexState> {
                       }}
                     />
                   </View>
-                </View>
-                <View>
-                  <View className="weather-info__location">{`${
-                    weather.basic.parent_city
-                  } ${weather.basic.location}`}</View>
+                  <Text>
+                    {`${weather.basic.parent_city} ${weather.basic.location}`}
+                  </Text>
                 </View>
               </View>
-            </View>
-          )}
-          <Clock />
-          {quote && (
-            <View className="quote-info">
-              <View className="quote-info__text">{quote.hitokoto}</View>
-              <View className="quote-info__from">{quote.from}</View>
-            </View>
-          )}
+            )}
+          </View>
+          <View className="user-wrap">
+            <AtAvatar circle openData={{ type: 'userAvatarUrl' }} />
+          </View>
+          <View className="clock-wrap">
+            <Clock />
+          </View>
+          <View className="quote-wrap">
+            {quote && (
+              <View className="quote-info">
+                <Text className="quote-info__text">{quote.hitokoto}</Text>
+                <Text className="quote-info__author">{quote.from}</Text>
+              </View>
+            )}
+          </View>
         </View>
+
         <OpenSetting
           isOpened={showOpenSetting}
           onCancel={this.onHideOpenSetting}

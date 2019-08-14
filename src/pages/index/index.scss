@@ -8,7 +8,7 @@ $icon-wh:100px;
     width: 100%;
     min-height: 100vh;
 
-    .daily-image-bg {
+    .daily-image-wrap {
       position: fixed;
       z-index: 1;
       height: 100%;
@@ -18,81 +18,33 @@ $icon-wh:100px;
       bottom: 0;
       left: 0;
       opacity: 1;
+
+      >.daily-image {
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+      }
     }
 
-    .daily-image {
-      position: fixed;
-      z-index: 2;
-      height: 100%;
-      width: 100%;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      opacity: 0;
-    }
-
-    .title {
-      display: block;
-      color: #fff;
-      text-align: center;
-      position: relative;
-      margin-top: 50px;
-      width: 100%;
-      z-index: 3;
-    }
-
-    .content {
+    .content-wrap {
       position: relative;
       z-index: 3;
 
-      .user-info {
+      >.index-title {
+        text-align: center;
+        position: fixed;
+        top: 64px;
+        width: 100%;
+        display: block;
+        font-size: 30rpx;
+        color: #fff;
 
-        &__avatar {
-          color: #333;
-        }
-
-        &__nickname {
-          color: rgb(44, 130, 230)
-        }
       }
 
-      .quote-info {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        padding: 50px 10%;
+      >.weather-wrap {
+        .weather-info {
 
-        &__text {
-          color: #fff;
-        }
-
-        &__from {
-          color: #fff;
-        }
-      }
-
-      .weather-info {
-        display: flex;
-        flex-direction: row;
-        justify-content: start;
-        align-items: stretch;
-
-        &__tmp {
-          font-size: 200%;
-          color: #fff;
-          height: 100px;
-        }
-
-        &__wrap {
-          align-content: space-between;
-        }
-
-        &__cond {
-          display: inline-flex;
-
-          &--Icon {
+          &__icon {
             display: inline-block;
             height: $icon-wh;
             width: $icon-wh;
@@ -104,7 +56,7 @@ $icon-wh:100px;
               display: inline-block;
             }
 
-            >.icon {
+            >.color-icon {
               filter: drop-shadow($icon-wh 0 #fff);
               position: relative;
               left: -95px;
@@ -112,9 +64,6 @@ $icon-wh:100px;
 
           }
         }
-
-
-
       }
     }
 
