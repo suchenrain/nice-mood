@@ -1,12 +1,14 @@
 @import "@/styles/variables.scss";
 
-$icon-wh:100px;
+$icon-wh:60rpx;
 
 .#{$prefix} {
 
   &-index-wrap {
     width: 100%;
     min-height: 100vh;
+
+
 
     .daily-image-wrap {
       position: fixed;
@@ -17,51 +19,142 @@ $icon-wh:100px;
       right: 0;
       bottom: 0;
       left: 0;
-      opacity: 1;
 
       >.daily-image {
         height: 100%;
         width: 100%;
         opacity: 0;
+        z-index: 2;
+        position: fixed;
+
+        &-default {
+          opacity: 1;
+          height: 100%;
+          width: 100%;
+          z-index: 1;
+          position: fixed;
+        }
       }
+    }
+
+    .mask-layer {
+      z-index: 3;
+      position: fixed;
+      background-color: rgba(#000000, 0.4);
+      height: 100%;
+      width: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
     }
 
     .content-wrap {
       position: relative;
-      z-index: 3;
+      z-index: 5;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      height: 80vh;
 
       >.index-title {
         text-align: center;
         position: fixed;
-        top: 64px;
+        top: 64rpx;
         width: 100%;
+        line-height: 35rpx;
         display: block;
-        font-size: 30rpx;
-        color: #fff;
-
+        font-size: 38rpx;
       }
 
       >.weather-wrap {
+        position: relative;
+        top: 160rpx;
+        left: 50rpx;
+        width: 100%;
+        height: 150rpx;
+
         .weather-info {
+          display: flex;
+          justify-content: flex-start;
+          align-items: baseline;
 
-          &__icon {
-            display: inline-block;
-            height: $icon-wh;
+          &__tmp {
+            font-size: 220%;
+            text-align: center;
+            align-self: center;
+          }
+
+          &__rightbox {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            align-content: space-around;
+            margin-left: 10rpx;
+
+          }
+
+          &__condicon {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          &__cond {
+            font-size: 30rpx
+          }
+
+          &__location {
+            font-size: 30rpx;
+          }
+
+          // &__icon {
+          //   width: $icon-wh;
+          //   height: $icon-wh;
+          //   filter: brightness(100);
+          // }
+
+          &__icon--mask {
             width: $icon-wh;
-            overflow: hidden;
+            height: $icon-wh;
+            background-color: #fff;
+          }
+        }
+      }
 
-            &--del {
-              width: 100%;
-              height: 100%;
-              display: inline-block;
-            }
+      >.user-wrap {
+        position: relative;
+        top: 70rpx;
+        height: 150rpx;
 
-            >.color-icon {
-              filter: drop-shadow($icon-wh 0 #fff);
-              position: relative;
-              left: -95px;
-            }
+        .user-avatar {
+          width: 150rpx;
+          height: 150rpx;
+        }
+      }
 
+      >.clock-wrap {}
+
+      >.quote-wrap {
+        max-width: 80vw;
+
+        .quote-info {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+
+          &__text {
+            font-size: 39rpx;
+
+          }
+
+          &__author {
+            font-size: 30rpx;
+            margin-top: 30rpx;
           }
         }
       }

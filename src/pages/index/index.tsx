@@ -9,6 +9,7 @@ import { AtAvatar, AtToast } from 'taro-ui';
 import { OpenSetting, Clock } from '@/components';
 import { globalData } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
+import { url } from 'inspector';
 // import { Demo } from '@/components'
 @connect(({ index, loading }) => ({
   ...index,
@@ -35,9 +36,7 @@ class Index extends Component<IndexProps, IndexState> {
     this._reloadPage();
   }
   // 对应微信小程序的onShow()
-  componentDidShow() {
-    this._easeInOut(0.95, 200, 3000);
-  }
+  componentDidShow() {}
 
   onHideOpenSetting = () => {
     Taro.vibrateShort();
@@ -51,9 +50,12 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   onBgLoaded = () => {
-    this._easeInOut(0.95, 200, 3000);
+    const easeIn = this._easeInOut(1, 500, 5000);
+    const easeOut = this._easeInOut(0, 200, 5000);
+
     this.setState({
-      bgLoaded: true
+      bgLoaded: true,
+      ani: { in: easeIn, out: easeOut }
     });
   };
 
@@ -64,7 +66,7 @@ class Index extends Component<IndexProps, IndexState> {
       delay: delay
     });
     animation.opacity(opacity).step();
-    this.setState({ ani: animation.export() });
+    return animation.export();
   };
   // （重）加载页面数据
   _reloadPage = () => {
@@ -163,25 +165,36 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   render() {
-    const { weather, loading, bgImage, quote } = this.props;
-    const { showOpenSetting, ani } = this.state;
+    const { weather, bgImage, quote } = this.props;
+    const { showOpenSetting, ani, bgLoaded } = this.state;
+    const weatherIconStyle = weather && {
+      mask: `url(https://cdn.heweather.com/cond_icon/${
+        weather.now.cond_code
+      }.png) no-repeat`,
+      '-webkit-mask': `url(https://cdn.heweather.com/cond_icon/${
+        weather.now.cond_code
+      }.png) no-repeat`,
+      '-webkit-mask-size': '100% 100%',
+      'mask-size': '100% 100%'
+    };
     return (
       <View className="fx-index-wrap">
-        <View
-          className="daily-image-wrap"
-          style={{
-            background: `center/ cover no-repeat url(${bgDog})`
-          }}
-        >
+        <View className="daily-image-wrap">
+          <Image
+            className="daily-image-default"
+            src={bgDog}
+            mode="aspectFill"
+            animation={ani.out}
+          />
           <Image
             className="daily-image"
             src="https://source.unsplash.com/user/suchenrain/likes"
             mode="aspectFill"
             onLoad={this.onBgLoaded}
-            animation={ani}
+            animation={ani.in}
           />
         </View>
-
+        <View className="mask-layer" />
         <View className="content-wrap">
           <Text className="index-title">每天好心情</Text>
           <View className="weather-wrap">
@@ -190,21 +203,23 @@ class Index extends Component<IndexProps, IndexState> {
                 <Text className="weather-info__tmp">
                   {weather.now.tmp}&deg;
                 </Text>
-                <View className="">
-                  <Text className="weather-info__cond">
-                    {weather.now.cond_txt}
-                  </Text>
-                  <View className="weather-info__icon">
+                <View className="weather-info__rightbox">
+                  <View className="weather-info__condicon">
+                    <Text className="weather-info__cond">
+                      {weather.now.cond_txt}
+                    </Text>
                     <View
-                      className="weather-info__icon--del color-icon"
-                      style={{
-                        background: `center/ 100% 100% no-repeat url(https://cdn.heweather.com/cond_icon/${
-                          weather.now.cond_code
-                        }.png)`
-                      }}
+                      className="weather-info__icon--mask"
+                      style={weatherIconStyle}
                     />
+                    {/* <Image
+                      className="weather-info__icon"
+                      src={`https://cdn.heweather.com/cond_icon/${
+                        weather.now.cond_code
+                      }.png`}
+                    /> */}
                   </View>
-                  <Text>
+                  <Text className="weather-info__location">
                     {`${weather.basic.parent_city} ${weather.basic.location}`}
                   </Text>
                 </View>
@@ -212,7 +227,7 @@ class Index extends Component<IndexProps, IndexState> {
             )}
           </View>
           <View className="user-wrap">
-            <AtAvatar circle openData={{ type: 'userAvatarUrl' }} />
+            <AtAvatar className="user-avatar" circle size="large" openData={{ type: 'userAvatarUrl' }} />
           </View>
           <View className="clock-wrap">
             <Clock />
@@ -221,7 +236,7 @@ class Index extends Component<IndexProps, IndexState> {
             {quote && (
               <View className="quote-info">
                 <Text className="quote-info__text">{quote.hitokoto}</Text>
-                <Text className="quote-info__author">{quote.from}</Text>
+                <Text className="quote-info__author">{`- ${quote.from} -`}</Text>
               </View>
             )}
           </View>
