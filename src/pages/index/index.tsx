@@ -9,7 +9,7 @@ import { AtAvatar } from 'taro-ui';
 import { OpenSetting, Clock, Copyright } from '@/components';
 import { globalData, isNight } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
-import { easeInOut } from '@/utils/animation';
+import { show } from '@/utils/animation';
 // import { Demo } from '@/components'
 @connect(({ index, loading }) => ({
   ...index,
@@ -34,6 +34,8 @@ class Index extends Component<IndexProps, IndexState> {
   // 对应微信小程序 onLoad()
   componentDidMount() {
     this._reloadPage();
+    show(this, 'userAvatar', 1, 200, 2000);
+    show(this, 'clock', 1, 200, 2000);
   }
   // 对应微信小程序的onShow()
   componentDidShow() {}
@@ -50,12 +52,11 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   onBgLoaded = () => {
-    const easeIn = easeInOut(1, 500, 5000);
-    const easeOut = easeInOut(0, 200, 5000);
+    show(this, 'defaultBg', 0, 200, 2000);
+    show(this, 'bg', 1, 200, 2000);
 
     this.setState({
-      bgLoaded: true,
-      ani: { in: easeIn, out: easeOut }
+      bgLoaded: true
     });
   };
 
@@ -84,12 +85,18 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   _getQuote = () => {
-    this.props.dispatch({
-      type: 'index/getQuote',
-      payload: {
-        c: 'g'
-      }
-    });
+    show(this, 'quote', 0, 0, 1500);
+    setTimeout(() => {
+      this.props.dispatch({
+        type: 'index/getQuote',
+        payload: {
+          c: 'g'
+        },
+        callback: () => {
+          show(this, 'quote', 1, 0, 2000);
+        }
+      });
+    }, 1500);
   };
   /** 设置时钟 */
   _setClock = () => {};
@@ -156,8 +163,8 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   render() {
-    const { weather, bgImage, quote } = this.props;
-    const { showOpenSetting, ani, bgLoaded } = this.state;
+    const { weather, quote } = this.props;
+    const { showOpenSetting, ani } = this.state;
     const weatherIconStyle = weather && {
       mask: `url(https://cdn.heweather.com/cond_icon/${
         weather.now.cond_code
@@ -175,14 +182,14 @@ class Index extends Component<IndexProps, IndexState> {
             className="daily-image-default"
             src={bgDog}
             mode="aspectFill"
-            animation={ani.out}
+            animation={ani.defaultBg}
           />
           <Image
             className="daily-image"
             src="https://source.unsplash.com/user/suchenrain/likes/600x960"
             mode="aspectFill"
             onLoad={this.onBgLoaded}
-            animation={ani.in}
+            animation={ani.bg}
           />
         </View>
         <View className="mask-layer" />
@@ -217,7 +224,7 @@ class Index extends Component<IndexProps, IndexState> {
               </View>
             )}
           </View>
-          <View className="user-wrap">
+          <View className="user-wrap" animation={ani.userAvatar}>
             <AtAvatar
               className="user-avatar"
               circle
@@ -225,10 +232,10 @@ class Index extends Component<IndexProps, IndexState> {
               openData={{ type: 'userAvatarUrl' }}
             />
           </View>
-          <View className="clock-wrap">
+          <View className="clock-wrap" animation={ani.clock}>
             <Clock />
           </View>
-          <View className="quote-wrap">
+          <View className="quote-wrap" animation={ani.quote}>
             {quote && (
               <View className="quote-info">
                 <Text className="quote-info__text">{quote.hitokoto}</Text>

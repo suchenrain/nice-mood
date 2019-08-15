@@ -39,7 +39,7 @@ export default {
         });
       }
     },
-    *getQuote({ payload }, { call, put }) {
+    *getQuote({ payload, callback }, { call, put }) {
       const { error, result } = yield call(indexApi.getQuote, {
         ...payload
       });
@@ -51,6 +51,9 @@ export default {
             quote: result
           }
         });
+        if (callback && typeof callback === 'function') {
+          yield callback();
+        }
       }
     }
   },

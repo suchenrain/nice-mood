@@ -40,7 +40,7 @@ $icon-wh:60rpx;
     .mask-layer {
       z-index: 3;
       position: fixed;
-      background-color: rgba(#000000, 0.35);
+      background-color: rgba(#000000, 0.3);
       height: 100%;
       width: 100%;
       top: 0;
@@ -57,7 +57,7 @@ $icon-wh:60rpx;
       flex-direction: column;
       justify-content: first baseline;
       align-items: center;
-      height: 80vh;
+      // height: 80vh;
 
       >.index-title {
         text-align: center;
@@ -129,6 +129,7 @@ $icon-wh:60rpx;
       >.user-wrap {
         position: relative;
         height: 150rpx;
+        opacity: 0;
 
         .user-avatar {
           width: 150rpx;
@@ -136,12 +137,15 @@ $icon-wh:60rpx;
         }
       }
 
-      >.clock-wrap {}
+      >.clock-wrap {
+        opacity: 0;
+      }
 
       >.quote-wrap {
-        max-width: 80vw;
+        max-width: 85vw;
         margin-top: 130rpx;
-
+        opacity: 0;
+        
         .quote-info {
           display: flex;
           flex-direction: column;
