@@ -1,15 +1,15 @@
 import Taro, { Component, Config } from '@tarojs/taro';
-import { View, OpenData, Text, Image } from '@tarojs/components';
+import { View, Text, Image } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 // import Api from '@/utils/httpRequest'
 // import Tips from '@/utils/tips'
 import { IndexProps, IndexState } from './index.interface';
 import './index.scss';
-import { AtAvatar, AtToast } from 'taro-ui';
-import { OpenSetting, Clock } from '@/components';
-import { globalData } from '@/utils/common';
+import { AtAvatar } from 'taro-ui';
+import { OpenSetting, Clock, Copyright } from '@/components';
+import { globalData, isNight } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
-import { url } from 'inspector';
+import { easeInOut } from '@/utils/animation';
 // import { Demo } from '@/components'
 @connect(({ index, loading }) => ({
   ...index,
@@ -50,8 +50,8 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   onBgLoaded = () => {
-    const easeIn = this._easeInOut(1, 500, 5000);
-    const easeOut = this._easeInOut(0, 200, 5000);
+    const easeIn = easeInOut(1, 500, 5000);
+    const easeOut = easeInOut(0, 200, 5000);
 
     this.setState({
       bgLoaded: true,
@@ -59,15 +59,6 @@ class Index extends Component<IndexProps, IndexState> {
     });
   };
 
-  _easeInOut = (opacity: number, delay: number, duration: number) => {
-    let animation = Taro.createAnimation({
-      duration: duration,
-      timingFunction: 'ease',
-      delay: delay
-    });
-    animation.opacity(opacity).step();
-    return animation.export();
-  };
   // （重）加载页面数据
   _reloadPage = () => {
     this._setWeatherAndLocation();
@@ -173,7 +164,7 @@ class Index extends Component<IndexProps, IndexState> {
       }.png) no-repeat`,
       '-webkit-mask': `url(https://cdn.heweather.com/cond_icon/${
         weather.now.cond_code
-      }.png) no-repeat`,
+      }${isNight() ? 'n' : ''}.png) no-repeat`,
       '-webkit-mask-size': '100% 100%',
       'mask-size': '100% 100%'
     };
@@ -188,7 +179,7 @@ class Index extends Component<IndexProps, IndexState> {
           />
           <Image
             className="daily-image"
-            src="https://source.unsplash.com/user/suchenrain/likes"
+            src="https://source.unsplash.com/user/suchenrain/likes/600x960"
             mode="aspectFill"
             onLoad={this.onBgLoaded}
             animation={ani.in}
@@ -227,7 +218,12 @@ class Index extends Component<IndexProps, IndexState> {
             )}
           </View>
           <View className="user-wrap">
-            <AtAvatar className="user-avatar" circle size="large" openData={{ type: 'userAvatarUrl' }} />
+            <AtAvatar
+              className="user-avatar"
+              circle
+              size="large"
+              openData={{ type: 'userAvatarUrl' }}
+            />
           </View>
           <View className="clock-wrap">
             <Clock />
@@ -236,12 +232,14 @@ class Index extends Component<IndexProps, IndexState> {
             {quote && (
               <View className="quote-info">
                 <Text className="quote-info__text">{quote.hitokoto}</Text>
-                <Text className="quote-info__author">{`- ${quote.from} -`}</Text>
+                <Text className="quote-info__author">{`- ${
+                  quote.from
+                } -`}</Text>
               </View>
             )}
           </View>
         </View>
-
+        <Copyright />
         <OpenSetting
           isOpened={showOpenSetting}
           onCancel={this.onHideOpenSetting}

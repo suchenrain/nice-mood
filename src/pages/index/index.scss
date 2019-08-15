@@ -40,7 +40,7 @@ $icon-wh:60rpx;
     .mask-layer {
       z-index: 3;
       position: fixed;
-      background-color: rgba(#000000, 0.4);
+      background-color: rgba(#000000, 0.35);
       height: 100%;
       width: 100%;
       top: 0;
@@ -55,7 +55,7 @@ $icon-wh:60rpx;
       color: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: first baseline;
       align-items: center;
       height: 80vh;
 
@@ -71,8 +71,7 @@ $icon-wh:60rpx;
 
       >.weather-wrap {
         position: relative;
-        top: 160rpx;
-        left: 50rpx;
+        margin-top: 160rpx;
         width: 100%;
         height: 150rpx;
 
@@ -80,6 +79,8 @@ $icon-wh:60rpx;
           display: flex;
           justify-content: flex-start;
           align-items: baseline;
+          margin-left: 30rpx;
+          opacity: 0.8;
 
           &__tmp {
             font-size: 220%;
@@ -127,7 +128,6 @@ $icon-wh:60rpx;
 
       >.user-wrap {
         position: relative;
-        top: 70rpx;
         height: 150rpx;
 
         .user-avatar {
@@ -140,21 +140,31 @@ $icon-wh:60rpx;
 
       >.quote-wrap {
         max-width: 80vw;
+        margin-top: 130rpx;
 
         .quote-info {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           align-items: center;
+          opacity: 0.8;
+          // background-color: rgba(256, 256, 256, 0.2);
+          // padding: 15px 10px;
+          // border-radius: 10px;
+          // min-width: 60vw;
+
 
           &__text {
-            font-size: 39rpx;
+            font-size: 36rpx;
+            text-align: center;
+            line-height: 50rpx;
 
           }
 
           &__author {
-            font-size: 30rpx;
+            font-size: 27rpx;
             margin-top: 30rpx;
+            line-height: 33rpx;
           }
         }
       }

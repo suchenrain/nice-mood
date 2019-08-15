@@ -1,0 +1,31 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+.#{$prefix} {
+  &-copyright {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 15px;
+    
+    font-size: 28rpx;
+    text-align: center;
+    z-index: 999;
+
+    &__link {
+      display: inline-block;
+      vertical-align: top;
+      position: relative;
+      font-size: 28rpx;
+      color: #6190e8;
+      display: none;
+    }
+
+    &__text {
+      padding: 0 0.34em;
+      font-size: 24rpx;
+      color: rgba($color: #fff, $alpha: 0.6);
+    }
+  }
+}

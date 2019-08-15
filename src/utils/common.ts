@@ -10,7 +10,13 @@ export const repeat = (str = '0', times: number) =>
 // 时间前面 +0
 export const pad = (num: number, maxLength = 2) =>
   repeat('0', maxLength - num.toString().length) + num;
-
+//白天还是黑夜
+export const isNight = () => {
+  let time = new Date();
+  const hour = time.getHours();
+  if (hour >= 6 && hour <= 18) return false;
+  else return true;
+};
 /**
  * 全局的公共变量
  */
