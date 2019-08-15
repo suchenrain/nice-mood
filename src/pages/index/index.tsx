@@ -239,9 +239,9 @@ class Index extends Component<IndexProps, IndexState> {
             {quote && (
               <View className="quote-info">
                 <Text className="quote-info__text">{quote.hitokoto}</Text>
-                <Text className="quote-info__author">{`- ${
-                  quote.from
-                } -`}</Text>
+                <Text className="quote-info__author">
+                  &lceil;{` ${quote.from} `}&rfloor;
+                </Text>
               </View>
             )}
           </View>
