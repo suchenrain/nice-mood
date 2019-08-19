@@ -6,7 +6,7 @@ import { connect } from '@tarojs/redux';
 import { IndexProps, IndexState } from './index.interface';
 import './index.scss';
 import { AtAvatar } from 'taro-ui';
-import { OpenSetting, Clock, Copyright, LoginWeapp } from '@/components';
+import { OpenSetting, Clock, Copyright } from '@/components';
 import { globalData, isNight } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
 import { show } from '@/utils/animation';
@@ -28,7 +28,8 @@ class Index extends Component<IndexProps, IndexState> {
       located: false,
       //背景图是否已加载完成
       bgLoaded: false,
-      ani: {}
+      ani: {},
+      greetings: ['Seize the day', 'You got it', 'You are enough']
     };
   }
   // 对应微信小程序 onLoad()
@@ -64,6 +65,7 @@ class Index extends Component<IndexProps, IndexState> {
   _reloadPage = () => {
     this._setWeatherAndLocation();
     this._getQuote();
+    this._reloadGetGreeting();
     //this._setBackgroud();
   };
 
@@ -84,8 +86,46 @@ class Index extends Component<IndexProps, IndexState> {
     });
   };
 
+  _getGreeting = cb => {
+    Taro.cloud
+      .callFunction({
+        name: 'getGreeting',
+        data: {
+          hour: 0
+        }
+      })
+      .then((res: any) => {
+        let data = res.result.data;
+        if (data) {
+          cb && cb(data);
+        }
+      });
+  };
+  _reloadGetGreeting = () => {
+    let hour = new Date().getHours();
+    const key = `greeting_${hour}`;
+    Taro.getStorage({
+      key: key
+    }).then(
+      res => {
+        const greetings = JSON.parse(res.data);
+        this.setState({ greetings });
+      },
+      err => {
+        this._getGreeting(msgs => {
+          const greetings = msgs.map(msg => msg.message);
+          this.setState(greetings);
+          Taro.setStorage({
+            key: key,
+            data: JSON.stringify(greetings)
+          });
+        });
+      }
+    );
+  };
+
   _getQuote = () => {
-    show(this, 'quote', 0, 0, 1500);
+    show(this, 'quote', 0, 0, 1000);
     setTimeout(() => {
       this.props.dispatch({
         type: 'index/getQuote',
@@ -93,10 +133,10 @@ class Index extends Component<IndexProps, IndexState> {
           c: 'g'
         },
         callback: () => {
-          show(this, 'quote', 1, 0, 2000);
+          show(this, 'quote', 1, 0, 1500);
         }
       });
-    }, 1500);
+    }, 1000);
   };
   /** 设置时钟 */
   _setClock = () => {};
@@ -164,14 +204,18 @@ class Index extends Component<IndexProps, IndexState> {
 
   render() {
     const { weather, quote } = this.props;
-    const { showOpenSetting, ani } = this.state;
+    const { showOpenSetting, ani, greetings } = this.state;
+    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+    const hasNight =
+      weather &&
+      [100, 103, 104, 300, 301, 406, 407].indexOf(weather.now.cond_code) > -1;
     const weatherIconStyle = weather && {
       mask: `url(https://cdn.heweather.com/cond_icon/${
         weather.now.cond_code
       }.png) no-repeat`,
       '-webkit-mask': `url(https://cdn.heweather.com/cond_icon/${
         weather.now.cond_code
-      }${isNight() ? 'n' : ''}.png) no-repeat`,
+      }${isNight() && hasNight ? 'n' : ''}.png) no-repeat`,
       '-webkit-mask-size': '100% 100%',
       'mask-size': '100% 100%'
     };
@@ -235,6 +279,7 @@ class Index extends Component<IndexProps, IndexState> {
           <View className="clock-wrap" animation={ani.clock}>
             <Clock />
           </View>
+          <View className="greeting-text">{greeting}</View>
           <View className="quote-wrap" animation={ani.quote}>
             {quote && (
               <View className="quote-info">
@@ -246,7 +291,6 @@ class Index extends Component<IndexProps, IndexState> {
             )}
           </View>
         </View>
-        <LoginWeapp />
         <Copyright />
         <OpenSetting
           isOpened={showOpenSetting}

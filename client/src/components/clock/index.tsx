@@ -40,7 +40,6 @@ class Clock extends Component<IClockProps, IClockState> {
     return (
       <View className="fx-clock">
         <View className="time-text">{formatTime}</View>
-        <View className="greeting-text">Good Morning</View>
       </View>
     );
   }

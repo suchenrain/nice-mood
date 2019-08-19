@@ -141,11 +141,16 @@ $icon-wh:60rpx;
         opacity: 0;
       }
 
+      >.greeting-text {
+        font-size: 100%;
+        margin-top: 60rpx;
+      }
+
       >.quote-wrap {
         max-width: 85vw;
         margin-top: 130rpx;
         opacity: 0;
-        
+
         .quote-info {
           display: flex;
           flex-direction: column;

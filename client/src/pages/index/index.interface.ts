@@ -10,12 +10,7 @@ export interface IndexState {
   showOpenSetting: boolean;
   located: boolean;
   bgLoaded: boolean;
-  geo?: { city: string; district: string };
-  weather?: {
-    tmp: number;
-    cond_txt: string;
-    cond_code: number;
-  };
+  greetings: Array<string>;
   ani: any;
 }
 /**
