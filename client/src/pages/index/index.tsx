@@ -1,15 +1,15 @@
 import Taro, { Component, Config } from '@tarojs/taro';
-import { View, Text, Image } from '@tarojs/components';
+import { View, Text, Image, OpenData, Button } from '@tarojs/components';
 import { connect } from '@tarojs/redux';
 // import Api from '@/utils/httpRequest'
 // import Tips from '@/utils/tips'
 import { IndexProps, IndexState } from './index.interface';
-import './index.scss';
-import { AtAvatar } from 'taro-ui';
 import { OpenSetting, Clock, Copyright } from '@/components';
 import { globalData, isNight } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
 import { show } from '@/utils/animation';
+
+import './index.scss';
 // import { Demo } from '@/components'
 @connect(({ index, loading }) => ({
   ...index,
@@ -20,6 +20,8 @@ class Index extends Component<IndexProps, IndexState> {
     navigationBarTitleText: '每日好心情',
     enablePullDownRefresh: true
   };
+  bgImgDOM: any;
+
   constructor(props: IndexProps) {
     super(props);
     this.state = {
@@ -41,6 +43,15 @@ class Index extends Component<IndexProps, IndexState> {
   // 对应微信小程序的onShow()
   componentDidShow() {}
 
+  onShareAppMessage = res => {
+    if (res.from === 'button') {
+      console.log(res.target);
+    }
+    return {
+      title: '自定义转发标题',
+      path: '/page/user?id=123'
+    };
+  };
   onHideOpenSetting = () => {
     Taro.vibrateShort();
     this.setState({
@@ -52,7 +63,7 @@ class Index extends Component<IndexProps, IndexState> {
     this._reloadPage();
   };
 
-  onBgLoaded = () => {
+  onBgLoaded = (e: any) => {
     show(this, 'defaultBg', 0, 200, 2000);
     show(this, 'bg', 1, 200, 2000);
 
@@ -60,7 +71,7 @@ class Index extends Component<IndexProps, IndexState> {
       bgLoaded: true
     });
   };
-
+  refBgDom = node => (this.bgImgDOM = node);
   // （重）加载页面数据
   _reloadPage = () => {
     this._setWeatherAndLocation();
@@ -124,11 +135,11 @@ class Index extends Component<IndexProps, IndexState> {
     );
   };
   _setGreeting = greetings => {
-    show(this, 'greeting', 0, 0, 3000);
+    show(this, 'greeting', 0, 0.1, 3000);
     let greeting = greetings[Math.floor(Math.random() * greetings.length)];
     setTimeout(() => {
       this.setState({ greeting }, () => {
-        show(this, 'greeting', 1, 0, 3000);
+        show(this, 'greeting', 0.8, 0, 3000);
       });
     }, 3000);
   };
@@ -204,11 +215,17 @@ class Index extends Component<IndexProps, IndexState> {
   };
   // 获取天气及区域信息
   _getWeather = (location: string) => {
-    Taro.vibrateShort();
-    this.props.dispatch({
-      type: 'index/getWeather',
-      payload: { location, key: globalData.weatherKey }
-    });
+    show(this, 'weather', 0, 0, 1000);
+    setTimeout(() => {
+      Taro.vibrateShort();
+      this.props.dispatch({
+        type: 'index/getWeather',
+        payload: { location, key: globalData.weatherKey },
+        callback: () => {
+          show(this, 'weather', 0.8, 0, 1500);
+        }
+      });
+    }, 1000);
   };
 
   render() {
@@ -242,12 +259,13 @@ class Index extends Component<IndexProps, IndexState> {
             mode="aspectFill"
             onLoad={this.onBgLoaded}
             animation={ani.bg}
+            ref={this.refBgDom}
           />
         </View>
         <View className="mask-layer" />
         <View className="content-wrap">
           <Text className="index-title">每天好心情</Text>
-          <View className="weather-wrap">
+          <View className="weather-wrap" animation={ani.weather}>
             {weather && (
               <View className="weather-info">
                 <Text className="weather-info__tmp">
@@ -262,12 +280,6 @@ class Index extends Component<IndexProps, IndexState> {
                       className="weather-info__icon--mask"
                       style={weatherIconStyle}
                     />
-                    {/* <Image
-                      className="weather-info__icon"
-                      src={`https://cdn.heweather.com/cond_icon/${
-                        weather.now.cond_code
-                      }.png`}
-                    /> */}
                   </View>
                   <Text className="weather-info__location">
                     {`${weather.basic.parent_city} ${weather.basic.location}`}
@@ -276,19 +288,18 @@ class Index extends Component<IndexProps, IndexState> {
               </View>
             )}
           </View>
-          <View className="user-wrap" animation={ani.userAvatar}>
-            <AtAvatar
+          <View className="user-wrap">
+            <OpenData
+              type="userAvatarUrl"
               className="user-avatar"
-              circle
-              size="large"
-              openData={{ type: 'userAvatarUrl' }}
+              animation={ani.userAvatar}
             />
-          </View>
-          <View className="clock-wrap" animation={ani.clock}>
-            <Clock />
           </View>
           <View className="greeting-text" animation={ani.greeting}>
             {greeting}
+          </View>
+          <View className="clock-wrap" animation={ani.clock}>
+            <Clock />
           </View>
           <View className="quote-wrap" animation={ani.quote}>
             {quote && (
@@ -301,6 +312,12 @@ class Index extends Component<IndexProps, IndexState> {
                 </Text>
               </View>
             )}
+          </View>
+          <View className="iconfont-wrap">
+            <Text className="iconfont iconrefresh" />
+            <View className="iconfont iconshare">
+              <Button className="share-btn" size="mini" openType="share" />
+            </View>
           </View>
         </View>
         <Copyright />

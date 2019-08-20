@@ -11,7 +11,7 @@ export default {
   },
 
   effects: {
-    *getWeather({ payload }, { select, call, put }) {
+    *getWeather({ payload, callback }, { call, put }) {
       const { error, result } = yield call(indexApi.getWeather, {
         ...payload
       });
@@ -23,6 +23,9 @@ export default {
             weather: result.HeWeather6[0]
           }
         });
+        if (callback && typeof callback === 'function') {
+          yield callback();
+        }
       }
     },
     *getDailyImage({ payload }, { call, put }) {
