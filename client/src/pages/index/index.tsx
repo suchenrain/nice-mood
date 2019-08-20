@@ -29,7 +29,7 @@ class Index extends Component<IndexProps, IndexState> {
       //背景图是否已加载完成
       bgLoaded: false,
       ani: {},
-      greetings: ['Seize the day', 'You got it', 'You are enough']
+      greeting: 'You got it'
     };
   }
   // 对应微信小程序 onLoad()
@@ -109,12 +109,12 @@ class Index extends Component<IndexProps, IndexState> {
     }).then(
       res => {
         const greetings = JSON.parse(res.data);
-        this.setState({ greetings });
+        this._setGreeting(greetings);
       },
       err => {
         this._getGreeting(msgs => {
           const greetings = msgs.map(msg => msg.message);
-          this.setState(greetings);
+          this._setGreeting(greetings);
           Taro.setStorage({
             key: key,
             data: JSON.stringify(greetings)
@@ -122,6 +122,15 @@ class Index extends Component<IndexProps, IndexState> {
         });
       }
     );
+  };
+  _setGreeting = greetings => {
+    show(this, 'greeting', 0, 0, 3000);
+    let greeting = greetings[Math.floor(Math.random() * greetings.length)];
+    setTimeout(() => {
+      this.setState({ greeting }, () => {
+        show(this, 'greeting', 1, 0, 3000);
+      });
+    }, 3000);
   };
 
   _getQuote = () => {
@@ -133,7 +142,7 @@ class Index extends Component<IndexProps, IndexState> {
           c: 'g'
         },
         callback: () => {
-          show(this, 'quote', 1, 0, 1500);
+          show(this, 'quote', 1, 0, 2000);
         }
       });
     }, 1000);
@@ -204,8 +213,7 @@ class Index extends Component<IndexProps, IndexState> {
 
   render() {
     const { weather, quote } = this.props;
-    const { showOpenSetting, ani, greetings } = this.state;
-    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+    const { showOpenSetting, ani, greeting } = this.state;
     const hasNight =
       weather &&
       [100, 103, 104, 300, 301, 406, 407].indexOf(weather.now.cond_code) > -1;
@@ -279,11 +287,15 @@ class Index extends Component<IndexProps, IndexState> {
           <View className="clock-wrap" animation={ani.clock}>
             <Clock />
           </View>
-          <View className="greeting-text">{greeting}</View>
+          <View className="greeting-text" animation={ani.greeting}>
+            {greeting}
+          </View>
           <View className="quote-wrap" animation={ani.quote}>
             {quote && (
               <View className="quote-info">
-                <Text className="quote-info__text">{quote.hitokoto}</Text>
+                <Text className="quote-info__text">
+                  &#8220;{quote.hitokoto}&#8221;
+                </Text>
                 <Text className="quote-info__author">
                   &lceil;{` ${quote.from} `}&rfloor;
                 </Text>

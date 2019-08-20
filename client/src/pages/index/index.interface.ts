@@ -10,7 +10,7 @@ export interface IndexState {
   showOpenSetting: boolean;
   located: boolean;
   bgLoaded: boolean;
-  greetings: Array<string>;
+  greeting: string;
   ani: any;
 }
 /**
