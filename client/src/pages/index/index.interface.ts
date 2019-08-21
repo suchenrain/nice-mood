@@ -8,6 +8,7 @@ import { DvaLoading } from '@/types/dva-loading.interface';
  */
 export interface IndexState {
   showOpenSetting: boolean;
+  showActionPanel:boolean;
   located: boolean;
   bgLoaded: boolean;
   greeting: string;

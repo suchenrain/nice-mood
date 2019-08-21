@@ -1,0 +1,33 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+.#{$prefix} {
+  &-action-panel__item {
+    padding: 20rpx 5rpx;
+    font-size: 28rpx;
+    transition: background-color 0.3s;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    &-icon {
+      width: 92rpx;
+      height: 92rpx;
+      font-size: 80rpx;
+      display: block;
+      padding: 16rpx;
+      background-color: #fff;
+      border-radius: 26rpx;
+      position: relative;
+
+    }
+
+    &-text {
+      font-size: 27rpx;
+      color: rgba($color: #2c2b2b, $alpha: 0.9);
+      margin-top: 10rpx;
+    }
+  }
+}

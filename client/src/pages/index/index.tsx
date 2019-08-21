@@ -4,7 +4,13 @@ import { connect } from '@tarojs/redux';
 // import Api from '@/utils/httpRequest'
 // import Tips from '@/utils/tips'
 import { IndexProps, IndexState } from './index.interface';
-import { OpenSetting, Clock, Copyright } from '@/components';
+import {
+  OpenSetting,
+  Clock,
+  Copyright,
+  ActionPanel,
+  ActionPanelItem
+} from '@/components';
 import { globalData, isNight, getCurrentPageUrl } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
 import { show } from '@/utils/animation';
@@ -28,6 +34,7 @@ class Index extends Component<IndexProps, IndexState> {
     super(props);
     this.state = {
       showOpenSetting: false,
+      showActionPanel: false,
       // 是否已定位
       located: false,
       //背景图是否已加载完成
@@ -89,6 +96,35 @@ class Index extends Component<IndexProps, IndexState> {
       bgLoaded: true
     });
   };
+
+  onRefresh = () => {
+    this._getQuote();
+    this._reloadGetGreeting();
+  };
+  onCancelPanel = () => {
+    this.setState({
+      showActionPanel: false
+    });
+  };
+  handleShare = () => {
+    this.setState({ showActionPanel: true });
+  };
+  // 分享朋友圈
+  onShareMoment = () => {
+    Taro.getImageInfo({
+      src: 'https://source.unsplash.com/user/suchenrain/likes/600x960'
+    }).then(
+      res => {
+        console.log(res);
+      },
+      err => {
+        console.log(err);
+      }
+    );
+  };
+  //发送给朋友
+  onForward = () => {};
+
   // （重）加载页面数据
   _reloadPage = () => {
     this._setWeatherAndLocation();
@@ -173,6 +209,7 @@ class Index extends Component<IndexProps, IndexState> {
           c: 'g'
         },
         callback: () => {
+          Taro.vibrateShort();
           show(this, 'quote', 1, 0, 2000);
         }
       });
@@ -251,7 +288,7 @@ class Index extends Component<IndexProps, IndexState> {
 
   render() {
     const { weather, quote } = this.props;
-    const { showOpenSetting, ani, greeting } = this.state;
+    const { showOpenSetting, showActionPanel, ani, greeting } = this.state;
     const hasNight =
       weather &&
       [100, 103, 104, 300, 301, 406, 407].indexOf(weather.now.cond_code) > -1;
@@ -334,9 +371,9 @@ class Index extends Component<IndexProps, IndexState> {
             )}
           </View>
           <View className="iconfont-wrap">
-            <Text className="iconfont iconrefresh" />
-            <View className="iconfont iconshare">
-              <Button className="share-btn" size="mini" openType="share" />
+            <Text className="iconfont iconrefresh" onClick={this.onRefresh} />
+            <View className="iconfont iconshare2" onClick={this.handleShare}>
+              {/* <Button className="share-btn" size="mini" openType="share" /> */}
             </View>
           </View>
         </View>
@@ -346,6 +383,25 @@ class Index extends Component<IndexProps, IndexState> {
           onCancel={this.onHideOpenSetting}
           onOk={this.onHideOpenSetting}
         />
+        <ActionPanel
+          cancelText="取消"
+          isOpened={showActionPanel}
+          className="action-panel-wrap"
+          onCancel={this.onCancelPanel}
+          onClose={this.onCancelPanel}
+        >
+          <ActionPanelItem
+            onClick={this.onForward}
+            icon="iconrefresh"
+            title="发送给朋友"
+          >
+          </ActionPanelItem>
+          <ActionPanelItem
+            onClick={this.onShareMoment}
+            icon="iconrefresh"
+            title="分享到朋友圈"
+          />
+        </ActionPanel>
       </View>
     );
   }
