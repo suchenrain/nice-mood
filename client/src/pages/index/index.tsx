@@ -5,7 +5,7 @@ import { connect } from '@tarojs/redux';
 // import Tips from '@/utils/tips'
 import { IndexProps, IndexState } from './index.interface';
 import { OpenSetting, Clock, Copyright } from '@/components';
-import { globalData, isNight } from '@/utils/common';
+import { globalData, isNight, getCurrentPageUrl } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
 import { show } from '@/utils/animation';
 
@@ -20,7 +20,9 @@ class Index extends Component<IndexProps, IndexState> {
     navigationBarTitleText: '每日好心情',
     enablePullDownRefresh: true
   };
-  bgImgDOM: any;
+  quoteTimeId: any;
+  weatherTimeId: any;
+  greetingTimeId: any;
 
   constructor(props: IndexProps) {
     super(props);
@@ -44,12 +46,15 @@ class Index extends Component<IndexProps, IndexState> {
   componentDidShow() {}
 
   onShareAppMessage = res => {
-    if (res.from === 'button') {
-      console.log(res.target);
-    }
+    const title = this.props.quote ? this.props.quote.hitokoto : '每天好心情呢';
+    const imageUrl = this.state.bgLoaded
+      ? 'https://source.unsplash.com/user/suchenrain/likes/500x400'
+      : bgDog;
+    const path = getCurrentPageUrl();
     return {
-      title: '自定义转发标题',
-      path: '/page/user?id=123'
+      title: title,
+      path: path,
+      imageUrl: imageUrl
     };
   };
   onHideOpenSetting = () => {
@@ -61,6 +66,19 @@ class Index extends Component<IndexProps, IndexState> {
   onPullDownRefresh = () => {
     Taro.stopPullDownRefresh();
     this._reloadPage();
+    // const query = Taro.createSelectorQuery();
+    // let test = query.select('.daily-image');
+    // let test2 = query.select('.daily-image-default');
+    // test
+    //   .fields({ properties: ['src', 'mode'] }, res => {
+    //     console.log(res);
+    //   })
+    //   .exec();
+    // test2
+    //   .fields({ properties: ['src', 'mode'] }, res => {
+    //     console.log(res);
+    //   })
+    //   .exec();
   };
 
   onBgLoaded = (e: any) => {
@@ -71,7 +89,6 @@ class Index extends Component<IndexProps, IndexState> {
       bgLoaded: true
     });
   };
-  refBgDom = node => (this.bgImgDOM = node);
   // （重）加载页面数据
   _reloadPage = () => {
     this._setWeatherAndLocation();
@@ -135,9 +152,11 @@ class Index extends Component<IndexProps, IndexState> {
     );
   };
   _setGreeting = greetings => {
+    if (this.greetingTimeId) clearTimeout(this.greetingTimeId);
+
     show(this, 'greeting', 0, 0.1, 3000);
     let greeting = greetings[Math.floor(Math.random() * greetings.length)];
-    setTimeout(() => {
+    this.greetingTimeId = setTimeout(() => {
       this.setState({ greeting }, () => {
         show(this, 'greeting', 0.8, 0, 3000);
       });
@@ -145,8 +164,9 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   _getQuote = () => {
+    if (this.quoteTimeId) clearTimeout(this.quoteTimeId);
     show(this, 'quote', 0, 0, 1000);
-    setTimeout(() => {
+    this.quoteTimeId = setTimeout(() => {
       this.props.dispatch({
         type: 'index/getQuote',
         payload: {
@@ -215,8 +235,9 @@ class Index extends Component<IndexProps, IndexState> {
   };
   // 获取天气及区域信息
   _getWeather = (location: string) => {
+    if (this.weatherTimeId) clearTimeout(this.weatherTimeId);
     show(this, 'weather', 0, 0, 1000);
-    setTimeout(() => {
+    this.weatherTimeId = setTimeout(() => {
       Taro.vibrateShort();
       this.props.dispatch({
         type: 'index/getWeather',
@@ -259,7 +280,6 @@ class Index extends Component<IndexProps, IndexState> {
             mode="aspectFill"
             onLoad={this.onBgLoaded}
             animation={ani.bg}
-            ref={this.refBgDom}
           />
         </View>
         <View className="mask-layer" />

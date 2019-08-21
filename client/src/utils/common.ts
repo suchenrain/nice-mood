@@ -1,3 +1,5 @@
+import Taro from '@tarojs/taro';
+
 /*
 |--------------------------------------
 |  公用函数
@@ -34,4 +36,14 @@ export const formatTime = (time: Date) => {
   `${pad(time.getHours())}:${pad(time.getMinutes())}:${pad(
     time.getSeconds()
   )}.${pad(time.getMilliseconds(), 3)}`;
+};
+
+/**
+ * 获取当前页url
+ */
+export const getCurrentPageUrl = (): string => {
+  let pages = Taro.getCurrentPages();
+  let currentPage = pages[pages.length - 1];
+  let url = currentPage.route;
+  return url;
 };
