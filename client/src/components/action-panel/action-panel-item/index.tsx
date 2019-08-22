@@ -35,6 +35,7 @@ class ActionPanelItem extends Component<
     return (
       <View className={rootClass}>
         <View className={iconClass} onClick={this.handleClick}>
+          {this.props.children}
         </View>
         <Text className="fx-action-panel__item-text">{this.props.title}</Text>
       </View>

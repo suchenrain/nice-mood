@@ -107,20 +107,25 @@ class Index extends Component<IndexProps, IndexState> {
     });
   };
   handleShare = () => {
-    this.setState({ showActionPanel: true });
+    this.setState({ showActionPanel: true }, () => {
+      Taro.vibrateShort();
+    });
   };
   // 分享朋友圈
   onShareMoment = () => {
-    Taro.getImageInfo({
-      src: 'https://source.unsplash.com/user/suchenrain/likes/600x960'
-    }).then(
-      res => {
-        console.log(res);
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    const FileSystemManager = Taro.getFileSystemManager();
+
+    FileSystemManager.getSavedFileList()
+    // Taro.getImageInfo({
+    //   src: 'https://source.unsplash.com/user/suchenrain/likes/600x960'
+    // }).then(
+    //   res => {
+    //     console.log(res);
+    //   },
+    //   err => {
+    //     console.log(err);
+    //   }
+    // );
   };
   //发送给朋友
   onForward = () => {};
@@ -395,6 +400,7 @@ class Index extends Component<IndexProps, IndexState> {
             icon="iconrefresh"
             title="发送给朋友"
           >
+            <Button className="share-btn" size="mini" openType="share" />
           </ActionPanelItem>
           <ActionPanelItem
             onClick={this.onShareMoment}
