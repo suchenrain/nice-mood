@@ -47,3 +47,12 @@ export const getCurrentPageUrl = (): string => {
   let url = currentPage.route;
   return url;
 };
+
+function createRpx2px() {
+  const { windowWidth } = Taro.getSystemInfoSync();
+  return (rpx: number) => {
+    return (windowWidth / 750) * rpx;
+  };
+}
+
+export const Rpx2px = createRpx2px();

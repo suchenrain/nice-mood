@@ -5,11 +5,14 @@ import LoginWeapp from './login/index.weapp';
 import ActionPanel from './action-panel';
 import ActionPanelItem from './action-panel/action-panel-item';
 
+import ShareMoment from './share-moment'
+
 export {
   OpenSetting,
   Clock,
   Copyright,
   LoginWeapp,
   ActionPanelItem,
-  ActionPanel
+  ActionPanel,
+  ShareMoment
 };

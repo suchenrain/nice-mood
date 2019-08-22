@@ -9,7 +9,8 @@ import {
   Clock,
   Copyright,
   ActionPanel,
-  ActionPanelItem
+  ActionPanelItem,
+  ShareMoment
 } from '@/components';
 import { globalData, isNight, getCurrentPageUrl } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
@@ -35,6 +36,7 @@ class Index extends Component<IndexProps, IndexState> {
     this.state = {
       showOpenSetting: false,
       showActionPanel: false,
+      shareMoment: false,
       // 是否已定位
       located: false,
       //背景图是否已加载完成
@@ -101,7 +103,7 @@ class Index extends Component<IndexProps, IndexState> {
     this._getQuote();
     this._reloadGetGreeting();
   };
-  onCancelPanel = () => {
+  handleCancelPanel = () => {
     this.setState({
       showActionPanel: false
     });
@@ -111,24 +113,21 @@ class Index extends Component<IndexProps, IndexState> {
       Taro.vibrateShort();
     });
   };
+  onCloseShareMoment = () => {
+    this.setState({
+      shareMoment: false,
+      showActionPanel: true
+    });
+  };
   // 分享朋友圈
   onShareMoment = () => {
-    const FileSystemManager = Taro.getFileSystemManager();
-
-    FileSystemManager.getSavedFileList()
-    // Taro.getImageInfo({
-    //   src: 'https://source.unsplash.com/user/suchenrain/likes/600x960'
-    // }).then(
-    //   res => {
-    //     console.log(res);
-    //   },
-    //   err => {
-    //     console.log(err);
-    //   }
-    // );
+    this.handleCancelPanel();
+    this.setState({ shareMoment: true });
   };
   //发送给朋友
-  onForward = () => {};
+  onForward = () => {
+    this.handleCancelPanel();
+  };
 
   // （重）加载页面数据
   _reloadPage = () => {
@@ -231,10 +230,11 @@ class Index extends Component<IndexProps, IndexState> {
   _checkLocationPermission = (cb: () => void) => {
     Taro.getSetting({
       success: res => {
+        const permisson = 'scope.userLocation';
         // 从未授权地理位置或者已经拒绝
-        if (!res.authSetting['scope.userLocation']) {
+        if (!res.authSetting[permisson]) {
           Taro.vibrateShort();
-          Taro.authorize({ scope: 'scope.userLocation' }).then(() => {
+          Taro.authorize({ scope: permisson }).then(() => {
             this._locationAccept();
             cb();
           }, this._locationReject);
@@ -293,7 +293,13 @@ class Index extends Component<IndexProps, IndexState> {
 
   render() {
     const { weather, quote } = this.props;
-    const { showOpenSetting, showActionPanel, ani, greeting } = this.state;
+    const {
+      showOpenSetting,
+      showActionPanel,
+      shareMoment,
+      ani,
+      greeting
+    } = this.state;
     const hasNight =
       weather &&
       [100, 103, 104, 300, 301, 406, 407].indexOf(weather.now.cond_code) > -1;
@@ -392,8 +398,8 @@ class Index extends Component<IndexProps, IndexState> {
           cancelText="取消"
           isOpened={showActionPanel}
           className="action-panel-wrap"
-          onCancel={this.onCancelPanel}
-          onClose={this.onCancelPanel}
+          onCancel={this.handleCancelPanel}
+          onClose={this.handleCancelPanel}
         >
           <ActionPanelItem
             onClick={this.onForward}
@@ -408,6 +414,7 @@ class Index extends Component<IndexProps, IndexState> {
             title="分享到朋友圈"
           />
         </ActionPanel>
+        <ShareMoment isOpened={shareMoment} onClose={this.onCloseShareMoment} />
       </View>
     );
   }
