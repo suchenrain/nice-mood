@@ -14,5 +14,6 @@
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
 	"libVersion": "2.2.3",
+	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
 	"condition": {}
 }
