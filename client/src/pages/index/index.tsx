@@ -414,7 +414,12 @@ class Index extends Component<IndexProps, IndexState> {
             title="分享到朋友圈"
           />
         </ActionPanel>
-        <ShareMoment isOpened={shareMoment} onClose={this.onCloseShareMoment} />
+        <ShareMoment
+          isOpened={shareMoment}
+          onClose={this.onCloseShareMoment}
+          text={quote ? quote.hitokoto : ''}
+          author={quote ? quote.from : ''}
+        />
       </View>
     );
   }

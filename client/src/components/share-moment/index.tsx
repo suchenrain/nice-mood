@@ -11,7 +11,8 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   constructor(props: IShareMomentProps) {
     super(props);
     this.state = {
-      imageFile: ''
+      imageFile: '',
+      photoLoaded: false
     };
   }
   // static options = {
@@ -19,13 +20,17 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   // }
   static defaultProps: IShareMomentProps = {
     isOpened: false,
+    src: '../../assets/bg/bg_dog.jpg',
+    text: '',
+    author: '',
     onClose: () => {}
   };
 
   componentWillReceiveProps(nextProps: IShareMomentProps) {
-    const { isOpened } = nextProps;
+    const presrc = this.props.src;
+    const { isOpened, src, text, author } = nextProps;
     if (isOpened) {
-      this.draw();
+      this.draw(src, text, author);
     }
   }
 
@@ -89,9 +94,26 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
     Tips.toast('保存失败,请授权相册权限！');
   };
 
-  draw = () => {
+  draw = (src: string, text: string, author: string) => {
+    let quote = text.split(/[,|.|！|。|，|？|?|;|:|、]+/);
+    let text2print: Array<string> = [];
+    quote.reduce((x, y) => {
+      if (x.length + y.length > 15) {
+        text2print.push(x);
+        return y;
+      } else {
+        if (x == '') {
+          return y;
+        } else {
+          text2print.push(`${x} ${y}`);
+          return '';
+        }
+      }
+    });
+    text2print = text2print.filter(x => x.length > 0);
+    Tips.loading('准备图片中...');
     Taro.getImageInfo({
-      src: '../../assets/bg/bg_dog.jpg'
+      src: src
     }).then(background => {
       const ctx = Taro.createCanvasContext('share', this.$scope);
       const canvasWidth = Rpx2px(300 * 2 * 3);
@@ -105,11 +127,34 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
         canvasHeight
       );
 
-      // 绘制用户名
-      ctx.setFontSize(20);
+      // 添加一层遮罩
+      ctx.setFillStyle('rgba(0, 0, 0, 0.2)');
+
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+      // 绘制text
+      ctx.setFontSize(Rpx2px(15 * 2 * 3));
       ctx.setTextAlign('center');
-      ctx.setFillStyle('#ffffff');
-      ctx.fillText('Test', canvasWidth / 2, 10 + 50);
+      ctx.setFillStyle('rgba(256, 256, 256, 0.6)');
+      text2print.forEach((t, index) => {
+        if (index == 0) t = `“${t}`;
+        if (index == text2print.length - 1) {
+          t = `${t}”`;
+        }
+        ctx.fillText(
+          t,
+          canvasWidth / 2,
+          Rpx2px((index == 0 ? 320 : 320 + index * 20) * 2 * 3)
+        );
+      });
+
+      ctx.setFontSize(Rpx2px(12 * 2 * 3));
+      author = `「 ${author} 」`;
+      ctx.fillText(
+        author,
+        canvasWidth / 2,
+        Rpx2px((335 + text2print.length * 20) * 2 * 3)
+      );
       ctx.stroke();
       // 完成作画
       ctx.draw(false, () => {
@@ -123,6 +168,11 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
         });
       });
     });
+  };
+
+  onPhotoLoaded = () => {
+    Tips.loaded();
+    this.setState({ photoLoaded: true });
   };
 
   canvasToTempFilePath = (option, context) => {
@@ -140,16 +190,20 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
 
   render() {
     const { isOpened } = this.props;
-    const { imageFile } = this.state;
+    const { imageFile, photoLoaded } = this.state;
     const rootClass = classNames('fx-share-moment', {
-      'fx-share-moment--active': isOpened
+      'fx-share-moment--active': isOpened && photoLoaded
     });
     return (
       <View className={rootClass} onTouchMove={this.handleTouchMove}>
         <Canvas className="fx-share-moment__canvas-hide" canvasId="share" />
         <View className="fx-share-moment__container">
           <View className="fx-share-moment__content">
-            <Image className="fx-share-moment__canvas" src={imageFile} />
+            <Image
+              className="fx-share-moment__canvas"
+              src={imageFile}
+              onLoad={this.onPhotoLoaded}
+            />
             <View className="fx-share-moment__footer">
               <View className="fx-share-moment__save" onClick={this.handleSave}>
                 保存到相册
