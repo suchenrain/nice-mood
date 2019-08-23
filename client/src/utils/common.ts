@@ -56,3 +56,12 @@ function createRpx2px() {
 }
 
 export const Rpx2px = createRpx2px();
+
+/**
+ * 获取字符串长度，区分中英文
+ * @param str
+ */
+export const getStrLength = (str: string): number => {
+  let cArr = str.match(/[^\x00-\xff]/gi);
+  return str.length + (cArr == null ? 0 : cArr.length);
+};

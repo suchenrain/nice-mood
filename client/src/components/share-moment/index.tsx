@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import { IShareMomentProps, IShareMomentState } from './index.interface';
 import './index.scss';
-import { Rpx2px } from '@/utils/common';
+import { Rpx2px, getStrLength } from '@/utils/common';
 import Tips from '@/utils/tips';
 
 class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
@@ -94,23 +94,32 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
     Tips.toast('保存失败,请授权相册权限！');
   };
 
-  draw = (src: string, text: string, author: string) => {
-    let quote = text.split(/[,|.|！|。|，|？|?|;|:|、]+/);
-    let text2print: Array<string> = [];
-    quote.reduce((x, y) => {
-      if (x.length + y.length > 15) {
-        text2print.push(x);
-        return y;
+  buildPrintArray = (text: string): Array<string> => {
+    let quotes = text.split(/[,.！!"'。，？?;:、\s]/g);
+    let res: Array<string> = [];
+    quotes = quotes.filter(q => q.length > 0);
+    let lastCount = 0;
+    let lastStr: string = '';
+    for (let i = 0; i < quotes.length; i++) {
+      let curStr = quotes[i];
+      let curCount = getStrLength(curStr);
+      if (i > 0 && lastCount < 26 && lastCount + curCount <= 26) {
+        res.pop();
+        res.push(`${lastStr} ${curStr}`);
+        lastStr = `${lastStr} ${curStr}`;
+        lastCount = getStrLength(lastStr);
       } else {
-        if (x == '') {
-          return y;
-        } else {
-          text2print.push(`${x} ${y}`);
-          return '';
-        }
+        res.push(curStr);
+        lastCount = curCount;
+        lastStr = curStr;
       }
-    });
-    text2print = text2print.filter(x => x.length > 0);
+    }
+    return res;
+  };
+
+  draw = (src: string, text: string, author: string) => {
+    let text2print = this.buildPrintArray(text);
+
     Tips.loading('准备图片中...');
     Taro.getImageInfo({
       src: src
@@ -135,11 +144,11 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
       // 绘制text
       ctx.setFontSize(Rpx2px(15 * 2 * 3));
       ctx.setTextAlign('center');
-      ctx.setFillStyle('rgba(256, 256, 256, 0.6)');
+      ctx.setFillStyle('rgba(256, 256, 256, 0.75)');
       text2print.forEach((t, index) => {
-        if (index == 0) t = `“${t}`;
+        if (index == 0) t = `“ ${t}`;
         if (index == text2print.length - 1) {
-          t = `${t}”`;
+          t = `${t} ”`;
         }
         ctx.fillText(
           t,
