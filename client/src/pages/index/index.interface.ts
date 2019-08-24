@@ -8,9 +8,10 @@ import { DvaLoading } from '@/types/dva-loading.interface';
  */
 export interface IndexState {
   showOpenSetting: boolean;
-  showActionPanel:boolean;
-  shareMoment:boolean;
+  showActionPanel: boolean;
+  shareMoment: boolean;
   located: boolean;
+  dailyBg: string;
   bgLoaded: boolean;
   greeting: string;
   ani: any;

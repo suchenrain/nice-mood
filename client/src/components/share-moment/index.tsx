@@ -95,7 +95,7 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   };
 
   buildPrintArray = (text: string): Array<string> => {
-    let quotes = text.split(/[,.！!"'。，？?;:、\s]/g);
+    let quotes = text.split(/[,，.。！!"“”'‘’？?;；:：、\s]/g);
     let res: Array<string> = [];
     quotes = quotes.filter(q => q.length > 0);
     let lastCount = 0;
@@ -128,13 +128,7 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
       const canvasWidth = Rpx2px(300 * 2 * 3);
       const canvasHeight = Rpx2px(450 * 2 * 3);
       // 绘制背景，填充满整个canvas画布
-      ctx.drawImage(
-        `../../${background.path}`,
-        0,
-        0,
-        canvasWidth,
-        canvasHeight
-      );
+      ctx.drawImage(`${background.path}`, 0, 0, canvasWidth, canvasHeight);
 
       // 添加一层遮罩
       ctx.setFillStyle('rgba(0, 0, 0, 0.2)');

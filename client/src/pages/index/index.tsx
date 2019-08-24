@@ -12,7 +12,7 @@ import {
   ActionPanelItem,
   ShareMoment
 } from '@/components';
-import { globalData, isNight, getCurrentPageUrl } from '@/utils/common';
+import { globalData, isNight, getCurrentPageUrl, pad } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
 import { show } from '@/utils/animation';
 
@@ -40,6 +40,7 @@ class Index extends Component<IndexProps, IndexState> {
       // 是否已定位
       located: false,
       //背景图是否已加载完成
+      dailyBg: '',
       bgLoaded: false,
       ani: {},
       greeting: 'You got it'
@@ -134,7 +135,7 @@ class Index extends Component<IndexProps, IndexState> {
     this._setWeatherAndLocation();
     this._getQuote();
     this._reloadGetGreeting();
-    //this._setBackgroud();
+    this._setBackgroud();
   };
 
   /** 设置背景图片 */
@@ -143,15 +144,34 @@ class Index extends Component<IndexProps, IndexState> {
       this._getDailyImage();
     }
   };
+  _dailyBgName = () => {
+    const date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
 
+    const fileName = `cloud://dev-nicemood.6465-dev-nicemood-1257746022/DailyPhoto/${year}${pad(
+      month
+    )}${pad(day)}.jpg`;
+    return fileName;
+  };
   _getDailyImage = () => {
-    this.props.dispatch({
-      type: 'index/getDailyImage',
-      payload: {
-        collections: `8349391,8349361`,
-        client_id: globalData.unsplashClientId
-      }
-    });
+    Taro.cloud
+      .getTempFileURL({
+        fileList: [this._dailyBgName()]
+      })
+      .then(res => {
+        this.setState({
+          dailyBg: res.fileList[0].tempFileURL
+        });
+      });
+    // this.props.dispatch({
+    //   type: 'index/getDailyImage',
+    //   payload: {
+    //     collections: `8349391,8349361`,
+    //     client_id: globalData.unsplashClientId
+    //   }
+    // });
   };
 
   _getGreeting = cb => {
@@ -298,7 +318,8 @@ class Index extends Component<IndexProps, IndexState> {
       showActionPanel,
       shareMoment,
       ani,
-      greeting
+      greeting,
+      dailyBg
     } = this.state;
     const hasNight =
       weather &&
@@ -324,7 +345,8 @@ class Index extends Component<IndexProps, IndexState> {
           />
           <Image
             className="daily-image"
-            src="https://source.unsplash.com/user/suchenrain/likes/600x960"
+            // src="https://source.unsplash.com/user/suchenrain/likes/600x960"
+            src={dailyBg}
             mode="aspectFill"
             onLoad={this.onBgLoaded}
             animation={ani.bg}
@@ -417,6 +439,7 @@ class Index extends Component<IndexProps, IndexState> {
         <ShareMoment
           isOpened={shareMoment}
           onClose={this.onCloseShareMoment}
+          src={dailyBg}
           text={quote ? quote.hitokoto : ''}
           author={quote ? quote.from : ''}
         />
