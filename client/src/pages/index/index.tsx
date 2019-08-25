@@ -16,6 +16,8 @@ import { globalData, isNight, getCurrentPageUrl, pad } from '@/utils/common';
 import bgDog from '@/assets/bg/bg_dog.jpg';
 import { show } from '@/utils/animation';
 
+import classNames from 'classnames';
+
 import './index.scss';
 // import { Demo } from '@/components'
 @connect(({ index, loading }) => ({
@@ -30,6 +32,7 @@ class Index extends Component<IndexProps, IndexState> {
   quoteTimeId: any;
   weatherTimeId: any;
   greetingTimeId: any;
+  refreshingQuote:boolean=false;
 
   constructor(props: IndexProps) {
     super(props);
@@ -49,8 +52,8 @@ class Index extends Component<IndexProps, IndexState> {
   // 对应微信小程序 onLoad()
   componentDidMount() {
     this._reloadPage();
-    show(this, 'userAvatar', 1, 200, 2000);
-    show(this, 'clock', 1, 200, 2000);
+    show(this, 'userAvatar', 0.7, 500, 2000);
+    show(this, 'clock', 1, 500, 2000);
   }
   // 对应微信小程序的onShow()
   componentDidShow() {}
@@ -218,13 +221,14 @@ class Index extends Component<IndexProps, IndexState> {
     let greeting = greetings[Math.floor(Math.random() * greetings.length)];
     this.greetingTimeId = setTimeout(() => {
       this.setState({ greeting }, () => {
-        show(this, 'greeting', 0.8, 0, 3000);
+        show(this, 'greeting', 0.7, 0, 3000);
       });
     }, 3000);
   };
 
   _getQuote = () => {
     if (this.quoteTimeId) clearTimeout(this.quoteTimeId);
+    this.refreshingQuote=true;
     show(this, 'quote', 0, 0, 1000);
     this.quoteTimeId = setTimeout(() => {
       this.props.dispatch({
@@ -234,6 +238,7 @@ class Index extends Component<IndexProps, IndexState> {
         },
         callback: () => {
           Taro.vibrateShort();
+          this.refreshingQuote=false;
           show(this, 'quote', 1, 0, 2000);
         }
       });
@@ -312,7 +317,7 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   render() {
-    const { weather, quote } = this.props;
+    const { weather, quote, loading } = this.props;
     const {
       showOpenSetting,
       showActionPanel,
@@ -334,6 +339,10 @@ class Index extends Component<IndexProps, IndexState> {
       '-webkit-mask-size': '100% 100%',
       'mask-size': '100% 100%'
     };
+
+    const refreshClass = classNames('iconfont', 'iconrefresh', {
+      'iconrefresh--active': this.refreshingQuote
+    });
     return (
       <View className="fx-index-wrap">
         <View className="daily-image-wrap">
@@ -355,39 +364,43 @@ class Index extends Component<IndexProps, IndexState> {
         <View className="mask-layer" />
         <View className="content-wrap">
           <Text className="index-title">每天好心情</Text>
-          <View className="weather-wrap" animation={ani.weather}>
-            {weather && (
-              <View className="weather-info">
-                <Text className="weather-info__tmp">
-                  {weather.now.tmp}&deg;
-                </Text>
-                <View className="weather-info__rightbox">
-                  <View className="weather-info__condicon">
-                    <Text className="weather-info__cond">
-                      {weather.now.cond_txt}
-                    </Text>
-                    <View
-                      className="weather-info__icon--mask"
-                      style={weatherIconStyle}
-                    />
-                  </View>
-                  <Text className="weather-info__location">
-                    {`${weather.basic.parent_city} ${weather.basic.location}`}
-                  </Text>
-                </View>
+          <View className="top-wrap">
+            <View className="user-wrap">
+              <OpenData
+                type="userAvatarUrl"
+                className="user-avatar"
+                animation={ani.userAvatar}
+              />
+              <View className="greeting-text" animation={ani.greeting}>
+                {greeting}
               </View>
-            )}
+            </View>
+
+            <View className="weather-wrap" animation={ani.weather}>
+              {weather && (
+                <View className="weather-info">
+                  <Text className="weather-info__tmp">
+                    {weather.now.tmp}&deg;
+                  </Text>
+                  <View className="weather-info__rightbox">
+                    <View className="weather-info__condicon">
+                      <Text className="weather-info__cond">
+                        {weather.now.cond_txt}
+                      </Text>
+                      <View
+                        className="weather-info__icon--mask"
+                        style={weatherIconStyle}
+                      />
+                    </View>
+                    <Text className="weather-info__location">
+                      {`${weather.basic.parent_city} ${weather.basic.location}`}
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </View>
           </View>
-          <View className="user-wrap">
-            <OpenData
-              type="userAvatarUrl"
-              className="user-avatar"
-              animation={ani.userAvatar}
-            />
-          </View>
-          <View className="greeting-text" animation={ani.greeting}>
-            {greeting}
-          </View>
+
           <View className="clock-wrap" animation={ani.clock}>
             <Clock />
           </View>
@@ -404,8 +417,8 @@ class Index extends Component<IndexProps, IndexState> {
             )}
           </View>
           <View className="iconfont-wrap">
-            <Text className="iconfont iconrefresh" onClick={this.onRefresh} />
-            <View className="iconfont iconshare2" onClick={this.handleShare}>
+            <Text className={refreshClass} onClick={this.onRefresh} />
+            <View className="iconfont iconshare" onClick={this.handleShare}>
               {/* <Button className="share-btn" size="mini" openType="share" /> */}
             </View>
           </View>
@@ -425,14 +438,14 @@ class Index extends Component<IndexProps, IndexState> {
         >
           <ActionPanelItem
             onClick={this.onForward}
-            icon="iconrefresh"
+            icon="iconfasongtijiao"
             title="发送给朋友"
           >
             <Button className="share-btn" size="mini" openType="share" />
           </ActionPanelItem>
           <ActionPanelItem
             onClick={this.onShareMoment}
-            icon="iconrefresh"
+            icon="iconpengyouquan"
             title="分享到朋友圈"
           />
         </ActionPanel>

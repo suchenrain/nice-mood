@@ -6,6 +6,7 @@ import { IShareMomentProps, IShareMomentState } from './index.interface';
 import './index.scss';
 import { Rpx2px, getStrLength } from '@/utils/common';
 import Tips from '@/utils/tips';
+import qrcode from '@/assets/images/nicemood2.png';
 
 class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   constructor(props: IShareMomentProps) {
@@ -78,6 +79,14 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
       );
     }
   };
+  hanlePreview = () => {
+    const { imageFile } = this.state;
+    Taro.previewImage({
+      urls: [imageFile],
+      current: imageFile
+    });
+  };
+
   saveImage2Album = (path: string): any => {
     Taro.saveImageToPhotosAlbum({
       filePath: path
@@ -121,56 +130,78 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
     let text2print = this.buildPrintArray(text);
 
     Tips.loading('准备图片中...');
-    Taro.getImageInfo({
-      src: src
-    }).then(background => {
-      const ctx = Taro.createCanvasContext('share', this.$scope);
-      const canvasWidth = Rpx2px(300 * 2 * 3);
-      const canvasHeight = Rpx2px(450 * 2 * 3);
-      // 绘制背景，填充满整个canvas画布
-      ctx.drawImage(`${background.path}`, 0, 0, canvasWidth, canvasHeight);
 
-      // 添加一层遮罩
-      ctx.setFillStyle('rgba(0, 0, 0, 0.2)');
+    const qrcodePromise = Taro.getImageInfo({ src: qrcode });
+    const backgroundPromise = Taro.getImageInfo({ src: src });
 
-      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    Promise.all([qrcodePromise, backgroundPromise]).then(
+      ([qrcode, background]) => {
+        const ctx = Taro.createCanvasContext('share', this.$scope);
+        const canvasWidth = Rpx2px(300 * 2 * 3);
+        const canvasHeight = Rpx2px(450 * 2 * 3);
+        // 绘制背景，填充满整个canvas画布
+        ctx.drawImage(`${background.path}`, 0, 0, canvasWidth, canvasHeight);
 
-      // 绘制text
-      ctx.setFontSize(Rpx2px(15 * 2 * 3));
-      ctx.setTextAlign('center');
-      ctx.setFillStyle('rgba(256, 256, 256, 0.75)');
-      text2print.forEach((t, index) => {
-        if (index == 0) t = `“ ${t}`;
-        if (index == text2print.length - 1) {
-          t = `${t} ”`;
-        }
-        ctx.fillText(
-          t,
-          canvasWidth / 2,
-          Rpx2px((index == 0 ? 320 : 320 + index * 20) * 2 * 3)
+        // 添加一层遮罩
+        ctx.setFillStyle('rgba(0, 0, 0, 0.15)');
+
+        // 绘制二维码
+        const qrWidth = Rpx2px(35 * 2 * 3);
+        const qrHeight = Rpx2px(35 * 2 * 3);
+        ctx.drawImage(
+          `../../${qrcode.path}`,
+          canvasWidth - qrWidth - Rpx2px(10 * 2 * 3),
+          canvasHeight - qrHeight - Rpx2px(10 * 2 * 3),
+          qrWidth,
+          qrHeight
         );
-      });
 
-      ctx.setFontSize(Rpx2px(12 * 2 * 3));
-      author = `「 ${author} 」`;
-      ctx.fillText(
-        author,
-        canvasWidth / 2,
-        Rpx2px((335 + text2print.length * 20) * 2 * 3)
-      );
-      ctx.stroke();
-      // 完成作画
-      ctx.draw(false, () => {
-        this.canvasToTempFilePath(
-          {
-            canvasId: 'share'
-          },
-          this.$scope
-        ).then(({ tempFilePath }) => {
-          this.setState({ imageFile: tempFilePath });
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+        // 绘制text 从下往上
+        ctx.setTextAlign('center');
+        ctx.setFillStyle('rgba(256, 256, 256, 0.75)');
+        // author
+        ctx.setFontSize(Rpx2px(12 * 2 * 3));
+        author = `「 ${author} 」`;
+        ctx.fillText(
+          author,
+          canvasWidth / 2,
+          canvasHeight - Rpx2px(40 * 2 * 3)
+        );
+        ctx.setFillStyle('rgba(256, 256, 256, 0.85)');
+        ctx.setFontSize(Rpx2px(15 * 2 * 3));
+        text2print.reverse();
+        text2print.forEach((t, index) => {
+          if (index == 0) t = `${t} ”`;
+          if (index == text2print.length - 1) {
+            t = `“ ${t}`;
+          }
+          ctx.fillText(
+            t,
+            canvasWidth / 2,
+            canvasHeight - Rpx2px((index * 20 + 80) * 2 * 3)
+          );
         });
-      });
-    });
+
+        ctx.stroke();
+        // 完成作画
+        ctx.draw(false, () => {
+          this.canvasToTempFilePath(
+            {
+              canvasId: 'share'
+            },
+            this.$scope
+          ).then(({ tempFilePath }) => {
+            this.setState({ imageFile: tempFilePath });
+          });
+        });
+      },
+      err => {
+        Tips.loaded();
+        this.handleClose();
+      }
+    );
   };
 
   onPhotoLoaded = () => {
@@ -206,6 +237,7 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
               className="fx-share-moment__canvas"
               src={imageFile}
               onLoad={this.onPhotoLoaded}
+              onClick={this.hanlePreview}
             />
             <View className="fx-share-moment__footer">
               <View className="fx-share-moment__save" onClick={this.handleSave}>

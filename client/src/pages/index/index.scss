@@ -1,5 +1,17 @@
 @import "@/styles/variables.scss";
 
+@keyframes xz {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+;
+
 $icon-wh:50rpx;
 
 .#{$prefix} {
@@ -69,92 +81,106 @@ $icon-wh:50rpx;
         font-size: 38rpx;
       }
 
-      >.weather-wrap {
-        position: relative;
-        margin-top: 160rpx;
+      >.top-wrap {
         width: 100%;
-        height: 150rpx;
-        opacity: 0;
-
-        .weather-info {
-          display: flex;
-          justify-content: flex-start;
-          align-items: baseline;
-          margin-left: 30rpx;
+        height: 200rpx;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-top: 150rpx;
 
 
-          &__tmp {
-            font-size: 220%;
-            text-align: center;
-            align-self: center;
-          }
+        .user-wrap {
+          position: relative;
+          height: 150rpx;
+          left: 30rpx;
 
-          &__rightbox {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            align-content: space-around;
-            margin-left: 10rpx;
-
-          }
-
-          &__condicon {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-
-          &__cond {
-            font-size: 27rpx
-          }
-
-          &__location {
-            font-size: 26rpx;
-          }
-
-          // &__icon {
-          //   width: $icon-wh;
-          //   height: $icon-wh;
-          //   filter: brightness(100);
-          // }
-
-          &__icon--mask {
-            width: $icon-wh;
-            height: $icon-wh;
-            background-color: #fff;
+          .user-avatar {
+            margin-top: 20rpx;
+            display: block;
+            width: 80rpx;
+            height: 80rpx;
+            -moz-border-radius: 30rpx;
+            -webkit-border-radius: 30rpx;
+            border-radius: 12rpx;
+            overflow: hidden;
+            opacity: 0;
           }
         }
-      }
 
-      >.user-wrap {
-        position: relative;
-        height: 150rpx;
+        .greeting-text {
+          font-size: 24rpx;
+          margin-top: 10rpx;
+          margin-left: 8rpx;
+          opacity: 0.2;
+          height: 60rpx;
+        }
 
-
-        .user-avatar {
-          display: block;
-          width: 100rpx;
-          height: 100rpx;
-          -moz-border-radius: 30rpx;
-          -webkit-border-radius: 30rpx;
-          border-radius: 12rpx;
-          overflow: hidden;
+        .weather-wrap {
+          height: 150rpx;
           opacity: 0;
+          position: relative;
+          right: 30rpx;
+
+          .weather-info {
+            display: flex;
+            justify-content: flex-start;
+            align-items: baseline;
+
+
+            &__tmp {
+              font-size: 220%;
+              text-align: center;
+              align-self: center;
+            }
+
+            &__rightbox {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-around;
+              align-items: center;
+              align-content: space-around;
+              margin-left: 10rpx;
+
+            }
+
+            &__condicon {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+
+            &__cond {
+              font-size: 27rpx
+            }
+
+            &__location {
+              font-size: 26rpx;
+            }
+
+            // &__icon {
+            //   width: $icon-wh;
+            //   height: $icon-wh;
+            //   filter: brightness(100);
+            // }
+
+            &__icon--mask {
+              width: $icon-wh;
+              height: $icon-wh;
+              background-color: #fff;
+            }
+          }
         }
       }
+
+
 
       >.clock-wrap {
-        margin-top: 30rpx;
+        margin-top: 110rpx;
         opacity: 0;
       }
 
-      >.greeting-text {
-        font-size: 83%;
-        margin-top: 30rpx;
-        opacity: 0.75;
-        height: 60rpx;
-      }
+
 
       >.iconfont-wrap {
         display: inline-flex;
@@ -166,18 +192,22 @@ $icon-wh:50rpx;
         margin-top: 50rpx;
 
         >.iconrefresh {
-          font-size: 86rpx;
+          font-size: 70rpx;
+
+          &--active {
+            animation: xz 1s linear 1;
+          }
         }
 
-        >.iconshare2 {
-          font-size: 80rpx;
+        >.iconshare {
+          font-size: 70rpx;
         }
 
       }
 
       >.quote-wrap {
         max-width: 85vw;
-        margin-top: 80rpx;
+        margin-top: 100rpx;
         opacity: 0;
         min-height: 200rpx;
 
@@ -201,8 +231,8 @@ $icon-wh:50rpx;
           }
 
           &__author {
-            font-size: 27rpx;
-            margin-top: 30rpx;
+            font-size: 28rpx;
+            margin-top: 40rpx;
             line-height: 33rpx;
           }
         }
