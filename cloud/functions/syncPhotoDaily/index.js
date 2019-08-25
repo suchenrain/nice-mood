@@ -114,8 +114,14 @@ syncPhoto = async () => {
           fileID
         } = await uploadFile(buffer)
         if (fileID) {
-          const record = await updateDailyPhotoRecord(photo.id, fileID)
-          console.log('ok');
+          const res = await updateDailyPhotoRecord(photo.id, fileID);
+          if (res.stats) {
+            console.log('ok');
+            //sendNotification('success');
+          } else {
+            //sendNotification('fail');
+            console.log('fail');
+          }
         }
       }
     } else {
@@ -124,6 +130,67 @@ syncPhoto = async () => {
         syncPhoto();
       }
     }
+  }
+}
+
+sendNotification = async (status) => {
+  try {
+    const result = await cloud.openapi.uniformMessage.send({
+      touser: 'ow9oX0YetyA6A0QveVqw_74lqJ0A',
+      // 需要formID
+      // weappTemplateMsg: {
+      //   page: 'page/page/index',
+      //   data: {
+      //     keyword1: {
+      //       value: '每日图片更新状态'
+      //     },
+      //     keyword2: {
+      //       value: status
+      //     },
+      //     keyword3: {
+      //       value: new Date()
+      //     }
+      //   },
+      //   templateId: 'ZZs_yBUv1EBvKpavn7MZwUFxZ5m6AhqB_bVCC8UksrA',
+      //   formId: 'FORMID',
+      //   emphasisKeyword: 'keyword2.DATA'
+      // }
+      // 需要同主体。。
+      mpTemplateMsg: {
+        appid: 'wx046f40cbed17594e',
+        url: 'http://weixin.qq.com/download',
+        miniprogram: {
+          appid: 'wxb90d263ae339723c',
+          pagepath: 'index'
+        },
+        data: {
+          first: {
+            value: 'NiceMood运行状态通知！',
+            color: '#173177'
+          },
+          keyword1: {
+            value: '每日图片自动更新',
+            color: '#173177'
+          },
+          keyword2: {
+            value: new Date(),
+            color: '#173177'
+          },
+          keyword3: {
+            value: status,
+            color: '#173177'
+          },
+          remark: {
+            value: '如有疑问请进入云开发后台查看详情',
+            color: '#173177'
+          }
+        },
+        templateId: 'hBGiI9eWsCeYRyEaAb6wqFTeN55KhAJnOco3rQ04YLk'
+      }
+    })
+    console.log(result)
+  } catch (err) {
+    console.log(err);
   }
 }
 
