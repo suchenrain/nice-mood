@@ -19,6 +19,7 @@ import { show } from '@/utils/animation';
 import classNames from 'classnames';
 
 import './index.scss';
+import { autoUpdate } from '@/utils/autoUpgrade';
 // import { Demo } from '@/components'
 @connect(({ index, loading }) => ({
   ...index,
@@ -32,7 +33,7 @@ class Index extends Component<IndexProps, IndexState> {
   quoteTimeId: any;
   weatherTimeId: any;
   greetingTimeId: any;
-  refreshingQuote:boolean=false;
+  refreshingQuote: boolean = false;
 
   constructor(props: IndexProps) {
     super(props);
@@ -48,6 +49,10 @@ class Index extends Component<IndexProps, IndexState> {
       ani: {},
       greeting: 'You got it'
     };
+  }
+
+  componentWillMount() {
+    autoUpdate();
   }
   // 对应微信小程序 onLoad()
   componentDidMount() {
@@ -228,7 +233,7 @@ class Index extends Component<IndexProps, IndexState> {
 
   _getQuote = () => {
     if (this.quoteTimeId) clearTimeout(this.quoteTimeId);
-    this.refreshingQuote=true;
+    this.refreshingQuote = true;
     show(this, 'quote', 0, 0, 1000);
     this.quoteTimeId = setTimeout(() => {
       this.props.dispatch({
@@ -238,7 +243,7 @@ class Index extends Component<IndexProps, IndexState> {
         },
         callback: () => {
           Taro.vibrateShort();
-          this.refreshingQuote=false;
+          this.refreshingQuote = false;
           show(this, 'quote', 1, 0, 2000);
         }
       });
