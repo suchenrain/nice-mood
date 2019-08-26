@@ -384,8 +384,11 @@ class Index extends Component<IndexProps, IndexState> {
                 className="user-avatar"
                 animation={ani.userAvatar}
               />
-              <View className="greeting-text" animation={ani.greeting}>
-                {greeting}
+              <View className="greeting-wrap">
+                <View className="twink-round"></View>
+                <View className="greeting-text" animation={ani.greeting}>
+                  {greeting}
+                </View>
               </View>
             </View>
 
