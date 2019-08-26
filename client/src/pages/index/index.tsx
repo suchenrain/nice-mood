@@ -187,7 +187,7 @@ class Index extends Component<IndexProps, IndexState> {
       .callFunction({
         name: 'getGreeting',
         data: {
-          hour: 0
+          hour: new Date().getHours()
         }
       })
       .then((res: any) => {
