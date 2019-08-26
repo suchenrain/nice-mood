@@ -1,4 +1,5 @@
 import { DvaLoading } from '@/types/dva-loading.interface';
+import { IQuote } from '@/types/quote';
 
 /**
  * index.state 参数类型
@@ -29,14 +30,7 @@ export interface IndexProps {
   bgImage?: IUnsplashImage;
   quote?: IQuote;
 }
-export type IQuote = {
-  id: number;
-  hitokoto: string;
-  type: string;
-  from: string;
-  creator: string;
-  created_at: number;
-};
+
 export interface IUnsplashImage {
   alt: string;
   color: string;

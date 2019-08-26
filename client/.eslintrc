@@ -13,6 +13,6 @@
       "jsx": true
     },
     "useJSXTextNode": true,
-    "project": "./tsconfig.json"
+    "project": "./client/tsconfig.json"
   }
 }

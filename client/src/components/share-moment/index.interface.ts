@@ -1,3 +1,5 @@
+import { IQuote } from '@/types/quote';
+
 /**
  * share-moment.state 参数类型
  *
@@ -6,6 +8,7 @@
  */
 export interface IShareMomentState {
   imageFile: string;
+  isDrawing: boolean;
   photoLoaded: boolean;
 }
 /**
@@ -17,7 +20,6 @@ export interface IShareMomentState {
 export interface IShareMomentProps {
   isOpened: boolean;
   src: string;
-  text:string;
-  author:string;
+  quote: IQuote;
   onClose: any;
 }

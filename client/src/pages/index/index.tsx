@@ -163,14 +163,22 @@ class Index extends Component<IndexProps, IndexState> {
     )}${pad(day)}.jpg`;
     return fileName;
   };
+  /**
+   * 获取每日图片并缓存到本地
+   * */
   _getDailyImage = () => {
     Taro.cloud
       .getTempFileURL({
         fileList: [this._dailyBgName()]
       })
       .then(res => {
-        this.setState({
-          dailyBg: res.fileList[0].tempFileURL
+        //缓存图片到本地
+        Taro.getImageInfo({
+          src: res.fileList[0].tempFileURL
+        }).then(localImage => {
+          this.setState({
+            dailyBg: localImage.path
+          });
         });
       });
     // this.props.dispatch({
@@ -322,7 +330,7 @@ class Index extends Component<IndexProps, IndexState> {
   };
 
   render() {
-    const { weather, quote, loading } = this.props;
+    const { weather, quote } = this.props;
     const {
       showOpenSetting,
       showActionPanel,
@@ -458,8 +466,7 @@ class Index extends Component<IndexProps, IndexState> {
           isOpened={shareMoment}
           onClose={this.onCloseShareMoment}
           src={dailyBg}
-          text={quote ? quote.hitokoto : ''}
-          author={quote ? quote.from : ''}
+          quote={quote}
         />
       </View>
     );

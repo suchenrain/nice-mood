@@ -82,12 +82,14 @@
     &--active {
       visibility: visible;
       opacity: 1;
+      transition: opacity 1s linear 0.3s;
 
       .#{$prefix} {
         &-share-moment {
 
           &__container {
             transform: translate3d(0, 0, 0);
+            transition: transform 0.5s linear 0.3s;
           }
         }
       }

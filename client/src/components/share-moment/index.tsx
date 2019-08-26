@@ -7,12 +7,16 @@ import './index.scss';
 import { Rpx2px, getStrLength } from '@/utils/common';
 import Tips from '@/utils/tips';
 import qrcode from '@/assets/images/nicemood2.png';
+import { IQuote } from '@/types/quote';
 
 class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
+  _quoteID: number;
+
   constructor(props: IShareMomentProps) {
     super(props);
     this.state = {
       imageFile: '',
+      isDrawing: false,
       photoLoaded: false
     };
   }
@@ -22,16 +26,18 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   static defaultProps: IShareMomentProps = {
     isOpened: false,
     src: '../../assets/bg/bg_dog.jpg',
-    text: '',
-    author: '',
+    quote: { id: 0, hitokoto: '世界很美，你也是。', from: 'Nice Mood' },
     onClose: () => {}
   };
 
   componentWillReceiveProps(nextProps: IShareMomentProps) {
-    const presrc = this.props.src;
-    const { isOpened, src, text, author } = nextProps;
+    const { isOpened, src, quote } = nextProps;
     if (isOpened) {
-      this.draw(src, text, author);
+      //避免打印重复的图片文字
+      if (this._quoteID !== quote.id) {
+        this._quoteID = quote.id;
+        this.draw(src, quote);
+      }
     }
   }
 
@@ -126,9 +132,10 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
     return res;
   };
 
-  draw = (src: string, text: string, author: string) => {
-    let text2print = this.buildPrintArray(text);
+  draw = (src: string, quote: IQuote) => {
+    let text2print = this.buildPrintArray(quote.hitokoto);
 
+    this.setState({ isDrawing: true });
     Tips.loading('准备图片中...');
 
     const qrcodePromise = Taro.getImageInfo({ src: qrcode });
@@ -162,6 +169,7 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
         ctx.setTextAlign('center');
         ctx.setFillStyle('rgba(256, 256, 256, 0.75)');
         // author
+        let author = quote.from;
         ctx.setFontSize(Rpx2px(12 * 2 * 3));
         author = `「 ${author} 」`;
         ctx.fillText(
@@ -193,20 +201,23 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
             },
             this.$scope
           ).then(({ tempFilePath }) => {
-            this.setState({ imageFile: tempFilePath });
+            this.setState({ imageFile: tempFilePath, isDrawing: false });
           });
         });
       },
       err => {
-        Tips.loaded();
+        this.setState({ isDrawing: false }, () => {
+          Tips.loaded();
+        });
         this.handleClose();
       }
     );
   };
 
   onPhotoLoaded = () => {
-    Tips.loaded();
-    this.setState({ photoLoaded: true });
+    this.setState({ photoLoaded: true }, () => {
+      Tips.loaded();
+    });
   };
 
   canvasToTempFilePath = (option, context) => {
@@ -224,9 +235,9 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
 
   render() {
     const { isOpened } = this.props;
-    const { imageFile, photoLoaded } = this.state;
+    const { imageFile, photoLoaded, isDrawing } = this.state;
     const rootClass = classNames('fx-share-moment', {
-      'fx-share-moment--active': isOpened && photoLoaded
+      'fx-share-moment--active': isOpened && !isDrawing && photoLoaded
     });
     return (
       <View className={rootClass} onTouchMove={this.handleTouchMove}>
