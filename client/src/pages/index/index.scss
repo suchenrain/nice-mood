@@ -19,12 +19,21 @@
 
   100% {
     opacity: 1;
-    border: 1px solid rgba(59, 235, 235, 1);
-    box-shadow: 0 0 15px 5px rgb(20, 247, 247);
+    border: 1px solid rgb(56, 230, 230);
+    box-shadow: 0 0 15px 5px rgb(27, 235, 235);
   }
 }
 
 $icon-wh:50rpx;
+
+.twink {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#6bc1fa), to(#13d1eb));
+
+  -webkit-animation: twinkling 2.7s infinite ease-in-out;
+  -webkit-animation-direction: alternate;
+  animation: twinkling 2.7s infinite ease-in-out;
+  animation-direction: alternate;
+}
 
 .#{$prefix} {
 
@@ -94,7 +103,7 @@ $icon-wh:50rpx;
       }
 
       >.top-wrap {
-        width: 100%;
+        width: 90%;
         height: 200rpx;
         display: flex;
         justify-content: space-between;
@@ -103,9 +112,10 @@ $icon-wh:50rpx;
 
 
         .user-wrap {
-          position: relative;
-          height: 150rpx;
-          left: 30rpx;
+          // height: 150rpx;
+          display: inline-flex;
+          justify-content: flex-start;
+          align-items: flex-end;
 
           .user-avatar {
             margin-top: 20rpx;
@@ -124,37 +134,29 @@ $icon-wh:50rpx;
           display: flex;
           justify-content: center;
           align-items: center;
+          margin-bottom: 4rpx;
         }
 
         .twink-round {
-          border-radius: 40%;
+          border-radius: 5%;
           width: 6rpx;
           height: 6rpx;
           border: 1px solid #2b92d4;
-          background-image: -webkit-gradient(linear, left top, left bottom, from(#73c3f8), to(#15b0e9));
-
-          -webkit-animation: twinkling 2.7s infinite ease-in-out;
-          -webkit-animation-direction: alternate;
-          animation: twinkling 2.7s infinite ease-in-out;
-          animation-direction: alternate;
-
+          margin-left: 10rpx;
         }
 
         .greeting-text {
           font-size: 24rpx;
           margin-left: 8rpx;
           opacity: 0.2;
-          height: 60rpx;
+          height: 24rpx;
           width: 100%;
-          text-align: center;
-          line-height: 60rpx;
+          line-height: 24rpx;
         }
 
         .weather-wrap {
-          height: 150rpx;
+          // height: 150rpx;
           opacity: 0;
-          position: relative;
-          right: 30rpx;
 
           .weather-info {
             display: flex;
@@ -222,7 +224,7 @@ $icon-wh:50rpx;
         align-items: center;
         width: 40vw;
         height: 80rpx;
-        opacity: 0.6;
+        opacity: 0.75;
         margin-top: 66rpx;
 
         >.iconrefresh {
@@ -244,6 +246,7 @@ $icon-wh:50rpx;
         margin-top: 100rpx;
         opacity: 0;
         min-height: 200rpx;
+
 
         .quote-info {
           display: flex;
