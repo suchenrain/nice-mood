@@ -6,7 +6,7 @@
   }
 
   to {
-    transform: rotate(-360deg);
+    transform: rotate(360deg);
   }
 }
 
@@ -227,7 +227,7 @@ $icon-wh:50rpx;
         opacity: 0.75;
         margin-top: 66rpx;
 
-        >.iconrefresh {
+        >.icon-refresh {
           font-size: 70rpx;
 
           &--active {
@@ -235,7 +235,7 @@ $icon-wh:50rpx;
           }
         }
 
-        >.iconshare {
+        >.icon-share {
           font-size: 70rpx;
         }
 

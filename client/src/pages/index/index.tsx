@@ -353,8 +353,8 @@ class Index extends Component<IndexProps, IndexState> {
       'mask-size': '100% 100%'
     };
 
-    const refreshClass = classNames('iconfont', 'iconrefresh', {
-      'iconrefresh--active': this.refreshingQuote
+    const refreshClass = classNames('iconfont', 'icon-refresh', {
+      'icon-refresh--active': this.refreshingQuote
     });
     return (
       <View className="fx-index-wrap">
@@ -434,7 +434,7 @@ class Index extends Component<IndexProps, IndexState> {
           </View>
           <View className="iconfont-wrap">
             <Text className={refreshClass} onClick={this.onRefresh} />
-            <View className="iconfont iconshare" onClick={this.handleShare}>
+            <View className="iconfont icon-share" onClick={this.handleShare}>
               {/* <Button className="share-btn" size="mini" openType="share" /> */}
             </View>
           </View>
@@ -454,15 +454,15 @@ class Index extends Component<IndexProps, IndexState> {
         >
           <ActionPanelItem
             onClick={this.onForward}
-            icon="iconfasongtijiao"
+            icon="icon-fasong"
             title="发送给朋友"
           >
             <Button className="share-btn" size="mini" openType="share" />
           </ActionPanelItem>
           <ActionPanelItem
             onClick={this.onShareMoment}
-            icon="iconpengyouquan"
-            title="分享到朋友圈"
+            icon="icon-camera"
+            title="保存到相册"
           />
         </ActionPanel>
         <ShareMoment
