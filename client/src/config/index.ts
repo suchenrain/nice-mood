@@ -18,12 +18,3 @@ export const ISMOCK: boolean = true;
  * 当前的host  ONLINEHOST | QAHOST | MOCKHOST
  */
 export const MAINHOST = ISMOCK ? MOCKHOST : ONLINEHOST;
-
-/**
- * 全局分享信息
- */
-export const SHAREINFO = {
-  title: '分享标题',
-  path: '路径',
-  imageUrl: '图片'
-};

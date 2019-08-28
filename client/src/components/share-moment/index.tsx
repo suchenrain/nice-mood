@@ -6,7 +6,7 @@ import { IShareMomentProps, IShareMomentState } from './index.interface';
 import './index.scss';
 import { Rpx2px, getStrLength } from '@/utils/common';
 import Tips from '@/utils/tips';
-import qrcode from '@/assets/images/nicemood2.png';
+import qrcode from '@/assets/images/nicemood.png';
 import { IQuote } from '@/types/quote';
 
 class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {

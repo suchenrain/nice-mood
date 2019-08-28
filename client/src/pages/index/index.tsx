@@ -44,10 +44,8 @@ class Index extends Component<IndexProps, IndexState> {
       // 是否已定位
       located: false,
       //背景图是否已加载完成
-      dailyBg: '',
       bgLoaded: false,
-      ani: {},
-      greeting: 'You got it'
+      ani: {}
     };
   }
 

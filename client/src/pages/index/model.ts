@@ -5,7 +5,7 @@ export default {
   namespace: 'index',
   state: {
     weather: undefined,
-    bgImage: undefined,
+    dailyPhoto: undefined,
     quote: undefined,
     v: '1.0'
   },
@@ -29,7 +29,7 @@ export default {
       }
     },
     *getDailyImage({ payload }, { call, put }) {
-      const { error, result } = yield call(indexApi.getDailyImage, {
+      const { error, result } = yield call(indexApi.getDailyPhoto, {
         ...payload
       });
       console.log('图片接口返回', result);
@@ -37,7 +37,7 @@ export default {
         yield put({
           type: 'save',
           payload: {
-            bgImage: result
+            dailyPhoto: result
           }
         });
       }

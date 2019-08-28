@@ -12,6 +12,7 @@ export const repeat = (str = '0', times: number) =>
 // 时间前面 +0
 export const pad = (num: number, maxLength = 2) =>
   repeat('0', maxLength - num.toString().length) + num;
+
 //白天还是黑夜
 export const isNight = () => {
   let time = new Date();
@@ -36,6 +37,16 @@ export const formatTime = (time: Date) => {
   `${pad(time.getHours())}:${pad(time.getMinutes())}:${pad(
     time.getSeconds()
   )}.${pad(time.getMilliseconds(), 3)}`;
+};
+
+/**
+ * 获取当前年月日格式字符串
+ */
+export const getDateString = () => {
+  const date = new Date();
+  return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(
+    date.getDate()
+  )}`;
 };
 
 /**
