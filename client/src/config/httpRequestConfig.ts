@@ -1,4 +1,4 @@
-import index from '@/pages/index/config'; // index的接口
+import home from '@/pages/home/config'; // index的接口
 /**
  * 请求公共参数
  */
@@ -11,5 +11,5 @@ export const commonParame = {};
 
 export const httpRequestConfig = {
   loginUrl: '/api/user/wechat-auth', // 微信的登陆接口
-  ...index
+  ...home
 };

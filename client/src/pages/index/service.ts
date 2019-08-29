@@ -1,7 +1,7 @@
 import Api from '@/utils/httpRequest';
 import Taro from '@tarojs/taro';
 import { getDateString } from '@/utils/common';
-import { IPhoto } from '@/types/photo';
+import { IPhoto } from '@/types';
 
 const db = Taro.cloud.database();
 

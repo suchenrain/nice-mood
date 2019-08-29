@@ -20,14 +20,13 @@ import classNames from 'classnames';
 
 import './index.scss';
 import { autoUpdate } from '@/utils/autoUpgrade';
-// import { Demo } from '@/components'
 @connect(({ index, loading }) => ({
   ...index,
   loading
 }))
 class Index extends Component<IndexProps, IndexState> {
   config: Config = {
-    navigationBarTitleText: '每日好心情',
+    navigationBarTitleText: 'Have a nice day',
     enablePullDownRefresh: true
   };
   quoteTimeId: any;
@@ -179,13 +178,6 @@ class Index extends Component<IndexProps, IndexState> {
           });
         });
       });
-    // this.props.dispatch({
-    //   type: 'index/getDailyImage',
-    //   payload: {
-    //     collections: `8349391,8349361`,
-    //     client_id: globalData.unsplashClientId
-    //   }
-    // });
   };
 
   _getGreeting = cb => {

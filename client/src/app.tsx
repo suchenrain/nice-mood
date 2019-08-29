@@ -3,11 +3,11 @@ import Taro, { Component, Config } from '@tarojs/taro';
 import { Provider } from '@tarojs/redux';
 
 import models from '@/models';
-import Index from './pages/index';
 import dva from '@/utils/dva';
 import { globalData } from '@/utils/common';
 
 import './app.scss';
+import Home from './pages/home/home';
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -89,7 +89,7 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Index />
+        <Home />
       </Provider>
     );
   }

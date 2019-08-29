@@ -1,4 +1,4 @@
-export class IPhoto {
+export interface IPhoto {
   _id: string;
   author: string;
   datestr: string;
@@ -6,5 +6,5 @@ export class IPhoto {
   pid: string;
   profile: string;
   url: string;
+  localPath: string;
 }
-

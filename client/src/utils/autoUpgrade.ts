@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro';
 import Tips from './tips';
 
-const autoUpdate = () => {
+const upgrade = () => {
   // 获取小程序更新机制兼容
   if (Taro.canIUse('getUpdateManager')) {
     const updateManager = Taro.getUpdateManager();
@@ -66,4 +66,4 @@ const downLoadAndUpdate = updateManager => {
   });
 };
 
-export { autoUpdate };
+export { upgrade };

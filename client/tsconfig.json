@@ -28,7 +28,7 @@
       "@/models": ["./src/models"],
       "@/styles/*": ["./src/styles/*"],
       "@/utils/*": ["./src/utils/*"],
-      "@/types/*": ["./src/types/*"],
+      "@/types": ["./src/types"],
       "@/pages/*": ["./src/pages/*"]
     }
   },
