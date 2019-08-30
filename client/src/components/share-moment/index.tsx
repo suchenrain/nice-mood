@@ -7,7 +7,7 @@ import './index.scss';
 import { Rpx2px, getStrLength } from '@/utils/common';
 import Tips from '@/utils/tips';
 import qrcode from '@/assets/images/nicemood.png';
-import { IQuote } from '@/types/quote';
+import { IQuote } from '@/types';
 
 class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   _quoteID: number;

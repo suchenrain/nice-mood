@@ -5,7 +5,9 @@ import LoginWeapp from './login/index.weapp';
 import ActionPanel from './action-panel';
 import ActionPanelItem from './action-panel/action-panel-item';
 
-import ShareMoment from './share-moment'
+import ShareMoment from './share-moment';
+
+import TouchBall from './assistive-touch';
 
 export {
   OpenSetting,
@@ -14,5 +16,6 @@ export {
   LoginWeapp,
   ActionPanelItem,
   ActionPanel,
-  ShareMoment
+  ShareMoment,
+  TouchBall
 };

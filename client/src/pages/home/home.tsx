@@ -4,6 +4,7 @@ import { connect } from '@tarojs/redux';
 import classNames from 'classnames';
 
 import { IHomeProps, IHomeState } from './home.interface';
+import defaultBg from '@/assets/bg/default.jpg';
 import './home.scss';
 
 import { upgrade } from '@/utils/autoUpgrade';
@@ -14,7 +15,8 @@ import {
   ActionPanel,
   ActionPanelItem,
   ShareMoment,
-  Clock
+  Clock,
+  TouchBall
 } from '@/components';
 import { show } from '@/utils/animation';
 
@@ -23,13 +25,16 @@ import { show } from '@/utils/animation';
 }))
 class Home extends Component<IHomeProps, IHomeState> {
   config: Config = {
-    navigationBarTitleText: 'Have a nice day'
+    navigationBarTitleText: 'Have a nice day',
+    enablePullDownRefresh: true
   };
 
   refreshingQuote: boolean = false;
   //定时器
   weatherTimeId: any;
   quoteTimeId: any;
+  greetingTimeId: any;
+  greetingIntvalId: any;
 
   constructor(props: IHomeProps) {
     super(props);
@@ -37,6 +42,7 @@ class Home extends Component<IHomeProps, IHomeState> {
       showOpenSetting: false,
       showActionPanel: false,
       showShareMoment: false,
+      greeting: 'Have a nice day:)',
       located: false,
       bgLoaded: false,
       ani: {}
@@ -48,7 +54,16 @@ class Home extends Component<IHomeProps, IHomeState> {
     upgrade();
   }
   componentDidMount() {
-    this.initData();
+    this.init();
+    show(this, 'userAvatar', 0.7, 500, 2000);
+    show(this, 'clock', 1, 500, 2000);
+  }
+
+  componentWillUnmount() {
+    this.weatherTimeId && clearTimeout(this.weatherTimeId);
+    this.quoteTimeId && clearTimeout(this.quoteTimeId);
+    this.greetingTimeId && clearTimeout(this.greetingTimeId);
+    this.greetingIntvalId && clearInterval(this.greetingIntvalId);
   }
 
   onShareAppMessage() {
@@ -72,39 +87,78 @@ class Home extends Component<IHomeProps, IHomeState> {
   /**
    * * daily photo 加载完成
    */
-  onBackgroundLoad = () => {};
+  onBackgroundLoad = () => {
+    show(this, 'defaultBg', 0, 200, 2000);
+    show(this, 'bg', 1, 200, 2000);
+    this.setState({
+      bgLoaded: true
+    });
+  };
 
+  /**
+   * * 下拉刷新
+   */
+  handleRefresh = () => {
+    this.reloadData();
+  };
   /**
    * * 刷新quote
    */
-  handleRefresh = () => {};
+  handleRefreshQuote = () => {
+    this.setQuote();
+  };
 
   /**
    * * 关闭小程序设置弹窗
    */
-  handleCloseOpenSetting = () => {};
+  handleCloseOpenSetting = () => {
+    this.setState(
+      {
+        showOpenSetting: false
+      },
+      Taro.vibrateShort
+    );
+  };
 
   /**
    * * 打开分享面板
    */
-  handleOpenShare = () => {};
+  handleOpenShare = () => {
+    this.setState({ showActionPanel: true }, Taro.vibrateShort);
+  };
 
   /**
    * * 关闭分享面板
    */
-  handleCloseActionPanel = () => {};
+  handleCloseActionPanel = () => {
+    this.setState({
+      showActionPanel: false
+    });
+  };
 
-  // 转发
+  // 点击转发给朋友
   handleForward = () => {};
 
   // 打开生成朋友圈图片弹窗
-  handleShareMoment = () => {};
+  handleShareMoment = () => {
+    this.setState({ showShareMoment: true }, this.handleCloseActionPanel);
+  };
 
   // 关闭朋友圈图片弹窗
-  handleCloseShareMoment = () => {};
+  handleCloseShareMoment = () => {
+    this.setState({
+      showShareMoment: false,
+      showActionPanel: true
+    });
+  };
 
-  // 初始化数据
-  initData = () => {
+  // 初始化
+  init = () => {
+    this.reloadData();
+  };
+
+  //加载数据
+  reloadData = () => {
     this.setWeather();
     this.setGreeting();
     this.setQuote();
@@ -124,7 +178,9 @@ class Home extends Component<IHomeProps, IHomeState> {
   };
 
   setDailyPhoto = () => {
-    this.getDailyPhoto();
+    if (!this.state.bgLoaded) {
+      this.getDailyPhoto();
+    }
   };
 
   /*
@@ -201,8 +257,26 @@ class Home extends Component<IHomeProps, IHomeState> {
 
   getGreeting = () => {
     this.props.dispatch({
-      type: 'home/getGreeting'
+      type: 'home/getGreeting',
+      callback: () => {
+        this.randomGreeting();
+        if (this.greetingIntvalId) clearInterval(this.greetingIntvalId);
+        this.greetingIntvalId = setInterval(this.randomGreeting, 6000);
+      }
     });
+  };
+
+  randomGreeting = () => {
+    if (this.greetingTimeId) clearTimeout(this.greetingTimeId);
+    show(this, 'greeting', 0, 0.1, 2000);
+    const greetings = this.props.greetings;
+    let greeting =
+      greetings[Math.floor(Math.random() * greetings.length)].message;
+    this.greetingTimeId = setTimeout(() => {
+      this.setState({ greeting }, () => {
+        show(this, 'greeting', 0.7, 0, 2000);
+      });
+    }, 2000);
   };
 
   getQuote = () => {
@@ -244,11 +318,12 @@ class Home extends Component<IHomeProps, IHomeState> {
   */
 
   render() {
-    const { weather, quote, dailyPhoto, greetings } = this.props;
+    const { weather, quote, dailyPhoto } = this.props;
     const {
       showOpenSetting,
       showActionPanel,
       showShareMoment,
+      greeting,
       ani
     } = this.state;
     const code = weather && weather.now.cond_code;
@@ -269,18 +344,15 @@ class Home extends Component<IHomeProps, IHomeState> {
       'icon-refresh--active': this.refreshingQuote
     });
 
-    const greetingList = greetings.map(greeting => {
-      <Text key={greeting._id}>greeting.message</Text>;
-    });
     return (
       <View className="fx-index-wrap">
         <View className="daily-image-wrap">
-          {/* <Image
+          <Image
             className="daily-image-default"
-            src={bgDog}
+            src={defaultBg}
             mode="aspectFill"
             animation={ani.defaultBg}
-          /> */}
+          />
           <Image
             className="daily-image"
             src={dailyPhoto.localPath}
@@ -302,7 +374,7 @@ class Home extends Component<IHomeProps, IHomeState> {
               <View className="greeting-wrap">
                 <View className="twink-round twink" />
                 <View className="greeting-text" animation={ani.greeting}>
-                  {greetingList}
+                  {greeting}
                 </View>
               </View>
             </View>
@@ -348,7 +420,7 @@ class Home extends Component<IHomeProps, IHomeState> {
             )}
           </View>
           <View className="iconfont-wrap">
-            <Text className={refreshClass} onClick={this.handleRefresh} />
+            <Text className={refreshClass} onClick={this.handleRefreshQuote} />
             <View
               className="iconfont icon-share"
               onClick={this.handleOpenShare}
@@ -356,6 +428,7 @@ class Home extends Component<IHomeProps, IHomeState> {
           </View>
         </View>
         <Copyright />
+        <View className="touchball-wrap"><TouchBall /></View>
         <OpenSetting
           isOpened={showOpenSetting}
           onCancel={this.handleCloseOpenSetting}

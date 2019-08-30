@@ -1,7 +1,6 @@
 // import Taro from '@tarojs/taro';
 import * as homeApi from './service';
 import { IQuote, IPhoto } from '@/types';
-import defaultBg from '@/assets/bg/bg_dog.jpg';
 
 const defaultQuote: IQuote = {
   id: 0,
@@ -15,7 +14,7 @@ const defaultPhoto: IPhoto = {
   pid: '',
   profile: '',
   url: '',
-  localPath: defaultBg
+  localPath: ''
 };
 
 export default {
@@ -58,7 +57,7 @@ export default {
         });
       }
     },
-    *getGreeting({}, { call, put }) {
+    *getGreeting({ callback }, { call, put }) {
       const { error, result } = yield call(homeApi.getGreeting, {});
       console.log('返回Greeting', result);
       if (!error) {
@@ -68,6 +67,9 @@ export default {
             greetings: result
           }
         });
+        if (callback && typeof callback === 'function') {
+          yield callback();
+        }
       }
     },
     *getQuote({ payload, callback }, { call, put }) {

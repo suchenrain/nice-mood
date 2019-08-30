@@ -1,0 +1,103 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+$ball-wh:100rpx;
+$icon-size:50rpx;
+$icon-top:24rpx;
+$icon-left:24rpx;
+
+.#{$prefix} {
+  &-assistive-touch {
+    width: 100%;
+
+    .sticky-ball {
+      width: $ball-wh;
+      height: $ball-wh;
+      background-color: rgba(255, 255, 255, 1);
+      border-radius: $ball-wh;
+      position: absolute;
+      right: 2%;
+      bottom: 10%;
+      transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+    }
+
+
+
+    .ball1 {
+      width: $ball-wh;
+      height: $ball-wh;
+      border-radius: $ball-wh;
+      position: absolute;
+      left: -100rpx;
+      top: -120rpx;
+    }
+
+    .ball2 {
+      width: $ball-wh;
+      height: $ball-wh;
+      border-radius: $ball-wh;
+      position: absolute;
+      left: -190rpx;
+      top: 0;
+    }
+
+    .ball3 {
+      width: $ball-wh;
+      height: $ball-wh;
+      border-radius: $ball-wh;
+      position: absolute;
+      left: -100rpx;
+      top: 120rpx;
+    }
+
+
+
+    .tog {
+      background-color: rgba(255, 255, 255, 1);
+      transition: .5s;
+      -webkit-transition: .5s;
+      -moz-transition: .5s;
+    }
+
+    .display {
+      transition: .5s;
+      -webkit-transition: .5s;
+      -moz-transition: .5s;
+      background-color: transparent;
+      left: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .iconfont {
+      position: absolute;
+      top: $icon-top;
+      left: $icon-left;
+      font-size: $icon-size;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .o {}
+
+    .iconfont.icon-cha {
+      transition: .4s;
+      -webkit-transition: .4s;
+      -moz-transition: .4s;
+      -webkit-transform: rotate(90deg);
+      -moz-transform: rotate(90deg);
+      transform: rotate(90deg);
+    }
+
+    .iconfont.icon-refresh {
+      transition: .2s;
+      -webkit-transition: .2s;
+      -moz-transition: .2s;
+    }
+  }
+}

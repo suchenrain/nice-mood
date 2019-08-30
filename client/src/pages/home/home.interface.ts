@@ -10,6 +10,7 @@ export interface IHomeState {
   showOpenSetting: boolean;
   showActionPanel: boolean;
   showShareMoment: boolean;
+  greeting: string;
   located: boolean;
   bgLoaded: boolean;
   ani: any;

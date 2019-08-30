@@ -29,8 +29,29 @@ export const getDailyPhoto = async () => {
   return await dailyPhotoCol
     .doc(datestr)
     .get()
-    .then((photo: IPhoto) => {
-      return { result: photo };
+    .then(res => {
+      let photo: IPhoto = res.data;
+      return Taro.cloud
+        .getTempFileURL({
+          fileList: [photo.fileID]
+        })
+        .then(res => {
+          //缓存图片到本地
+          return Taro.getImageInfo({
+            src: res.fileList[0].tempFileURL
+          })
+            .then(localImage => {
+              // 本地缓存路径
+              photo.localPath = localImage.path;
+              return { result: photo };
+            })
+            .catch(error => {
+              return { error };
+            });
+        })
+        .catch(error => {
+          return { error };
+        });
     })
     .catch(error => {
       return { error };
