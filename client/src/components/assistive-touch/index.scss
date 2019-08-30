@@ -3,14 +3,18 @@
 
 $ball-wh:100rpx;
 $icon-size:50rpx;
-$icon-top:24rpx;
-$icon-left:24rpx;
 
 .#{$prefix} {
   &-assistive-touch {
     width: 100%;
+    position: relative;
+    z-index: 9999;
 
     .sticky-ball {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
       width: $ball-wh;
       height: $ball-wh;
       background-color: rgba(255, 255, 255, 1);
@@ -55,8 +59,13 @@ $icon-left:24rpx;
 
 
     .tog {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
       background-color: rgba(255, 255, 255, 1);
       transition: .5s;
+
       -webkit-transition: .5s;
       -moz-transition: .5s;
     }
@@ -74,8 +83,6 @@ $icon-left:24rpx;
 
     .iconfont {
       position: absolute;
-      top: $icon-top;
-      left: $icon-left;
       font-size: $icon-size;
     }
 

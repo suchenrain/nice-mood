@@ -41,7 +41,7 @@ class AssistiveTouch extends Component<
 
     return (
       <View className="fx-assistive-touch">
-        <View className="sticky-ball" onClick={this.toggle}>
+        <View className="sticky-ball" onClick={this.toggle} on>
           <View className={stickyBallClass}></View>
           <View className={`tog ball1 ${togClass}`}>
             <View className={`iconfont icon-cha ${iconClass}`}></View>

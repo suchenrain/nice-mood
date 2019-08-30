@@ -428,7 +428,7 @@ class Home extends Component<IHomeProps, IHomeState> {
           </View>
         </View>
         <Copyright />
-        <View className="touchball-wrap"><TouchBall /></View>
+        <TouchBall />
         <OpenSetting
           isOpened={showOpenSetting}
           onCancel={this.handleCloseOpenSetting}
