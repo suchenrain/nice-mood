@@ -29,6 +29,7 @@ class Home extends Component<IHomeProps, IHomeState> {
   refreshingQuote: boolean = false;
   //定时器
   weatherTimeId: any;
+  quoteTimeId: any;
 
   constructor(props: IHomeProps) {
     super(props);
@@ -46,7 +47,9 @@ class Home extends Component<IHomeProps, IHomeState> {
     // 检查更新
     upgrade();
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.initData();
+  }
 
   onShareAppMessage() {
     const title = this.props.quote.hitokoto;
@@ -116,9 +119,13 @@ class Home extends Component<IHomeProps, IHomeState> {
     this.getGreeting();
   };
 
-  setQuote = () => {};
+  setQuote = () => {
+    this.getQuote();
+  };
 
-  setDailyPhoto = () => {};
+  setDailyPhoto = () => {
+    this.getDailyPhoto();
+  };
 
   /*
   |--------------------------------------
@@ -193,7 +200,34 @@ class Home extends Component<IHomeProps, IHomeState> {
   };
 
   getGreeting = () => {
-    this.props.dispatch();
+    this.props.dispatch({
+      type: 'home/getGreeting'
+    });
+  };
+
+  getQuote = () => {
+    if (this.quoteTimeId) clearTimeout(this.quoteTimeId);
+    this.refreshingQuote = true;
+    show(this, 'quote', 0, 0, 1000);
+    this.quoteTimeId = setTimeout(() => {
+      this.props.dispatch({
+        type: 'home/getQuote',
+        payload: {
+          c: 'g'
+        },
+        callback: () => {
+          Taro.vibrateShort();
+          this.refreshingQuote = false;
+          show(this, 'quote', 1, 0, 2000);
+        }
+      });
+    }, 1000);
+  };
+
+  getDailyPhoto = () => {
+    this.props.dispatch({
+      type: 'home/getDailyPhoto'
+    });
   };
 
   /**
@@ -318,7 +352,7 @@ class Home extends Component<IHomeProps, IHomeState> {
             <View
               className="iconfont icon-share"
               onClick={this.handleOpenShare}
-            ></View>
+            />
           </View>
         </View>
         <Copyright />

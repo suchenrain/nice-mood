@@ -3,8 +3,6 @@ import Taro from '@tarojs/taro';
 import { getDateString } from '@/utils/common';
 import { IPhoto } from '@/types';
 
-const db = Taro.cloud.database();
-
 /**
  * 获取天气数据（和风天气）
  * @param data 请求参数
@@ -24,26 +22,27 @@ export const getQuote = data => {
 /**
  * 获取每日图片
  */
-export const getDailyPhoto = () => {
+export const getDailyPhoto = async () => {
+  const db = Taro.cloud.database();
   let dailyPhotoCol = db.collection('dailyPhoto');
   const datestr = getDateString();
-  dailyPhotoCol.doc(datestr).get({
-    success: (photo: IPhoto) => {
+  return await dailyPhotoCol
+    .doc(datestr)
+    .get()
+    .then((photo: IPhoto) => {
       return { result: photo };
-    },
-    fail: error => {
+    })
+    .catch(error => {
       return { error };
-    }
-  });
+    });
 };
-
 /**
  * 获取问候语信息
  */
-export const getGreeting = () => {
+export const getGreeting = async () => {
   const hour = new Date().getHours();
   const key = `greeting_${hour}`;
-  Taro.getStorage({
+  return await Taro.getStorage({
     key: key
   })
     .then(res => {
@@ -51,7 +50,7 @@ export const getGreeting = () => {
       return { result: greetings };
     })
     .catch(err => {
-      Taro.cloud
+      return Taro.cloud
         .callFunction({
           name: 'getGreeting',
           data: {

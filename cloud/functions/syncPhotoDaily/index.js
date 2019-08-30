@@ -13,10 +13,10 @@ const db = cloud.database({
 const max = 5;
 let cur = 0;
 
-const generateFileName = () => {
+const generateID = () => {
   const date = new Date();
   //设置为 UTC+8
-  date.setHours(date.getHours() + 8);
+  // date.setHours(date.getHours() + 8);
   let year = date.getFullYear();
   let month = date.getMonth() + 1;
   let day = date.getDate();
@@ -26,7 +26,12 @@ const generateFileName = () => {
   if (day < 10) {
     day = "0" + day;
   }
-  const fileName = `DailyPhoto/${year}${month}${day}.jpg`
+  return `${year}${month}${day}`;
+}
+
+const generateFileName = () => {
+  const id = generateID();
+  const fileName = `DailyPhoto/${id}.jpg`
   return fileName;
 }
 
@@ -51,6 +56,7 @@ checkExisting = (pid) => {
 addDailyPhotoRecord = (photo) => {
   return db.collection('dailyPhoto').add({
     data: {
+      _id: generateID(),
       pid: photo.id,
       url: photo.urls.raw,
       author: photo.user.name,

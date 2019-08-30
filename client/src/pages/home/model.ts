@@ -11,7 +11,6 @@ const defaultQuote: IQuote = {
 const defaultPhoto: IPhoto = {
   _id: '',
   author: 'Nice Mood',
-  datestr: '',
   fileID: '',
   pid: '',
   profile: '',
@@ -47,8 +46,8 @@ export default {
         }
       }
     },
-    *getDailyPhoto({ call, put }) {
-      const { error, result } = yield call(homeApi.getDailyPhoto);
+    *getDailyPhoto({}, { call, put }) {
+      const { error, result } = yield call(homeApi.getDailyPhoto, {});
       console.log('图片接口返回', result);
       if (!error) {
         yield put({
@@ -59,8 +58,8 @@ export default {
         });
       }
     },
-    *getGreeting({ call, put }) {
-      const { error, result } = yield call(homeApi.getGreeting);
+    *getGreeting({}, { call, put }) {
+      const { error, result } = yield call(homeApi.getGreeting, {});
       console.log('返回Greeting', result);
       if (!error) {
         yield put({
