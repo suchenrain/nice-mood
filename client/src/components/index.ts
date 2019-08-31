@@ -1,13 +1,12 @@
-import OpenSetting from './open-setting';
-import Clock from './clock';
-import Copyright from './copyright';
-import LoginWeapp from './login/index.weapp';
 import ActionPanel from './action-panel';
 import ActionPanelItem from './action-panel/action-panel-item';
-
-import ShareMoment from './share-moment';
-
 import TouchBall from './assistive-touch';
+import Clock from './clock';
+import Copyright from './copyright';
+import Heart from './heart';
+import LoginWeapp from './login/index.weapp';
+import OpenSetting from './open-setting';
+import ShareMoment from './share-moment';
 
 export {
   OpenSetting,
@@ -17,5 +16,6 @@ export {
   ActionPanelItem,
   ActionPanel,
   ShareMoment,
-  TouchBall
+  TouchBall,
+  Heart
 };

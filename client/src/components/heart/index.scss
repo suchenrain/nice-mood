@@ -1,0 +1,39 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+
+.heart-animation {
+  position: absolute;
+  background-image: url('@/assets/images/web_heart_animation_edge.png');
+  background-position: left;
+  background-repeat: no-repeat;
+  /*background-size: 2900%;*/
+  height: 100px;
+  width: 100px;
+  left: 50%;
+  top: 50%;
+  -ms-transform: translate(-50%, -47.5%);
+  transform: translate(-50%, -47.5%);
+
+  &--active {
+    animation-timing-function: steps(28);
+    animation-name: heart-burst;
+    animation-duration: .8s;
+    animation-iteration-count: 1;
+    display: inline-block;
+    animation-fill-mode: forwards;
+  }
+}
+
+/*.HeartAnimation :hover {*/
+/*background-position: 3.571428571428571%*/
+/*}*/
+@keyframes heart-burst {
+  0% {
+    background-position: left
+  }
+
+  100% {
+    background-position: right
+  }
+}
