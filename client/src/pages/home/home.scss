@@ -45,7 +45,7 @@ $icon-wh:50rpx;
 
     .daily-image-wrap {
       position: fixed;
-      z-index: 1;
+      // z-index: 1;
       height: 100%;
       width: 100%;
       top: 0;
@@ -57,21 +57,32 @@ $icon-wh:50rpx;
         height: 100%;
         width: 100%;
         opacity: 0;
-        z-index: 2;
+        // z-index: 2;
         position: fixed;
 
         &-default {
           opacity: 1;
           height: 100%;
           width: 100%;
-          z-index: 1;
+          // z-index: 1;
           position: fixed;
         }
       }
     }
 
+    .touchball-wrap {
+      // z-index: 5;
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
     .mask-layer {
-      z-index: 3;
+      // z-index: 3;
       position: fixed;
       background-color: rgba(#000000, 0.3);
       height: 100%;
@@ -84,7 +95,7 @@ $icon-wh:50rpx;
 
     .content-wrap {
       position: relative;
-      z-index: 5;
+      // z-index: 5;
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -226,6 +237,8 @@ $icon-wh:50rpx;
         height: 80rpx;
         opacity: 0.75;
         margin-top: 66rpx;
+        position: relative;
+        z-index: 2;
 
         >.icon-refresh {
           font-size: 70rpx;

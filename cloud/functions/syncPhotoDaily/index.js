@@ -16,7 +16,7 @@ let cur = 0;
 const generateID = () => {
   const date = new Date();
   //设置为 UTC+8
-  // date.setHours(date.getHours() + 8);
+  date.setHours(date.getHours() + 8);
   let year = date.getFullYear();
   let month = date.getMonth() + 1;
   let day = date.getDate();

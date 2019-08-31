@@ -4,107 +4,104 @@
 $ball-wh:100rpx;
 $icon-size:50rpx;
 
-.#{$prefix} {
-  &-assistive-touch {
-    width: 100%;
-    position: relative;
-    z-index: 9999;
+.move-area {
+  width: 100%;
+  height: 100%;
+}
 
-    .sticky-ball {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+.sticky-ball {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-      width: $ball-wh;
-      height: $ball-wh;
-      background-color: rgba(255, 255, 255, 1);
-      border-radius: $ball-wh;
-      position: absolute;
-      right: 2%;
-      bottom: 10%;
-      transform: translate(-50%, -50%);
-      -webkit-transform: translate(-50%, -50%);
-      -moz-transform: translate(-50%, -50%);
-    }
-
-
-
-    .ball1 {
-      width: $ball-wh;
-      height: $ball-wh;
-      border-radius: $ball-wh;
-      position: absolute;
-      left: -100rpx;
-      top: -120rpx;
-    }
-
-    .ball2 {
-      width: $ball-wh;
-      height: $ball-wh;
-      border-radius: $ball-wh;
-      position: absolute;
-      left: -190rpx;
-      top: 0;
-    }
-
-    .ball3 {
-      width: $ball-wh;
-      height: $ball-wh;
-      border-radius: $ball-wh;
-      position: absolute;
-      left: -100rpx;
-      top: 120rpx;
-    }
+  width: $ball-wh;
+  height: $ball-wh;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 30%;
+  position: absolute;
+  top:80%;
+  left:80%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+}
 
 
 
-    .tog {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+.ball1 {
+  width: $ball-wh;
+  height: $ball-wh;
+  border-radius: $ball-wh;
+  position: absolute;
+  left: -100rpx;
+  top: -120rpx;
+}
 
-      background-color: rgba(255, 255, 255, 1);
-      transition: .5s;
+.ball2 {
+  width: $ball-wh;
+  height: $ball-wh;
+  border-radius: $ball-wh;
+  position: absolute;
+  left: -190rpx;
+  top: 0;
+}
 
-      -webkit-transition: .5s;
-      -moz-transition: .5s;
-    }
+.ball3 {
+  width: $ball-wh;
+  height: $ball-wh;
+  border-radius: $ball-wh;
+  position: absolute;
+  left: -100rpx;
+  top: 120rpx;
+}
 
-    .display {
-      transition: .5s;
-      -webkit-transition: .5s;
-      -moz-transition: .5s;
-      background-color: transparent;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-    }
 
-    .iconfont {
-      position: absolute;
-      font-size: $icon-size;
-    }
 
-    .view {
-      display: none;
-    }
+.tog {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    .o {}
+  background-color: rgba(255, 255, 255, 1);
+  transition: .5s;
 
-    .iconfont.icon-cha {
-      transition: .4s;
-      -webkit-transition: .4s;
-      -moz-transition: .4s;
-      -webkit-transform: rotate(90deg);
-      -moz-transform: rotate(90deg);
-      transform: rotate(90deg);
-    }
+  -webkit-transition: .5s;
+  -moz-transition: .5s;
+}
 
-    .iconfont.icon-refresh {
-      transition: .2s;
-      -webkit-transition: .2s;
-      -moz-transition: .2s;
-    }
-  }
+.display {
+  transition: .5s;
+  -webkit-transition: .5s;
+  -moz-transition: .5s;
+  background-color: transparent;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.iconfont {
+  position: absolute;
+  font-size: $icon-size;
+}
+
+.view {
+  display: none;
+}
+
+.o {}
+
+.iconfont.icon-cha {
+  transition: .4s;
+  -webkit-transition: .4s;
+  -moz-transition: .4s;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+.iconfont.icon-refresh {
+  transition: .2s;
+  -webkit-transition: .2s;
+  -moz-transition: .2s;
 }
