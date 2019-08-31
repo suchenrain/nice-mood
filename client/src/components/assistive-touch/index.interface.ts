@@ -6,8 +6,8 @@
  */
 export interface IAssistiveTouchState {
     toggled:boolean;
-    oLeft:string;
-    oTop:string;
+    oLeft:number;
+    oTop:number;
 }
 /**
  * assistive-touch.props 参数类型

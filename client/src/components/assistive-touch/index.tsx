@@ -14,14 +14,16 @@ class AssistiveTouch extends Component<
     super(props);
     this.state = {
       toggled: true,
-      oLeft: '80%',
-      oTop: '80%'
+      oLeft: 0,
+      oTop: 0
     };
   }
   static options = {
     addGlobalClass: true
   };
   static defaultProps: IAssistiveTouchProps = {};
+
+  componentWillMount() {}
 
   toggle = () => {
     this.setState({
@@ -32,19 +34,42 @@ class AssistiveTouch extends Component<
   move = e => {
     const htmlWidth = globalData.systemInfo.screenWidth;
     const htmlHeight = globalData.systemInfo.screenHeight;
-    console.log(e);
-    // let oLeft = e.clientX - this.oW;
-    // let oTop = e.clientY - this.oH;
-    // if (oLeft < 0) {
-    //   oLeft = 0;
-    // } else if (oLeft > htmlWidth - this.bWidth) {
-    //   oLeft = htmlWidth - this.bWidth;
-    // }
-    // if (oTop < 0) {
-    //   oTop = 0;
-    // } else if (oTop > htmlHeight - this.bHeight) {
-    //   oTop = htmlHeight - this.bHeight;
-    // }
+    const bWidth = 50;
+    const bHeight = 50;
+    const currentPosition = e.detail;
+    // 左侧距离
+    let { oLeft, oTop } = this.state;
+    if (currentPosition.x < (htmlWidth - bWidth) / 2) {
+      oLeft = 0;
+    } else {
+      oLeft = htmlWidth - bWidth;
+    }
+
+    oTop = currentPosition.y;
+
+    if (oTop < 0) {
+      oTop = 0;
+    } else if (oTop > htmlHeight - bHeight) {
+      oTop = htmlHeight - bHeight;
+    }
+
+    this.setState({
+      oLeft,
+      oTop
+    });
+  };
+
+  debounce = (fn, timer) => {
+    let timer_out;
+
+    return function(...args) {
+      // 清除计时器
+      if (timer_out) clearTimeout(timer_out);
+
+      timer_out = setTimeout(() => {
+        fn.apply(this, args);
+      }, timer);
+    };
   };
 
   render() {
@@ -59,18 +84,21 @@ class AssistiveTouch extends Component<
     const iconClass = classNames({
       view: toggled
     });
+    // const { oLeft, oTop } = this.state;
 
     return (
       <MovableArea className="move-area">
         <MovableView
           direction="all"
           className="sticky-ball"
-          onChange={this.move}
+          //onChange={this.debounce(this.move, 500)}
           onClick={this.toggle}
-          style={{
-            left: `${this.state.oLeft}`,
-            top: `${this.state.oTop}`
-          }}
+          // x={oLeft}
+          // y={oTop}
+          // style={{
+          //   // left: `${oLeft}px`,
+          //   // top: `${oTop}px`,
+          // }}
         >
           <View className={stickyBallClass} />
           <View className={`tog ball1 ${togClass}`}>
