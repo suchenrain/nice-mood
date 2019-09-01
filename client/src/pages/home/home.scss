@@ -6,7 +6,7 @@
   }
 
   to {
-    transform: rotate(360deg);
+    transform: rotate(-360deg);
   }
 }
 
@@ -69,16 +69,6 @@ $icon-wh:50rpx;
           position: fixed;
         }
       }
-    }
-
-    .touchball-wrap {
-      position: fixed;
-      height: 100%;
-      width: 100%;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
     }
 
     .mask-layer {

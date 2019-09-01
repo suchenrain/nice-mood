@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { SHAREINFO } from '.';
+import { SHAREINFO } from './weappConfig';
 
 /*
 |--------------------------------------

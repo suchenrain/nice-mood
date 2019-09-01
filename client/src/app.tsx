@@ -6,6 +6,9 @@ import models from '@/models';
 import dva from '@/utils/dva';
 import { globalData } from '@/utils/common';
 
+import '@/config/taroConfig';
+import '@/config/httpRequestConfig';
+
 import './app.scss';
 import Home from './pages/home/home';
 
@@ -30,11 +33,12 @@ class App extends Component {
    * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
+
   config: Config = {
-    pages: ['pages/home/home'],
+    pages: ['pages/home/home', 'pages/about/about'],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#ddd',
+      navigationBarBackgroundColor: '#33333300',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'white',
       navigationStyle: 'custom'

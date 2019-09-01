@@ -10,3 +10,10 @@ export const SHAREINFO = {
 export const CLOUD = {
   STORAGE_ROOTPATH: 'cloud://dev-nicemood.6465-dev-nicemood-1257746022/'
 };
+
+export const PAGES = {
+  INDEX: '/pages/home/home',
+  ABOUT: '/pages/about/about',
+  SETTING: '/pages/setting/setting',
+  PROFILE: '/pages/profile/profile'
+};

@@ -26,6 +26,7 @@ import { show } from '@/utils/animation';
 }))
 class Home extends Component<IHomeProps, IHomeState> {
   config: Config = {
+    navigationStyle: 'custom',
     navigationBarTitleText: 'Have a nice day',
     enablePullDownRefresh: true
   };
@@ -468,9 +469,7 @@ class Home extends Component<IHomeProps, IHomeState> {
           </View>
         )}
         {!dailyPhoto._id && <Copyright />}
-        <View className="touchball-wrap">
-          <TouchBall />
-        </View>
+        <TouchBall />
         <OpenSetting
           isOpened={showOpenSetting}
           onCancel={this.handleCloseOpenSetting}

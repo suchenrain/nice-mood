@@ -1,10 +1,10 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, MovableArea, MovableView } from '@tarojs/components';
+import { View } from '@tarojs/components';
 
 import { IAssistiveTouchProps, IAssistiveTouchState } from './index.interface';
 import classNames from 'classnames';
 import './index.scss';
-import { globalData } from '../../utils/common';
+import { PAGES } from '@/config/weappConfig';
 
 class AssistiveTouch extends Component<
   IAssistiveTouchProps,
@@ -13,9 +13,7 @@ class AssistiveTouch extends Component<
   constructor(props: IAssistiveTouchProps) {
     super(props);
     this.state = {
-      toggled: true,
-      oLeft: 0,
-      oTop: 0
+      toggled: true
     };
   }
   static options = {
@@ -31,52 +29,30 @@ class AssistiveTouch extends Component<
     });
   };
 
-  move = e => {
-    const htmlWidth = globalData.systemInfo.screenWidth;
-    const htmlHeight = globalData.systemInfo.screenHeight;
-    const bWidth = 50;
-    const bHeight = 50;
-    const currentPosition = e.detail;
-    // 左侧距离
-    let { oLeft, oTop } = this.state;
-    if (currentPosition.x < (htmlWidth - bWidth) / 2) {
-      oLeft = 0;
-    } else {
-      oLeft = htmlWidth - bWidth;
+  navigate = page => e => {
+    e.stopPropagation();
+    let url: string = PAGES.INDEX;
+    switch (page) {
+      case 'about':
+        url = PAGES.ABOUT;
+        break;
+      case 'setting':
+        url = PAGES.SETTING;
+        break;
+      case 'profile':
+        url = PAGES.PROFILE;
+        break;
+      default:
+        break;
     }
-
-    oTop = currentPosition.y;
-
-    if (oTop < 0) {
-      oTop = 0;
-    } else if (oTop > htmlHeight - bHeight) {
-      oTop = htmlHeight - bHeight;
-    }
-
-    this.setState({
-      oLeft,
-      oTop
-    });
-  };
-
-  debounce = (fn, timer) => {
-    let timer_out;
-
-    return function(...args) {
-      // 清除计时器
-      if (timer_out) clearTimeout(timer_out);
-
-      timer_out = setTimeout(() => {
-        fn.apply(this, args);
-      }, timer);
-    };
+    Taro.navigateTo({ url });
   };
 
   render() {
     const { toggled } = this.state;
-    const stickyBallClass = classNames('iconfont', 'o', {
-      'icon-cha': toggled,
-      'icon-refresh': !toggled
+    const stickyBallClass = classNames('iconfont', {
+      'icon-circle': toggled,
+      'icon-cha': !toggled
     });
     const togClass = classNames({
       display: toggled
@@ -84,34 +60,23 @@ class AssistiveTouch extends Component<
     const iconClass = classNames({
       view: toggled
     });
-    const { oLeft, oTop } = this.state;
 
     return (
-      <MovableArea className="move-area">
-        <MovableView
-          direction="all"
-          className="sticky-ball"
-          //onChange={this.debounce(this.move, 500)}
-          onClick={this.toggle}
-          x={oLeft}
-          y={oTop}
-          // style={{
-          //   // left: `${oLeft}px`,
-          //   // top: `${oTop}px`,
-          // }}
-        >
-          <View className={stickyBallClass} />
-          <View className={`tog ball1 ${togClass}`}>
-            <View className={`iconfont icon-cha ${iconClass}`} />
-          </View>
-          <View className={`tog ball2 ${togClass}`}>
-            <View className={`iconfont icon-cha ${iconClass}`} />
-          </View>
-          <View className={`tog ball3 ${togClass}`}>
-            <View className={`iconfont icon-cha ${iconClass}`} />
-          </View>
-        </MovableView>
-      </MovableArea>
+      <View className="sticky-ball" onClick={this.toggle}>
+        <View className={stickyBallClass} />
+        <View className={`tog ball1 ${togClass}`}>
+          <View
+            className={`iconfont icon-setting ${iconClass}`}
+            onClick={this.navigate('about')}
+          />
+        </View>
+        <View className={`tog ball2 ${togClass}`}>
+          <View className={`iconfont icon-favorite ${iconClass}`} />
+        </View>
+        <View className={`tog ball3 ${togClass}`}>
+          <View className={`iconfont icon-info ${iconClass}`} />
+        </View>
+      </View>
     );
   }
 }

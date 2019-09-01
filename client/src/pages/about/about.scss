@@ -1,0 +1,92 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+$title-color:#40a7e7;
+
+.#{$prefix} {
+  &-about {
+    width: 100%;
+    min-height: 100vh;
+
+    background-color: #eee6;
+
+    &-swiper {
+      width: 100%;
+      height: 400rpx;
+      background: #fff;
+      margin-bottom: 20rpx;
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 32rpx;
+        color: #333;
+        height: 100%;
+      }
+
+      .info .image {}
+
+      .info .alt {
+        position: absolute;
+        bottom: 40rpx;
+        font-size: 25rpx;
+        color: #000;
+        background-color: #fffd;
+        padding: 2rpx 10rpx;
+        border-radius: 10rpx;
+
+
+      }
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 80rpx;
+  font-size: 22rpx;
+  color: #666;
+}
+
+.panel {
+
+  line-height: 2.2em;
+  padding: 0 40rpx;
+  overflow: hidden;
+  background: #fff;
+  margin-bottom: 20rpx;
+
+  &-title {
+    color: $title-color;
+    font-size: 32rpx;
+    margin: 26rpx 0 10rpx 0;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+    position: relative;
+    padding-bottom: 16rpx;
+
+
+    &-icon {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 1.2em;
+      color: #333;
+    }
+
+    &-text {
+      margin-left: 20rpx;
+      font-size: 29rpx;
+      color: #999;
+    }
+  }
+}
