@@ -1,39 +1,159 @@
-@import "@/styles/variables.scss";
-@import "@/styles/mixins/index.scss";
+@import "@/styles/mixins/math.scss";
 
+$bubble-d: 4.5rem; // bubble diameter
+$bubble-r: .5*$bubble-d; // bubble-radius
+$sparkle-d: .375rem;
+$sparkle-r: .5*$sparkle-d;
 
-.heart-animation {
-  position: absolute;
-  background-image: url('@/assets/images/web_heart_animation_edge.png');
-  background-position: left;
-  background-repeat: no-repeat;
-  /*background-size: 2900%;*/
-  height: 100px;
-  width: 100px;
-  left: 50%;
-  top: 50%;
-  -ms-transform: translate(-50%, -47.5%);
-  transform: translate(-50%, -47.5%);
+@mixin sparkles($k) {
+  $shadow-list: ();
+  $n-groups: 7;
+  $group-base-angle: 360deg/$n-groups;
+  $group-distr-r: (1 + $k*.25)*$bubble-r;
+  $n-sparkles: 2;
+  $sparkle-base-angle: 360deg/$n-sparkles;
+  $sparkle-off-angle: 60deg; // offset angle from radius
+  $spread-r: -$k*$sparkle-r;
 
-  &--active {
-    animation-timing-function: steps(28);
-    animation-name: heart-burst;
-    animation-duration: .8s;
-    animation-iteration-count: 1;
-    display: inline-block;
-    animation-fill-mode: forwards;
+  @for $i from 0 to $n-groups {
+    $group-curr-angle: $i*$group-base-angle - 90deg;
+    $xg: $group-distr-r*cos($group-curr-angle);
+    $yg: $group-distr-r*sin($group-curr-angle);
+
+    @for $j from 0 to $n-sparkles {
+      $sparkle-curr-angle: $group-curr-angle + $sparkle-off-angle + $j*$sparkle-base-angle;
+      $xs: $xg + $sparkle-d*cos($sparkle-curr-angle);
+      $ys: $yg + $sparkle-d*sin($sparkle-curr-angle);
+
+      $shadow-list: $shadow-list, $xs $ys 0 $spread-r hsl(($i + $j)*$group-base-angle, 100%, 75%);
+    }
   }
+
+  box-shadow: $shadow-list;
 }
 
-/*.HeartAnimation :hover {*/
-/*background-position: 3.571428571428571%*/
-/*}*/
-@keyframes heart-burst {
+@mixin bubble($ext) {
+  transform: scale(1);
+  border-color: #cc8ef5;
+  border-width: $ext;
+}
+
+@keyframes inout {
   0% {
-    background-position: left
+    opacity: 0.2;
   }
 
   100% {
-    background-position: right
+    opacity: 1;
+  }
+}
+
+.inout {
+  -webkit-animation: inout 3s infinite ease-in-out;
+  -webkit-animation-direction: alternate;
+  animation: inout 3s infinite ease-in-out;
+  animation-direction: alternate;
+}
+
+.toggle-heart {
+  align-self: center;
+  position: absolute;
+  color: #888;
+  filter: grayscale(1);
+  user-select: none;
+  cursor: pointer;
+  display: inline-block;
+  // width: 50rpx;
+  // height: 50rpx;
+
+  &:before,
+  &:after {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    content: '';
+  }
+
+  &:before {
+    box-sizing: border-box;
+    margin: -$bubble-r;
+    border: solid $bubble-r #e2264d;
+    width: $bubble-d;
+    height: $bubble-d;
+    transform: scale(0);
+  }
+
+  &:after {
+    margin: -$sparkle-r;
+    width: $sparkle-d;
+    height: $sparkle-d;
+    @include sparkles(1);
+  }
+
+  &--active {
+    color: #e2264d;
+    filter: none;
+    will-change: font-size;
+    animation: heart 1s cubic-bezier(.17, .89, .32, 1.49);
+
+    &:before,
+    &:after {
+      animation: inherit;
+      animation-timing-function: ease-out;
+    }
+
+    &:before {
+      will-change: transform, border-width, border-color;
+      animation-name: bubble;
+    }
+
+    &:after {
+      will-change: opacity, box-shadow;
+      animation-name: sparkles;
+    }
+  }
+}
+
+.icon-iosheart{
+  // width: 50rpx;
+  // height: 50rpx;
+  color: rgb(247, 243, 243);
+  
+  &--active{
+    color:#f55b7a;
+  }
+}
+
+@keyframes heart {
+
+  0%,
+  17.5% {
+    font-size: 0;
+  }
+}
+
+@keyframes bubble {
+  15% {
+    @include bubble($bubble-r);
+  }
+
+  30%,
+  100% {
+    @include bubble(0);
+  }
+}
+
+@keyframes sparkles {
+
+  0%,
+  20% {
+    opacity: 0;
+  }
+
+  25% {
+    opacity: 1;
+    @include sparkles(0);
   }
 }

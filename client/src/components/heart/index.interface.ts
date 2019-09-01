@@ -14,7 +14,8 @@ export interface IHeartState {
  * @interface IHeartProps
  */
 export interface IHeartProps {
+  twink:boolean;
   active: boolean;
-  unlike:()=>any;
-  like:()=>any;
+  size:string
+  onFavorite:(like:boolean)=>any;
 }

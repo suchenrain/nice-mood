@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View } from '@tarojs/components';
+import { Text, View } from '@tarojs/components';
 import classNames from 'classnames';
 import { IHeartProps, IHeartState } from './index.interface';
 import './index.scss';
@@ -12,9 +12,9 @@ class Heart extends Component<IHeartProps, IHeartState> {
       _active: active
     };
   }
-  // static options = {
-  //   addGlobalClass: true
-  // }
+  static options = {
+    addGlobalClass: true
+  };
 
   // static defaultProps: IHeartProps = {
   //   active: false
@@ -30,17 +30,26 @@ class Heart extends Component<IHeartProps, IHeartState> {
   handleClick = () => {
     const { _active } = this.state;
     if (_active) {
-      this.props.unlike();
+      this.props.onFavorite(false);
     } else {
-      this.props.like();
+      this.props.onFavorite(true);
     }
   };
   render() {
     const { _active } = this.state;
-    const heartClass = classNames('heart-animation', {
-      'heart-animation--active': _active
+    const { twink,size } = this.props;
+    const heartClass = classNames('toggle-heart', {
+      'toggle-heart--active': _active
     });
-    return <View className={heartClass} onClick={this.handleClick}></View>;
+    const heartIcon = classNames('iconfont icon-iosheart', {
+      'icon-iosheart--active': _active,
+      'inout': twink
+    });
+    return (
+      <View className={heartClass} onClick={this.handleClick}>
+        <View className={heartIcon}  style={{fontSize:size}}/>
+      </View>
+    );
   }
 }
 export default Heart;

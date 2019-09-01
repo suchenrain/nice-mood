@@ -13,6 +13,8 @@ export interface IHomeState {
   greeting: string;
   located: boolean;
   bgLoaded: boolean;
+  likeQuote: boolean;
+  likePhoto: boolean;
   ani: any;
 }
 /**

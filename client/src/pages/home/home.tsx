@@ -16,7 +16,8 @@ import {
   ActionPanelItem,
   ShareMoment,
   Clock,
-  TouchBall
+  TouchBall,
+  Heart
 } from '@/components';
 import { show } from '@/utils/animation';
 
@@ -45,6 +46,8 @@ class Home extends Component<IHomeProps, IHomeState> {
       greeting: 'Have a nice day:)',
       located: false,
       bgLoaded: false,
+      likeQuote: false,
+      likePhoto: false,
       ani: {}
     };
   }
@@ -149,6 +152,21 @@ class Home extends Component<IHomeProps, IHomeState> {
     this.setState({
       showShareMoment: false,
       showActionPanel: true
+    });
+  };
+
+  /**
+   * quote heart点击回调
+   */
+  handleQuoteHeart = (like: boolean) => {
+    this.setState({
+      likeQuote: like
+    });
+  };
+
+  handlePhotoHeart = (like: boolean) => {
+    this.setState({
+      likePhoto: like
     });
   };
 
@@ -324,6 +342,8 @@ class Home extends Component<IHomeProps, IHomeState> {
       showActionPanel,
       showShareMoment,
       greeting,
+      likePhoto,
+      likeQuote,
       ani
     } = this.state;
     const code = weather && weather.now.cond_code;
@@ -410,9 +430,16 @@ class Home extends Component<IHomeProps, IHomeState> {
           <View className="quote-wrap" animation={ani.quote}>
             {quote && (
               <View className="quote-info">
-                <Text className="quote-info__text">
+                <View className="quote-info__text">
                   &#8220;{quote.hitokoto}&#8221;
-                </Text>
+                  <Heart
+                    twink={true}
+                    size="24px"
+                    active={likeQuote}
+                    onFavorite={this.handleQuoteHeart}
+                  />
+                </View>
+
                 <Text className="quote-info__author">
                   &lceil;{` ${quote.from} `}&rfloor;
                 </Text>
@@ -427,8 +454,23 @@ class Home extends Component<IHomeProps, IHomeState> {
             />
           </View>
         </View>
-        <Copyright />
-        <View className="touchball-wrap"><TouchBall /></View>
+        {dailyPhoto._id && (
+          <View className="photo-copyright">
+            <View className="photo-copyright__text">
+              Photo by {dailyPhoto.author}
+              <Heart
+                twink={true}
+                size="16px"
+                active={likePhoto}
+                onFavorite={this.handlePhotoHeart}
+              />
+            </View>
+          </View>
+        )}
+        {!dailyPhoto._id && <Copyright />}
+        <View className="touchball-wrap">
+          <TouchBall />
+        </View>
         <OpenSetting
           isOpened={showOpenSetting}
           onCancel={this.handleCloseOpenSetting}

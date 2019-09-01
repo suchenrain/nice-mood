@@ -84,7 +84,7 @@ class AssistiveTouch extends Component<
     const iconClass = classNames({
       view: toggled
     });
-    // const { oLeft, oTop } = this.state;
+    const { oLeft, oTop } = this.state;
 
     return (
       <MovableArea className="move-area">
@@ -93,8 +93,8 @@ class AssistiveTouch extends Component<
           className="sticky-ball"
           //onChange={this.debounce(this.move, 500)}
           onClick={this.toggle}
-          // x={oLeft}
-          // y={oTop}
+          x={oLeft}
+          y={oTop}
           // style={{
           //   // left: `${oLeft}px`,
           //   // top: `${oTop}px`,

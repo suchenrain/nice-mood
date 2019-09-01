@@ -24,6 +24,7 @@
   }
 }
 
+
 $icon-wh:50rpx;
 
 .twink {
@@ -71,7 +72,6 @@ $icon-wh:50rpx;
     }
 
     .touchball-wrap {
-      // z-index: 5;
       position: fixed;
       height: 100%;
       width: 100%;
@@ -95,13 +95,11 @@ $icon-wh:50rpx;
 
     .content-wrap {
       position: relative;
-      // z-index: 5;
       color: #fff;
       display: flex;
       flex-direction: column;
       justify-content: first baseline;
       align-items: center;
-      // height: 80vh;
 
       >.index-title {
         text-align: center;
@@ -294,6 +292,33 @@ $icon-wh:50rpx;
 
       }
 
+    }
+
+    .photo-copyright {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      margin-bottom: 15px;
+      
+      font-size: 28rpx;
+      text-align: center;
+      z-index: 999;
+  
+      &__link {
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+        font-size: 28rpx;
+        color: #6190e8;
+        display: none;
+      }
+  
+      &__text {
+        padding: 0 0.34em;
+        font-size: 24rpx;
+        color: rgba($color: #fff, $alpha: 0.6);
+      }
     }
 
     .share-btn {

@@ -8,11 +8,22 @@ const sassImporter = function (url) {
       file: path.resolve(__dirname, '..', 'node_modules', url.substr(1))
     }
   }
+
   // @/styles
   const reg = /^@\/styles\/(.*)/
-  return {
-    file: reg.test(url) ? path.resolve(__dirname, '..', 'src/styles', url.match(reg)[1]) : url
+  if (reg.test(url)) {
+    return {
+      file: path.resolve(__dirname, '..', 'src/styles', url.match(reg)[1])
+    }
   }
+  // // @/assets
+  // const asset_reg = /^@\/assets\/(.*)/
+  // if (asset_reg.test(url)) {
+  //   return {
+  //     file: path.resolve(__dirname, '..', 'src/assets', url.match(asset_reg)[1])
+  //   }
+  // }
+
 }
 
 const config = {
@@ -44,8 +55,7 @@ const config = {
       importer: sassImporter
     }
   },
-  defineConstants: {
-  },
+  defineConstants: {},
   alias: {
     '@/assets': path.resolve(__dirname, '..', 'src/assets'),
     '@/components': path.resolve(__dirname, '..', 'src/components'),
@@ -58,10 +68,8 @@ const config = {
     '@/pages': path.resolve(__dirname, '..', 'src/pages')
   },
   copy: {
-    patterns: [
-    ],
-    options: {
-    }
+    patterns: [],
+    options: {}
   },
   weapp: {
     module: {
