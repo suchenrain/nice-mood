@@ -39,6 +39,7 @@ class App extends Component {
     pages: [
       'pages/home/home',
       'pages/about/about',
+      'pages/profile/profile',
       'pages/setting/setting',
       'pages/systeminfo/systeminfo'
     ],
