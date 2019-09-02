@@ -23,7 +23,9 @@ class AssistiveTouch extends Component<
 
   componentWillMount() {}
 
-  toggle = () => {
+  toggle = e => {
+    e.stopPropagation();
+    e.preventDefault();
     this.setState({
       toggled: !this.state.toggled
     });
@@ -31,6 +33,7 @@ class AssistiveTouch extends Component<
 
   navigate = page => e => {
     e.stopPropagation();
+    e.preventDefault();
     let url: string = PAGES.INDEX;
     switch (page) {
       case 'about':
@@ -67,14 +70,20 @@ class AssistiveTouch extends Component<
         <View className={`tog ball1 ${togClass}`}>
           <View
             className={`iconfont icon-setting ${iconClass}`}
-            onClick={this.navigate('about')}
+            onClick={this.navigate('setting')}
           />
         </View>
         <View className={`tog ball2 ${togClass}`}>
-          <View className={`iconfont icon-favorite ${iconClass}`} />
+          <View
+            className={`iconfont icon-favorite ${iconClass}`}
+            onClick={this.navigate('profile')}
+          />
         </View>
         <View className={`tog ball3 ${togClass}`}>
-          <View className={`iconfont icon-info ${iconClass}`} />
+          <View
+            className={`iconfont icon-info ${iconClass}`}
+            onClick={this.navigate('about')}
+          />
         </View>
       </View>
     );

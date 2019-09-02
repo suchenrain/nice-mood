@@ -4,7 +4,7 @@ import { View, Swiper, SwiperItem, Image } from '@tarojs/components';
 // import Tips from '@/utils/tips'
 // import {  } from '@/components'
 import { IAboutProps, IAboutState } from './about.interface';
-import photo1 from '@/assets/images/nicemood.png';
+import photo1 from '@/assets/images/ad1.jpg';
 
 import './about.scss';
 

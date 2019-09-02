@@ -35,7 +35,7 @@ class App extends Component {
    */
 
   config: Config = {
-    pages: ['pages/home/home', 'pages/about/about'],
+    pages: ['pages/home/home', 'pages/about/about', 'pages/setting/setting'],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#33333300',
