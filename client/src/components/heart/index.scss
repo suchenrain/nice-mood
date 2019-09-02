@@ -116,13 +116,17 @@ $sparkle-r: .5*$sparkle-d;
   }
 }
 
-.icon-iosheart{
+.icon-iosheart {
   // width: 50rpx;
   // height: 50rpx;
-  color: rgb(247, 243, 243);
-  
-  &--active{
-    color:#f55b7a;
+  color: rgb(250, 250, 250);
+  // text-shadow:
+  //   0 0 3px #fff,
+  //   0 2px 2px #fff, 0 -2px 2px #fff,
+  //   2px 0 2px #fff, -2px 0 2px #fff;
+
+  &--active {
+    color: #f55b7a;
   }
 }
 

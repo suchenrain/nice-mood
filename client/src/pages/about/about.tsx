@@ -78,7 +78,7 @@ class About extends Component<IAboutProps, IAboutState> {
         <View className="panel">
           <View className="panel-title">联系反馈</View>
           <View className="panel-content" onClick={this.copy('GitHub', github)}>
-            <View className="panel-content-icon iconfont icon-github" />
+            <View className="panel-content-icon iconfont icon-github-smile" />
             <View className="panel-content-text">
               <View>通过 GitHub 反馈</View>
               <View>{github}</View>

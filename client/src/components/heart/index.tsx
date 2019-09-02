@@ -28,6 +28,7 @@ class Heart extends Component<IHeartProps, IHeartState> {
   }
 
   handleClick = () => {
+    Taro.vibrateShort();
     const { _active } = this.state;
     if (_active) {
       this.props.onFavorite(false);

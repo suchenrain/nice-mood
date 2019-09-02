@@ -26,6 +26,7 @@ class AssistiveTouch extends Component<
   toggle = e => {
     e.stopPropagation();
     e.preventDefault();
+    Taro.vibrateShort();
     this.setState({
       toggled: !this.state.toggled
     });
@@ -34,6 +35,7 @@ class AssistiveTouch extends Component<
   navigate = page => e => {
     e.stopPropagation();
     e.preventDefault();
+    Taro.vibrateShort();
     let url: string = PAGES.INDEX;
     switch (page) {
       case 'about':

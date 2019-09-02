@@ -30,6 +30,13 @@ export let globalData: any = {
     'ebecebfa0d4192a48cbccdbcb1304b25c613a604456a223e93904c7ebadf2170'
 };
 
+export const setGlobalData = (key, val) => {
+  globalData[key] = val;
+};
+export const getGlobalData = key => {
+  return {...globalData[key]};
+};
+
 /**
  * 时间格式装换函数
  */

@@ -8,7 +8,12 @@ import defaultBg from '@/assets/bg/default.jpg';
 import './home.scss';
 
 import { upgrade } from '@/utils/autoUpgrade';
-import { getCurrentPageUrl, isNight, globalData } from '@/utils/common';
+import {
+  getCurrentPageUrl,
+  isNight,
+  globalData,
+  getGlobalData
+} from '@/utils/common';
 import {
   Copyright,
   OpenSetting,
@@ -20,6 +25,7 @@ import {
   Heart
 } from '@/components';
 import { show } from '@/utils/animation';
+import { ISetting } from '@/types';
 
 @connect(({ home }) => ({
   ...home
@@ -54,8 +60,11 @@ class Home extends Component<IHomeProps, IHomeState> {
   }
 
   componentWillMount() {
-    // 检查更新
-    upgrade();
+    const setting: ISetting = getGlobalData('setting');
+    if (setting.enableUpdateCheck) {
+      // 检查更新
+      upgrade();
+    }
   }
   componentDidMount() {
     this.init();
@@ -365,6 +374,8 @@ class Home extends Component<IHomeProps, IHomeState> {
       'icon-refresh--active': this.refreshingQuote
     });
 
+    const setting: ISetting = getGlobalData('setting');
+
     return (
       <View className="fx-index-wrap">
         <View className="daily-image-wrap">
@@ -386,19 +397,21 @@ class Home extends Component<IHomeProps, IHomeState> {
         <View className="content-wrap">
           <Text className="index-title">每天好心情</Text>
           <View className="top-wrap">
-            <View className="user-wrap">
-              <OpenData
-                type="userAvatarUrl"
-                className="user-avatar"
-                animation={ani.userAvatar}
-              />
-              <View className="greeting-wrap">
-                <View className="twink-round twink" />
-                <View className="greeting-text" animation={ani.greeting}>
-                  {greeting}
+            {setting.enableGreeting && (
+              <View className="user-wrap">
+                <OpenData
+                  type="userAvatarUrl"
+                  className="user-avatar"
+                  animation={ani.userAvatar}
+                />
+                <View className="greeting-wrap">
+                  <View className="twink-round twink" />
+                  <View className="greeting-text" animation={ani.greeting}>
+                    {greeting}
+                  </View>
                 </View>
               </View>
-            </View>
+            )}
 
             <View className="weather-wrap" animation={ani.weather}>
               {weather && (
@@ -461,7 +474,7 @@ class Home extends Component<IHomeProps, IHomeState> {
               Photo by {dailyPhoto.author}
               <Heart
                 twink={true}
-                size="16px"
+                size="1rem"
                 active={likePhoto}
                 onFavorite={this.handlePhotoHeart}
               />
@@ -492,7 +505,7 @@ class Home extends Component<IHomeProps, IHomeState> {
           <ActionPanelItem
             onClick={this.handleShareMoment}
             icon="icon-camera"
-            title="保存到相册"
+            title="生成图签"
           />
         </ActionPanel>
         <ShareMoment

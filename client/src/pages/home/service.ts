@@ -67,7 +67,7 @@ export const getGreeting = async () => {
     key: key
   })
     .then(res => {
-      const greetings = JSON.parse(res.data);
+      const greetings = res.data;
       return { result: greetings };
     })
     .catch(err => {
@@ -80,7 +80,7 @@ export const getGreeting = async () => {
         })
         .then((res: any) => {
           const greetings = res.result.data;
-          Taro.setStorageSync(key, JSON.stringify(greetings));
+          Taro.setStorageSync(key, greetings);
           return { result: greetings };
         })
         .catch(error => {

@@ -24,6 +24,12 @@
     color: #40a7e7
   }
 
+  &-subtitle {
+    padding: 24rpx 0;
+    color: #40a7e7;
+    font-size: 30rpx;
+  }
+
   &-content {}
 
   &-item {
@@ -32,18 +38,32 @@
     align-items: center;
     padding: 16rpx 0;
 
+    &-sub {
+      padding-left: 18rpx;
+    }
+
     &-tip-icon {
       display: flex;
       justify-content: flex-start;
       align-items: center;
       font-size: 1em;
-      color:#999;
+      color: #999;
+    }
+    &-tip-icon.icon-warning {
+      color:rgb(206, 18, 18);
+      font-size: 22rpx;
     }
 
     &-tip-text {
       font-size: 24rpx;
-      color:#aaa;
+      color: #aaa;
     }
+
+  }
+
+  .right {
+    font-size: 1.2em;
+    color: #888;
 
   }
 }

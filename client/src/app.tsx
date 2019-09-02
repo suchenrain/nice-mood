@@ -11,6 +11,7 @@ import '@/config/httpRequestConfig';
 
 import './app.scss';
 import Home from './pages/home/home';
+import { defaultSetting } from './types';
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -35,7 +36,12 @@ class App extends Component {
    */
 
   config: Config = {
-    pages: ['pages/home/home', 'pages/about/about', 'pages/setting/setting'],
+    pages: [
+      'pages/home/home',
+      'pages/about/about',
+      'pages/setting/setting',
+      'pages/systeminfo/systeminfo'
+    ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#33333300',
@@ -80,6 +86,16 @@ class App extends Component {
     // 获取设备信息
     const sys = await Taro.getSystemInfo();
     sys && (globalData.systemInfo = sys);
+
+    // 获取用户设置
+    try {
+      const setting = Taro.getStorageSync('setting');
+      if (setting) {
+        globalData.setting = setting;
+      } else {
+        globalData.setting = defaultSetting;
+      }
+    } catch (err) {}
   }
 
   componentDidShow() {}
