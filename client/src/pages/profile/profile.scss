@@ -5,14 +5,106 @@
 .profile {
   width: 100%;
   min-height: 100Vh;
+  font-size: 32rpx;
 
-  &-userinfo {}
+  &-userinfo {
+    height: 500rpx;
+    background-color: rgba(68, 68, 68, 0.945);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: overlay;
+
+  }
 
   &-avatar {
     height: 120rpx;
     width: 120rpx;
     border-radius: 50%;
     overflow: hidden;
+    margin: 0 0 32rpx 30rpx;
+
+
+  }
+
+  &-nickname {
+    margin: 0 0 40rpx 30rpx;
+    color: #fff;
+    font-size: 40rpx;
+    font-weight: bolder;
+
+  }
+
+  .tabswiper {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30rpx;
+
+    &-tab {
+      padding: 4rpx 20rpx;
+      background-color: #fff;
+      color: #000;
+      width: 30%;
+      min-width: 200rpx;
+      text-align: center;
+
+
+      &--active {
+        background-color: #333;
+        color: #fff;
+      }
+    }
+
+    &-tab:first-child {
+      border-bottom-left-radius: 10rpx;
+      border-top-left-radius: 10rpx;
+      border: 2rpx solid #000;
+    }
+
+    &-tab:last-child {
+      border-bottom-right-radius: 10rpx;
+      border-top-right-radius: 10rpx;
+      border: 2rpx solid #000;
+    }
+  }
+
+  .display {
+    display: block;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .quote {
+    padding: 40rpx;
+
+    &-item {
+      border-bottom: 1px solid #ccc9;
+      padding: 30rpx 0;
+      text-indent: -0.5em;
+      padding-left: 0.5em;
+
+    }
+
+    &-text {
+      color: #333;
+    }
+
+    &-author {
+      font-size: 28rpx;
+      color: #888;
+      margin-left: 12rpx;
+
+
+    }
 
   }
 }
