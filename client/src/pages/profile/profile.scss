@@ -6,6 +6,8 @@
   width: 100%;
   min-height: 100Vh;
   font-size: 32rpx;
+  background-color: #fff;
+
 
   &-userinfo {
     height: 500rpx;
@@ -66,12 +68,14 @@
       border-bottom-left-radius: 10rpx;
       border-top-left-radius: 10rpx;
       border: 2rpx solid #000;
+      border-right: none;
     }
 
     &-tab:last-child {
       border-bottom-right-radius: 10rpx;
       border-top-right-radius: 10rpx;
       border: 2rpx solid #000;
+      border-left: none;
     }
   }
 

@@ -1,0 +1,12 @@
+[
+  {
+    "name": "favorite quote",
+    "value": {
+      "quote": {
+        "id": 1,
+        "hitokoto": "test",
+        "from": "nice mood"
+      }
+    }
+  }
+]

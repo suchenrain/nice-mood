@@ -10,6 +10,8 @@ import { IProfileProps, IProfileState } from './profile.interface';
 import './profile.scss';
 
 import demoBg from '@/assets/bg/default.jpg';
+import { AtSwipeAction } from 'taro-ui';
+import { IQuote } from '../../types';
 
 // @connect(({ profile }) => ({
 //     ...profile,
@@ -23,7 +25,8 @@ class Profile extends Component<IProfileProps, IProfileState> {
   constructor(props: IProfileProps) {
     super(props);
     this.state = {
-      current: 0
+      current: 0,
+      activeQuoteId: 0
     };
   }
   componentDidMount() {}
@@ -38,9 +41,69 @@ class Profile extends Component<IProfileProps, IProfileState> {
     });
   };
 
+  /**
+   * 切换
+   */
+  handleSingle = id => () => {
+    this.setState({ activeQuoteId: id });
+  };
+  // 关闭所有
+  handleResetSingle = () => {
+    this.setState({ activeQuoteId: 0 });
+  };
+
+  //移除
+  handleRemove = e => {
+    // {text:"移除",style:{}}
+  };
+
   render() {
     const headerBg = demoBg;
-    const { current } = this.state;
+    const { current, activeQuoteId } = this.state;
+
+    // quotes
+    // const { quotes } = this.props;
+    const quotes: Array<IQuote> = [
+      {
+        id: 1,
+        hitokoto: `If you don't like where you are, change it. You're not a tree.`,
+        from: 'Jim Rohn'
+      },
+      {
+        id: 2,
+        hitokoto: '求之不得，寤寐思服。悠哉悠哉，辗转反侧。',
+        from: '关雎'
+      }
+    ];
+
+    const swipeActionOption = [
+      {
+        text: '移除',
+        style: {
+          backgroundColor: '#FF4949'
+        }
+      }
+    ];
+    const quoteList = quotes.map(quote => {
+      return (
+        <AtSwipeAction
+          key={quote.id}
+          options={swipeActionOption}
+          onOpened={this.handleSingle(quote.id)}
+          isOpened={activeQuoteId == quote.id}
+          onClosed={this.handleResetSingle}
+          onClick={this.handleRemove}
+        >
+          <View className="quote-item">
+            <View className="quote-text">
+              “{quote.hitokoto}”
+              <Text className="quote-author">{quote.from}</Text>
+            </View>
+          </View>
+        </AtSwipeAction>
+      );
+    });
+
     return (
       <View className="profile">
         <View
@@ -77,19 +140,8 @@ class Profile extends Component<IProfileProps, IProfileState> {
             photo
           </View>
           <View className={`quote ${current == 1 ? 'display' : 'hidden'}`}>
-            <View className="quote-item">
-              <View className="quote-text">
-                “Patience and perseverance have a magical effect before which
-                difficulties disappear and obstacles vanish.”
-                <Text className="quote-author">Phil Jackson</Text>
-              </View>
-            </View>
-            <View className="quote-item">
-              <View className="quote-text">
-                “不管怎么样，未来都是可以改变的。”
-                <Text className="quote-author">雏菊</Text>
-              </View>
-            </View>
+            {quotes.length == 0 && <View>你还没有喜欢的句子呢</View>}
+            {quoteList}
           </View>
         </View>
       </View>
