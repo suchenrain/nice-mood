@@ -1,21 +1,17 @@
 import Taro, { Component, Config } from '@tarojs/taro';
-import { View, OpenData, Text } from '@tarojs/components';
-// import { connect } from '@tarojs/redux'
+import { View, OpenData, Text, ScrollView } from '@tarojs/components';
+import { connect } from '@tarojs/redux';
 
-// import Api from '@/utils/httpRequest'
-// import Tips from '@/utils/tips'
-// import {  } from '@/components'
 import { IProfileProps, IProfileState } from './profile.interface';
 
 import './profile.scss';
 
 import demoBg from '@/assets/bg/default.jpg';
 import { AtSwipeAction } from 'taro-ui';
-import { IQuote } from '../../types';
 
-// @connect(({ profile }) => ({
-//     ...profile,
-// }))
+@connect(({ profile }) => ({
+  ...profile
+}))
 class Profile extends Component<IProfileProps, IProfileState> {
   config: Config = {
     navigationStyle: 'custom',
@@ -25,19 +21,52 @@ class Profile extends Component<IProfileProps, IProfileState> {
   constructor(props: IProfileProps) {
     super(props);
     this.state = {
-      current: 0,
+      current: 0, //active tab
+      quotePageIndex: 1,
+      quoteClicked: false,
+      loadingQuote: false,
       activeQuoteId: 0
     };
   }
-  componentDidMount() {}
+  componentDidMount() {
+    this.loadData();
+  }
+  onReachBottom() {
+    const { current, quotePageIndex, loadingQuote } = this.state;
+    const { totalQuotePage } = this.props;
+    if (current == 1 && !loadingQuote && quotePageIndex <= totalQuotePage) {
+      this.fetchQuotes();
+    }
+  }
 
-  clickTab = (current: number) => e => {
-    this.setState({ current });
+  loadData = () => {
+    this.fetchPhotos();
+  };
+  fetchPhotos = () => {};
+
+  fetchQuotes = () => {
+    const { quotePageIndex } = this.state;
+    this.props.dispatch({
+      type: 'profile/getFondQuotes',
+      payload: {
+        pageIndex: quotePageIndex
+      },
+      callback: () => {
+        const nextPage = quotePageIndex + 1;
+        this.setState({ quotePageIndex: nextPage, quoteClicked: true });
+      }
+    });
   };
 
-  handleTabChange = e => {
-    this.setState({
-      current: e.detail.current
+  back = () => {
+    Taro.navigateBack();
+  };
+
+  handleToggleTab = (current: number) => e => {
+    this.setState({ current }, () => {
+      if (current == 1 && !this.state.quoteClicked) {
+        this.fetchQuotes();
+      }
     });
   };
 
@@ -62,19 +91,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
     const { current, activeQuoteId } = this.state;
 
     // quotes
-    // const { quotes } = this.props;
-    const quotes: Array<IQuote> = [
-      {
-        id: 1,
-        hitokoto: `If you don't like where you are, change it. You're not a tree.`,
-        from: 'Jim Rohn'
-      },
-      {
-        id: 2,
-        hitokoto: '求之不得，寤寐思服。悠哉悠哉，辗转反侧。',
-        from: '关雎'
-      }
-    ];
+    const { quotes } = this.props;
 
     const swipeActionOption = [
       {
@@ -105,7 +122,11 @@ class Profile extends Component<IProfileProps, IProfileState> {
     });
 
     return (
-      <View className="profile">
+      <ScrollView scroll-y style="height: 600px" className="profile">
+        <View
+          onClick={this.back}
+          className="backicon iconfont icon-right"
+        ></View>
         <View
           className="profile-userinfo"
           style={{ backgroundImage: `url("${headerBg}")` }}
@@ -122,7 +143,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
             className={`tabswiper-tab ${
               current == 0 ? 'tabswiper-tab--active' : ''
             }`}
-            onClick={this.clickTab(0)}
+            onClick={this.handleToggleTab(0)}
           >
             图片
           </View>
@@ -130,7 +151,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
             className={`tabswiper-tab ${
               current == 1 ? 'tabswiper-tab--active' : ''
             }`}
-            onClick={this.clickTab(1)}
+            onClick={this.handleToggleTab(1)}
           >
             一言
           </View>
@@ -144,7 +165,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
             {quoteList}
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }

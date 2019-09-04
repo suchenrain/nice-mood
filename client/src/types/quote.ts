@@ -5,4 +5,5 @@ export interface IQuote {
   type?: string;
   creator?: string;
   created_at?: number;
+  fond?:boolean;
 }

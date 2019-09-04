@@ -5,31 +5,43 @@ import * as profileApi from './service';
 export default {
   namespace: 'profile',
   state: {
-    quotes: []
+    quotes: [],
+    totalQuotePage: 1
   },
 
   effects: {
-    *getFondQuotes({ payload }, { call, put, select }) {
+    *getFondQuotes({ payload, callback }, { call, put, select }) {
       const { error, result } = yield call(profileApi.getFondQuotes, {
         ...payload
       });
       console.log('返回收藏的Quotes', result);
-      if (!error) {
-        const quotes = yield select(state => state.quotes);
-        let newQuotes = quotes.concat(result);
+
+      if (!error && result) {
+        let data;
+        if (result.pageIndex === 1) {
+          data = result.data;
+        } else {
+          const preQuotes = yield select(state => state.profile.quotes);
+          data = preQuotes.concat(result.data);
+        }
+
         yield put({
           type: 'saveQuotes',
           payload: {
-            quotes: newQuotes
+            quotes: data,
+            totalQuotePage: result.totalPage
           }
         });
+        if (callback && typeof callback === 'function') {
+          yield callback();
+        }
       }
     }
   },
 
   reducers: {
     saveQuotes(state, { payload }) {
-      return { ...state, ...payload.quotes };
+      return { ...state, ...payload };
     }
   }
 };

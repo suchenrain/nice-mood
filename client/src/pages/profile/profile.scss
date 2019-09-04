@@ -7,8 +7,17 @@
   min-height: 100Vh;
   font-size: 32rpx;
   background-color: #fff;
-  position: fixed;
+  position: relative;
 
+  .backicon {
+    position: absolute;
+    top: 64rpx;
+    left: 40rpx;
+    font-size: 50rpx;
+    color: #fff;
+    transform: rotate(180deg);
+
+  }
 
   &-userinfo {
     height: 500rpx;
@@ -80,8 +89,8 @@
     }
   }
 
-  .content-wrap{
-    padding: 0 20rpx;
+  .content-wrap {
+    padding: 0 40rpx;
   }
 
   .display {

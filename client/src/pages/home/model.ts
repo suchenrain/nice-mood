@@ -88,6 +88,14 @@ export default {
           yield callback();
         }
       }
+    },
+    *upsertFondQuote({ payload, callback }, { call }) {
+      const { error, result } = yield call(homeApi.upsertFondQuote, {
+        ...payload
+      });
+      if (callback && typeof callback === 'function') {
+        yield callback(error, result);
+      }
     }
   },
 

@@ -88,3 +88,21 @@ export const getGreeting = async () => {
         });
     });
 };
+
+/**
+ * 添加/移除 喜欢的quote记录
+ * @param payload {quote:{},fond:boolean}
+ */
+export const upsertFondQuote = async payload => {
+  return await Taro.cloud
+    .callFunction({
+      name: 'upsertFondQuote',
+      data: payload
+    })
+    .then(result => {
+      return { result };
+    })
+    .catch(error => {
+      return { error };
+    });
+};

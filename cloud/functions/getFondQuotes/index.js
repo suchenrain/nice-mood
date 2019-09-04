@@ -12,11 +12,22 @@ const db = cloud.database({
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   try {
-    const pageIndex = event.pageIndex || 0;
-    const pageSize = event.pageSize || 20;
-    const skipCount = pageIndex * pageSize;
+    const pageIndex = event.pageIndex || 1;
+    const pageSize = event.pageSize || 50;
+    const skipCount = (pageIndex - 1) * pageSize;
 
-    return db.collection('favorites-quote')
+    // 先取出集合记录总数
+    const countResult = await db.collection('favorites-quote').where({
+      openid: wxContext.OPENID,
+    }).count();
+    const total = countResult.total
+    // 计算需分几次取
+    const totalPage = Math.ceil(total / pageSize)
+    if (pageIndex > totalPage) {
+      return Promise.reject({ error: "invalid page index" })
+    }
+
+    const result = await db.collection('favorites-quote')
       .where({
         openid: wxContext.OPENID,
       }).orderBy('createtime', 'desc')
@@ -28,8 +39,15 @@ exports.main = async (event, context) => {
       })
       .limit(pageSize)
       .get();
+
+    return Promise.resolve({
+      totalPage,
+      pageIndex,
+      data: result.data
+
+    })
   }
-  catch (e) {
-    console.error(e)
+  catch (error) {
+    return Promise.reject(error)
   }
 }

@@ -3,10 +3,9 @@ import Taro from '@tarojs/taro';
 /**
  * 获取喜欢的quote列表
  */
-export const getFondQuotes = async (
-  pageIndex: number = 0,
-  pageSize: number = 20
-) => {
+export const getFondQuotes = async payload => {
+  const pageIndex: number = payload.pageIndex || 1;
+  const pageSize: number = payload.pageSize || 50;
   return await Taro.cloud
     .callFunction({
       name: 'getFondQuotes',
@@ -16,7 +15,7 @@ export const getFondQuotes = async (
       }
     })
     .then((res: any) => {
-      return { result: res.data };
+      return { result: res.result };
     })
     .catch(error => {
       return { error };

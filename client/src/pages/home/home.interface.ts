@@ -24,10 +24,11 @@ export interface IHomeState {
  * @interface IHomeProps
  */
 export interface IHomeProps {
-  dispatch?: any;
-  loading?: DvaLoading;
+  
   weather: IWeather;
   quote: IQuote;
   dailyPhoto: IPhoto;
   greetings: Array<IGreeting>;
+  dispatch?: any;
+  loading?: DvaLoading;
 }

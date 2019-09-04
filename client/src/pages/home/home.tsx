@@ -26,6 +26,7 @@ import {
 } from '@/components';
 import { show } from '@/utils/animation';
 import { ISetting } from '@/types';
+import Tips from '@/utils/tips';
 
 @connect(({ home }) => ({
   ...home
@@ -168,15 +169,20 @@ class Home extends Component<IHomeProps, IHomeState> {
   /**
    * quote heart点击回调
    */
-  handleQuoteHeart = (like: boolean) => {
-    this.setState({
-      likeQuote: like
-    });
+  handleQuoteHeart = (fond: boolean) => {
+    this.setState(
+      {
+        likeQuote: fond
+      },
+      () => {
+        this.upsertFondQuote(fond);
+      }
+    );
   };
 
-  handlePhotoHeart = (like: boolean) => {
+  handlePhotoHeart = (fond: boolean) => {
     this.setState({
-      likePhoto: like
+      likePhoto: fond
     });
   };
 
@@ -209,6 +215,30 @@ class Home extends Component<IHomeProps, IHomeState> {
     if (!this.state.bgLoaded) {
       this.getDailyPhoto();
     }
+  };
+
+  /**
+   * 更新收藏quote
+   */
+  upsertFondQuote = (fond: boolean) => {
+    const { quote } = this.props;
+    this.props.dispatch({
+      type: 'home/upsertFondQuote',
+      payload: {
+        quote: quote,
+        fond: fond
+      },
+      callback: (err, res) => {
+        if (err) {
+          this.setState({ likeQuote: !fond }, () => {
+            Tips.toast(fond ? '收藏失败' : '取消失败');
+          });
+        }
+        if (res) {
+          Tips.success(fond ? '已收藏' : '已取消收藏');
+        }
+      }
+    });
   };
 
   /*
@@ -318,6 +348,11 @@ class Home extends Component<IHomeProps, IHomeState> {
           c: 'g'
         },
         callback: () => {
+          // preset like status
+          this.setState({
+            likeQuote: this.props.quote.fond || false
+          });
+
           Taro.vibrateShort();
           this.refreshingQuote = false;
           show(this, 'quote', 1, 0, 2000);
