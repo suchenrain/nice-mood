@@ -7,6 +7,7 @@
   min-height: 100Vh;
   font-size: 32rpx;
   background-color: #fff;
+  position: fixed;
 
 
   &-userinfo {
@@ -79,6 +80,10 @@
     }
   }
 
+  .content-wrap{
+    padding: 0 20rpx;
+  }
+
   .display {
     display: block;
   }
@@ -88,7 +93,7 @@
   }
 
   .quote {
-    padding: 40rpx;
+    padding: 40rpx 0;
 
     &-item {
       border-bottom: 1px solid #ccc9;

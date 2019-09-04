@@ -78,7 +78,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
 
     const swipeActionOption = [
       {
-        text: '移除',
+        text: '不感兴趣',
         style: {
           backgroundColor: '#FF4949'
         }
@@ -135,7 +135,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
             一言
           </View>
         </View>
-        <View>
+        <View className="content-wrap">
           <View className={`photo ${current == 0 ? 'display' : 'hidden'}`}>
             photo
           </View>
