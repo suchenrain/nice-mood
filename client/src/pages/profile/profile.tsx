@@ -8,33 +8,41 @@ import './profile.scss';
 
 import demoBg from '@/assets/bg/default.jpg';
 import { AtSwipeAction } from 'taro-ui';
+import Tips from '@/utils/tips';
 
-@connect(({ profile }) => ({
+@connect(({ loading, profile }) => ({
+  loading,
   ...profile
 }))
 class Profile extends Component<IProfileProps, IProfileState> {
   config: Config = {
     navigationStyle: 'custom',
-    navigationBarTitleText: '收藏',
-    enablePullDownRefresh: false
+    navigationBarTitleText: '我的收藏',
+    enablePullDownRefresh: false,
+    onReachBottomDistance: 15
   };
   constructor(props: IProfileProps) {
     super(props);
     this.state = {
       current: 0, //active tab
       quotePageIndex: 1,
-      quoteClicked: false,
-      loadingQuote: false,
-      activeQuoteId: 0
+      quoteInited: false,
+      activeQuoteId: 0,
+      photoInited: false,
+      photoPageIndex: 1
     };
   }
   componentDidMount() {
     this.loadData();
   }
   onReachBottom() {
-    const { current, quotePageIndex, loadingQuote } = this.state;
-    const { totalQuotePage } = this.props;
-    if (current == 1 && !loadingQuote && quotePageIndex <= totalQuotePage) {
+    const { current, quotePageIndex } = this.state;
+    const { totalQuotePage, loading } = this.props;
+    if (
+      current == 1 &&
+      !loading.effects['profile/getFondQuotes'] &&
+      quotePageIndex <= totalQuotePage
+    ) {
       this.fetchQuotes();
     }
   }
@@ -51,10 +59,15 @@ class Profile extends Component<IProfileProps, IProfileState> {
       payload: {
         pageIndex: quotePageIndex
       },
-      callback: () => {
+      success: () => {
         const nextPage = quotePageIndex + 1;
-        this.setState({ quotePageIndex: nextPage, quoteClicked: true });
-      }
+
+        this.setState({
+          quotePageIndex: nextPage,
+          quoteInited: true
+        });
+      },
+      fail: () => {}
     });
   };
 
@@ -64,7 +77,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
 
   handleToggleTab = (current: number) => e => {
     this.setState({ current }, () => {
-      if (current == 1 && !this.state.quoteClicked) {
+      if (current == 1 && !this.state.quoteInited) {
         this.fetchQuotes();
       }
     });
@@ -82,16 +95,29 @@ class Profile extends Component<IProfileProps, IProfileState> {
   };
 
   //移除
-  handleRemove = e => {
-    // {text:"移除",style:{}}
+  handleQuoteRemove = (id: number) => e => {
+    // e: {text:"移除",style:{}}
+    this.props.dispatch({
+      type: 'profile/upsertFondQuote',
+      payload: {
+        quote: { id },
+        fond: false
+      },
+      success: () => {
+        Tips.success('移除成功');
+      },
+      fail: err => {
+        Tips.toast('移除失败');
+      }
+    });
   };
 
   render() {
     const headerBg = demoBg;
-    const { current, activeQuoteId } = this.state;
+    const { current, activeQuoteId, quoteInited, quotePageIndex } = this.state;
 
     // quotes
-    const { quotes } = this.props;
+    const { quotes, loading, totalQuotePage } = this.props;
 
     const swipeActionOption = [
       {
@@ -109,20 +135,19 @@ class Profile extends Component<IProfileProps, IProfileState> {
           onOpened={this.handleSingle(quote.id)}
           isOpened={activeQuoteId == quote.id}
           onClosed={this.handleResetSingle}
-          onClick={this.handleRemove}
+          onClick={this.handleQuoteRemove(quote.id)}
         >
           <View className="quote-item">
-            <View className="quote-text">
-              “{quote.hitokoto}”
-              <Text className="quote-author">{quote.from}</Text>
-            </View>
+            <View className="quote-text">&#8220;{quote.hitokoto}&#8221;</View>
+            <Text className="quote-author">&#761;{quote.from}&#764;</Text>
+            {/* <Text className="quote-author">｢{quote.from}｣</Text> */}
           </View>
         </AtSwipeAction>
       );
     });
 
     return (
-      <ScrollView scroll-y style="height: 600px" className="profile">
+      <View className="profile">
         <View
           onClick={this.back}
           className="backicon iconfont icon-right"
@@ -161,11 +186,16 @@ class Profile extends Component<IProfileProps, IProfileState> {
             photo
           </View>
           <View className={`quote ${current == 1 ? 'display' : 'hidden'}`}>
-            {quotes.length == 0 && <View>你还没有喜欢的句子呢</View>}
+            {quoteInited && quotes.length == 0 && (
+              <View className="no-data">空空如也，快去收藏吧</View>
+            )}
             {quoteList}
+            {loading.effects['profile/getFondQuotes'] && (
+              <View className="loading-data">加载中...</View>
+            )}
           </View>
         </View>
-      </ScrollView>
+      </View>
     );
   }
 }

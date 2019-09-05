@@ -98,10 +98,10 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
       filePath: path
     }).then(
       () => {
-        Tips.toast('图片已保存至相册');
+        Tips.success('图片已保存至相册');
       },
       () => {
-        Tips.toast('已取消');
+        Tips.success('已取消');
       }
     );
   };

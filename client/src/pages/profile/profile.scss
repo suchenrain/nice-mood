@@ -10,7 +10,7 @@
   position: relative;
 
   .backicon {
-    position: absolute;
+    position: fixed;
     top: 64rpx;
     left: 40rpx;
     font-size: 50rpx;
@@ -49,6 +49,10 @@
     color: #fff;
     font-size: 40rpx;
     font-weight: bolder;
+    width: 60%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
 
   }
 
@@ -101,25 +105,46 @@
     display: none;
   }
 
+  .loading-data {
+    color: #222c;
+    text-align: center;
+    margin-top: 20rpx;
+    font-size: 26rpx;
+
+  }
+
+  .no-data {
+    color: #3335;
+    text-align: center;
+    font-size: 30rpx;
+    margin-top: 200rpx;
+
+  }
+
   .quote {
     padding: 40rpx 0;
 
     &-item {
-      border-bottom: 1px solid #ccc9;
-      padding: 30rpx 0;
+      border-bottom: 2rpx dashed #ccc9;
+      padding: 30rpx 0 6rpx 0;
       text-indent: -0.5em;
       padding-left: 0.5em;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
 
     }
 
     &-text {
-      color: #333;
+      color: #333d;
     }
 
     &-author {
       font-size: 28rpx;
       color: #888;
-      margin-left: 12rpx;
+      // margin-left: 12rpx;
+      align-self: flex-end;
 
 
     }

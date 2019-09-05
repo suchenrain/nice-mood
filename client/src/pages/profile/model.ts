@@ -10,7 +10,7 @@ export default {
   },
 
   effects: {
-    *getFondQuotes({ payload, callback }, { call, put, select }) {
+    *getFondQuotes({ payload, success, fail }, { call, put, select }) {
       const { error, result } = yield call(profileApi.getFondQuotes, {
         ...payload
       });
@@ -32,8 +32,28 @@ export default {
             totalQuotePage: result.totalPage
           }
         });
-        if (callback && typeof callback === 'function') {
-          yield callback();
+        if (success && typeof success === 'function') {
+          yield success();
+        }
+      } else {
+        if (fail && typeof fail === 'function') {
+          yield fail();
+        }
+      }
+    },
+    *upsertFondQuote({ payload, success, fail }, { call, put }) {
+      const { error, result } = yield call(profileApi.upsertFondQuote, {
+        ...payload
+      });
+      if (!error && result.result.stats.removed > 0) {
+        yield success();
+        yield put({
+          type: 'syncQuotes',
+          payload
+        });
+      } else {
+        if (fail && typeof fail === 'function') {
+          yield fail(error);
         }
       }
     }
@@ -42,6 +62,13 @@ export default {
   reducers: {
     saveQuotes(state, { payload }) {
       return { ...state, ...payload };
+    },
+    syncQuotes(state, { payload }) {
+      const quotes = state.quotes;
+      return {
+        ...state,
+        quotes: quotes.filter(item => item.id !== payload.quote.id)
+      };
     }
   }
 };
