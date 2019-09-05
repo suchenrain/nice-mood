@@ -1,9 +1,9 @@
 [
   {
-    "name": "getFondQuotes",
+    "name": "getFondPhotos",
     "value": {
       "pageIndex": 1,
-      "pageSize": 50
+      "pageSize": 5
     }
   }
 ]

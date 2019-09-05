@@ -13,6 +13,10 @@ export interface IProfileState {
   activeQuoteId: number;
   quoteInited: boolean;
   photoInited: boolean;
+  nomoreQuote: boolean;
+  nomorePhoto: boolean;
+  photoToBeRemove:string;
+  photoConfirmRemove:boolean;
 }
 /**
  * profile.props 参数类型
@@ -22,7 +26,7 @@ export interface IProfileState {
  */
 export interface IProfileProps {
   quotes: Array<IQuote>;
-  photes: Array<IPhoto>;
+  photos: Array<IPhoto>;
   totalPhotoPage: number;
   totalQuotePage: number;
   dispatch: any;

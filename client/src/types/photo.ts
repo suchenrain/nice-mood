@@ -6,5 +6,9 @@ export interface IPhoto {
   profile: string;
   url: string;
   localPath: string;
-  fond?:boolean;
+  tempFileURL: string;
+  color: string;
+  alt: string;
+  id: string;
+  fond?: boolean;
 }

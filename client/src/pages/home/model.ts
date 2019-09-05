@@ -14,7 +14,11 @@ const defaultPhoto: IPhoto = {
   pid: '',
   profile: '',
   url: '',
-  localPath: ''
+  localPath: '',
+  tempFileURL: '',
+  color: '',
+  alt: '',
+  id: ''
 };
 
 export default {

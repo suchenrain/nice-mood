@@ -6,7 +6,9 @@ export default {
   namespace: 'profile',
   state: {
     quotes: [],
-    totalQuotePage: 1
+    photos: [],
+    totalQuotePage: 1,
+    totalPhotoPage: 1
   },
 
   effects: {
@@ -26,10 +28,41 @@ export default {
         }
 
         yield put({
-          type: 'saveQuotes',
+          type: 'save',
           payload: {
             quotes: data,
             totalQuotePage: result.totalPage
+          }
+        });
+        if (success && typeof success === 'function') {
+          yield success();
+        }
+      } else {
+        if (fail && typeof fail === 'function') {
+          yield fail();
+        }
+      }
+    },
+    *getFondPhotos({ payload, success, fail }, { call, put, select }) {
+      const { error, result } = yield call(profileApi.getFondPhotos, {
+        ...payload
+      });
+      console.log('返回收藏的Photos', result);
+
+      if (!error && result) {
+        let data;
+        if (result.pageIndex === 1) {
+          data = result.data;
+        } else {
+          const prePhotos = yield select(state => state.profile.photos);
+          data = prePhotos.concat(result.data);
+        }
+
+        yield put({
+          type: 'save',
+          payload: {
+            photos: data,
+            totalPhotoPage: result.totalPage
           }
         });
         if (success && typeof success === 'function') {
@@ -56,11 +89,27 @@ export default {
           yield fail(error);
         }
       }
+    },
+    *upsertFondPhoto({ payload, success, fail }, { call, put }) {
+      const { error, result } = yield call(profileApi.upsertFondPhoto, {
+        ...payload
+      });
+      if (!error && result.result.stats.removed > 0) {
+        yield success();
+        yield put({
+          type: 'syncPhotos',
+          payload
+        });
+      } else {
+        if (fail && typeof fail === 'function') {
+          yield fail(error);
+        }
+      }
     }
   },
 
   reducers: {
-    saveQuotes(state, { payload }) {
+    save(state, { payload }) {
       return { ...state, ...payload };
     },
     syncQuotes(state, { payload }) {
@@ -68,6 +117,13 @@ export default {
       return {
         ...state,
         quotes: quotes.filter(item => item.id !== payload.quote.id)
+      };
+    },
+    syncPhotos(state, { payload }) {
+      const photos = state.photos;
+      return {
+        ...state,
+        photos: photos.filter(item => item.pid !== payload.pid)
       };
     }
   }

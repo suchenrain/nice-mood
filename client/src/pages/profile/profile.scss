@@ -1,7 +1,22 @@
 @import "@/styles/variables.scss";
 @import "@/styles/mixins/index.scss";
 
+@keyframes inout {
+  0% {
+    opacity: 0.2;
+  }
 
+  100% {
+    opacity: 1;
+  }
+}
+
+.inout {
+  -webkit-animation: inout 3s infinite ease-in-out;
+  -webkit-animation-direction: alternate;
+  animation: inout 3s infinite ease-in-out;
+  animation-direction: alternate;
+}
 .profile {
   width: 100%;
   min-height: 100Vh;
@@ -11,6 +26,7 @@
 
   .backicon {
     position: fixed;
+    z-index: 999;
     top: 64rpx;
     left: 40rpx;
     font-size: 50rpx;
@@ -94,60 +110,104 @@
   }
 
   .content-wrap {
-    padding: 0 40rpx;
-  }
 
-  .display {
-    display: block;
-  }
 
-  .hidden {
-    display: none;
-  }
+    .display {
+      display: block !important;
+    }
 
-  .loading-data {
-    color: #222c;
-    text-align: center;
-    margin-top: 20rpx;
-    font-size: 26rpx;
+    .hidden {
+      display: none !important;
+    }
 
-  }
-
-  .no-data {
-    color: #3335;
-    text-align: center;
-    font-size: 30rpx;
-    margin-top: 200rpx;
-
-  }
-
-  .quote {
-    padding: 40rpx 0;
-
-    &-item {
-      border-bottom: 2rpx dashed #ccc9;
-      padding: 30rpx 0 6rpx 0;
-      text-indent: -0.5em;
-      padding-left: 0.5em;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-start;
+    .loading-data {
+      color: #222c;
+      text-align: center;
+      margin-top: 20rpx;
+      font-size: 26rpx;
 
     }
 
-    &-text {
-      color: #333d;
-    }
-
-    &-author {
-      font-size: 28rpx;
-      color: #888;
-      // margin-left: 12rpx;
-      align-self: flex-end;
-
+    .no-data {
+      color: #3335;
+      text-align: center;
+      font-size: 30rpx;
+      margin-top: 200rpx;
 
     }
 
+    .nomore-data {
+      color: #3335;
+      text-align: center;
+      font-size: 26rpx;
+      margin-top: 20rpx;
+
+    }
+
+    .photo {
+      padding: 40rpx 0 20rpx 0;
+
+      &-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        margin-bottom: 6rpx;
+        position: relative;
+      }
+
+      &-img {
+        align-self: stretch;
+        width: auto;
+        height: 75vh;
+      }
+
+      &-alt {
+        font-size: 28rpx;
+        color: #fff;
+        position: absolute;
+        bottom: 26rpx;
+        left: 30rpx;
+        text-transform: capitalize;
+      }
+
+      &-fond {
+        color: rgb(255, 30, 86);
+        font-size: 2.2em;
+        position: absolute;
+        bottom: 22rpx;
+        right: 30rpx;
+      }
+    }
+
+    .quote {
+      padding: 40rpx 40rpx;
+
+      &-item {
+        border-bottom: 2rpx dashed #ccc9;
+        padding: 30rpx 0 6rpx 0;
+        text-indent: -0.5em;
+        padding-left: 0.5em;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+
+      }
+
+      &-text {
+        color: #333d;
+      }
+
+      &-author {
+        font-size: 28rpx;
+        color: #888;
+        // margin-left: 12rpx;
+        align-self: flex-end;
+
+
+      }
+
+    }
   }
 }

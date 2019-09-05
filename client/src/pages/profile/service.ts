@@ -5,7 +5,7 @@ import Taro from '@tarojs/taro';
  */
 export const getFondQuotes = async payload => {
   const pageIndex: number = payload.pageIndex || 1;
-  const pageSize: number = payload.pageSize || 10;
+  const pageSize: number = payload.pageSize || 50;
   return await Taro.cloud
     .callFunction({
       name: 'getFondQuotes',
@@ -51,6 +51,24 @@ export const upsertFondQuote = async payload => {
   return await Taro.cloud
     .callFunction({
       name: 'upsertFondQuote',
+      data: payload
+    })
+    .then(result => {
+      return { result };
+    })
+    .catch(error => {
+      return { error };
+    });
+};
+
+/**
+ * 移除 喜欢的photo记录
+ * @param payload {pid:'dM76dd',fond:boolean}
+ */
+export const upsertFondPhoto = async payload => {
+  return await Taro.cloud
+    .callFunction({
+      name: 'upsertFondPhoto',
       data: payload
     })
     .then(result => {

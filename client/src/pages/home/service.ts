@@ -1,7 +1,6 @@
 import Api from '@/utils/httpRequest';
 import Taro from '@tarojs/taro';
 import { getDateString } from '@/utils/common';
-import { IPhoto } from '@/types';
 
 /**
  * 获取天气数据（和风天气）
