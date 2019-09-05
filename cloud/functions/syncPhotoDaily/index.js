@@ -56,9 +56,12 @@ checkExisting = (pid) => {
 addDailyPhotoRecord = (photo) => {
   return db.collection('dailyPhoto').add({
     data: {
-      _id: generateID(),
+      id: generateID(),
       pid: photo.id,
       url: photo.urls.raw,
+      color: photo.color,
+      description: photo.description,
+      alt: photo.alt_description,
       author: photo.user.name,
       profile: photo.user.links.html,
       fileID: ''

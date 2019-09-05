@@ -181,9 +181,14 @@ class Home extends Component<IHomeProps, IHomeState> {
   };
 
   handlePhotoHeart = (fond: boolean) => {
-    this.setState({
-      likePhoto: fond
-    });
+    this.setState(
+      {
+        likePhoto: fond
+      },
+      () => {
+        this.upsertFondPhoto(fond);
+      }
+    );
   };
 
   // 初始化
@@ -235,7 +240,30 @@ class Home extends Component<IHomeProps, IHomeState> {
           });
         }
         if (res) {
-          Tips.success(fond ? '已收藏' : '已取消收藏');
+          Tips.success(fond ? '已加入收藏' : '已取消收藏');
+        }
+      }
+    });
+  };
+  /**
+   * 更新收藏photo
+   */
+  upsertFondPhoto = (fond: boolean) => {
+    const { dailyPhoto } = this.props;
+    this.props.dispatch({
+      type: 'home/upsertFondPhoto',
+      payload: {
+        pid: dailyPhoto.pid,
+        fond: fond
+      },
+      callback: (err, res) => {
+        if (err) {
+          this.setState({ likePhoto: !fond }, () => {
+            Tips.toast(fond ? '收藏失败' : '取消失败');
+          });
+        }
+        if (res) {
+          Tips.success(fond ? '已加入收藏' : '已取消收藏');
         }
       }
     });

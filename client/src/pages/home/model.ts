@@ -96,6 +96,14 @@ export default {
       if (callback && typeof callback === 'function') {
         yield callback(error, result);
       }
+    },
+    *upsertFondPhoto({ payload, callback }, { call }) {
+      const { error, result } = yield call(homeApi.upsertFondPhoto, {
+        ...payload
+      });
+      if (callback && typeof callback === 'function') {
+        yield callback(error, result);
+      }
     }
   },
 

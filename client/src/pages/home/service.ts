@@ -27,10 +27,13 @@ export const getDailyPhoto = async () => {
   let dailyPhotoCol = db.collection('dailyPhoto');
   const datestr = getDateString();
   return await dailyPhotoCol
-    .doc(datestr)
+    .where({
+      id: datestr
+    })
+    .limit(1)
     .get()
     .then(res => {
-      let photo: IPhoto = res.data;
+      let photo = res.data[0];
       return Taro.cloud
         .getTempFileURL({
           fileList: [photo.fileID]
@@ -97,6 +100,23 @@ export const upsertFondQuote = async payload => {
   return await Taro.cloud
     .callFunction({
       name: 'upsertFondQuote',
+      data: payload
+    })
+    .then(result => {
+      return { result };
+    })
+    .catch(error => {
+      return { error };
+    });
+};
+/**
+ * 添加/移除 喜欢的photo记录
+ * @param payload {pid:'dM76dd',fond:boolean}
+ */
+export const upsertFondPhoto = async payload => {
+  return await Taro.cloud
+    .callFunction({
+      name: 'upsertFondPhoto',
       data: payload
     })
     .then(result => {
