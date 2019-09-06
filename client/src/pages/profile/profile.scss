@@ -17,6 +17,7 @@
   animation: inout 3s infinite ease-in-out;
   animation-direction: alternate;
 }
+
 .profile {
   width: 100%;
   min-height: 100Vh;
@@ -154,12 +155,27 @@
         align-items: center;
         margin-bottom: 6rpx;
         position: relative;
+        height: 75vh;
+
+        &-removed {
+          height: 0;
+          opacity: 0;
+          margin-bottom: 0;
+          overflow: hidden;
+          transition-property: opacity, height, margin-bottom;
+          transition-duration: 0.8s;
+          transition-timing-function: linear;
+        }
+
+        &-added {
+          animation: inout 3s 1 ease-in-out;
+        }
       }
 
       &-img {
         align-self: stretch;
         width: auto;
-        height: 75vh;
+        height: 100%;
       }
 
       &-alt {
