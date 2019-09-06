@@ -11,4 +11,6 @@ export interface IPhoto {
   alt: string;
   id: string;
   fond?: boolean;
+  removed?: boolean;
+  isNew?: boolean;
 }

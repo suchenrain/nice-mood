@@ -156,11 +156,19 @@
         margin-bottom: 6rpx;
         position: relative;
         height: 75vh;
-        transition: height 1.5s;
 
-        &-delete {
+        &-removed {
           height: 0;
+          opacity: 0;
+          margin-bottom: 0;
           overflow: hidden;
+          transition-property: opacity, height, margin-bottom;
+          transition-duration: 0.8s;
+          transition-timing-function: linear;
+        }
+
+        &-added {
+          animation: inout 3s 1 ease-in-out;
         }
       }
 

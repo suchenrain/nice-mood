@@ -42,13 +42,18 @@ class Profile extends Component<IProfileProps, IProfileState> {
   componentDidMount() {
     this.loadData();
   }
-  componentWillReceiveProps(nextProps:IProfileProps){
-    const {photos}=this.props;
-    const {photos:nextPhotos}=nextProps;
-    if(photos.length!=nextPhotos.length){
 
-    }
-  }
+  // componentWillReceiveProps(nextProps: IProfileProps) {
+  //   const { quotes } = this.props;
+  //   const { quotes: nextQuotes } = nextProps;
+  //   const diffCount = nextQuotes.length - quotes.length;
+  //   // 新增
+  //   if (diffCount > 0) {
+  //   }
+  //   // 移除
+  //   if (diffCount < 0) {
+  //   }
+  // }
   onReachBottom() {
     const { current, quotePageIndex, photoPageIndex } = this.state;
     const { totalQuotePage, totalPhotoPage, loading } = this.props;
@@ -242,7 +247,12 @@ class Profile extends Component<IProfileProps, IProfileState> {
     // photo
     const photoList = photos.map(photo => {
       return (
-        <View className="photo-item" key={photo._id}>
+        <View
+          className={`photo-item ${photo.removed ? 'photo-item-removed' : ''} ${
+            photo.isNew ? 'photo-item-added' : ''
+          }`}
+          key={photo._id}
+        >
           <Image
             style={{ backgroundColor: photo.color }}
             src={photo.tempFileURL}

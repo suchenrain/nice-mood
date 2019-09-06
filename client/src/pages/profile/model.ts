@@ -52,10 +52,19 @@ export default {
       if (!error && result) {
         let data;
         if (result.pageIndex === 1) {
-          data = result.data;
+          const newData = result.data.map(item => {
+            item.isNew = true;
+            return item;
+          });
+          data = newData;
         } else {
-          const prePhotos = yield select(state => state.profile.photos);
-          data = prePhotos.concat(result.data);
+          let prePhotos = yield select(state => state.profile.photos);
+          const temp = prePhotos.filter(p => !p.removed);
+          const newData = result.data.map(item => {
+            item.isNew = true;
+            return item;
+          });
+          data = temp.concat(newData);
         }
 
         yield put({
@@ -123,7 +132,12 @@ export default {
       const photos = state.photos;
       return {
         ...state,
-        photos: photos.filter(item => item.pid !== payload.pid)
+        photos: photos.map(item => {
+          if (item.pid == payload.pid) {
+            item.removed = true;
+          }
+          return item;
+        })
       };
     }
   }
