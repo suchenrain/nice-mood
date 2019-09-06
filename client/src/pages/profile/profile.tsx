@@ -21,6 +21,8 @@ class Profile extends Component<IProfileProps, IProfileState> {
     enablePullDownRefresh: false,
     onReachBottomDistance: 15
   };
+  removedPhotos:[];
+  addedPhotos:[];
 
   constructor(props: IProfileProps) {
     super(props);
@@ -39,6 +41,13 @@ class Profile extends Component<IProfileProps, IProfileState> {
   }
   componentDidMount() {
     this.loadData();
+  }
+  componentWillReceiveProps(nextProps:IProfileProps){
+    const {photos}=this.props;
+    const {photos:nextPhotos}=nextProps;
+    if(photos.length!=nextPhotos.length){
+
+    }
   }
   onReachBottom() {
     const { current, quotePageIndex, photoPageIndex } = this.state;
