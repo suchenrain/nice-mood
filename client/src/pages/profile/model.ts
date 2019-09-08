@@ -21,10 +21,21 @@ export default {
       if (!error && result) {
         let data;
         if (result.pageIndex === 1) {
-          data = result.data;
+          const newData = result.data.map(item => {
+            item.isNew = true;
+            item.removed = false;
+            return item;
+          });
+          data = newData;
         } else {
           const preQuotes = yield select(state => state.profile.quotes);
-          data = preQuotes.concat(result.data);
+          const temp = preQuotes.filter(p => !p.removed);
+          const newData = result.data.map(item => {
+            item.isNew = true;
+            item.removed = false;
+            return item;
+          });
+          data = temp.concat(newData);
         }
 
         yield put({
@@ -54,6 +65,7 @@ export default {
         if (result.pageIndex === 1) {
           const newData = result.data.map(item => {
             item.isNew = true;
+            item.removed = false;
             return item;
           });
           data = newData;
@@ -62,6 +74,7 @@ export default {
           const temp = prePhotos.filter(p => !p.removed);
           const newData = result.data.map(item => {
             item.isNew = true;
+            item.removed = false;
             return item;
           });
           data = temp.concat(newData);
@@ -125,7 +138,13 @@ export default {
       const quotes = state.quotes;
       return {
         ...state,
-        quotes: quotes.filter(item => item.id !== payload.quote.id)
+        quotes: quotes.map(item => {
+          if (item.id == payload.quote.id) {
+            item.removed = true;
+            item.isNew = false;
+          }
+          return item;
+        })
       };
     },
     syncPhotos(state, { payload }) {
@@ -135,6 +154,7 @@ export default {
         photos: photos.map(item => {
           if (item.pid == payload.pid) {
             item.removed = true;
+            item.isNew = false;
           }
           return item;
         })

@@ -17,6 +17,9 @@ export interface IProfileState {
   nomorePhoto: boolean;
   photoToBeRemove:string;
   photoConfirmRemove:boolean;
+  tabTopHeight:number;
+  tabHeight:number;
+  reachTop:boolean;
 }
 /**
  * profile.props 参数类型

@@ -27,6 +27,7 @@ import {
 import { show } from '@/utils/animation';
 import { ISetting } from '@/types';
 import Tips from '@/utils/tips';
+import { PAGES } from '@/config/weappConfig';
 
 @connect(({ home }) => ({
   ...home
@@ -102,8 +103,8 @@ class Home extends Component<IHomeProps, IHomeState> {
    * * daily photo 加载完成
    */
   onBackgroundLoad = () => {
-    show(this, 'defaultBg', 0, 200, 2000);
-    show(this, 'bg', 1, 200, 2000);
+    show(this, 'defaultBg', 0, 800, 4000);
+    show(this, 'bg', 1, 800, 4000);
     this.setState({
       bgLoaded: true
     });
@@ -194,6 +195,12 @@ class Home extends Component<IHomeProps, IHomeState> {
   // 初始化
   init = () => {
     this.reloadData();
+  };
+
+  navigate2Profile = e => {
+    e.stopPropagation();
+    e.preventDefault();
+    Taro.navigateTo({ url: PAGES.PROFILE });
   };
 
   //加载数据
@@ -461,7 +468,7 @@ class Home extends Component<IHomeProps, IHomeState> {
           <Text className="index-title">每天好心情</Text>
           <View className="top-wrap">
             {setting.enableGreeting && (
-              <View className="user-wrap">
+              <View className="user-wrap" onClick={this.navigate2Profile}>
                 <OpenData
                   type="userAvatarUrl"
                   className="user-avatar"
@@ -573,6 +580,7 @@ class Home extends Component<IHomeProps, IHomeState> {
         </ActionPanel>
         <ShareMoment
           isOpened={showShareMoment}
+          isLocal={!dailyPhoto._id}
           onClose={this.handleCloseShareMoment}
           src={dailyPhoto.localPath}
           quote={quote}

@@ -25,7 +25,8 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   // }
   static defaultProps: IShareMomentProps = {
     isOpened: false,
-    src: '../../assets/bg/bg_dog.jpg',
+    isLocal: false,
+    src: '',
     quote: { id: 0, hitokoto: '世界很美，你也是。', from: 'Nice Mood' },
     onClose: () => {}
   };
@@ -147,7 +148,8 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
         const canvasWidth = Rpx2px(300 * 2 * 3);
         const canvasHeight = Rpx2px(450 * 2 * 3);
         // 绘制背景，填充满整个canvas画布
-        ctx.drawImage(`${background.path}`, 0, 0, canvasWidth, canvasHeight);
+        const bg = `${this.props.isLocal ? '../../' : ''}${background.path}`;
+        ctx.drawImage(`${bg}`, 0, 0, canvasWidth, canvasHeight);
 
         // 添加一层遮罩
         ctx.setFillStyle('rgba(0, 0, 0, 0.15)');

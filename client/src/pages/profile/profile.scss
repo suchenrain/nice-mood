@@ -11,6 +11,17 @@
   }
 }
 
+@keyframes outin {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    display: none !important;
+  }
+}
+
 .inout {
   -webkit-animation: inout 3s infinite ease-in-out;
   -webkit-animation-direction: alternate;
@@ -27,7 +38,7 @@
 
   .backicon {
     position: fixed;
-    z-index: 999;
+    z-index: 1000;
     top: 64rpx;
     left: 40rpx;
     font-size: 50rpx;
@@ -38,6 +49,7 @@
 
   &-userinfo {
     height: 500rpx;
+    width: 100%;
     background-color: rgba(68, 68, 68, 0.945);
     display: flex;
     flex-direction: column;
@@ -80,6 +92,20 @@
     align-items: center;
     margin-top: 30rpx;
 
+    &-fixed {
+      position: fixed;
+      width: 100%;
+      top: -40rpx;
+      padding: 140rpx 0 20rpx 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 999;
+      transition: all 1s ease-out;
+
+      .tabswiper-tab {
+        border: 2rpx solid #fffd !important;
+      }
+    }
+
     &-tab {
       padding: 4rpx 20rpx;
       background-color: #fff;
@@ -108,6 +134,8 @@
       border: 2rpx solid #000;
       border-left: none;
     }
+
+
   }
 
   .content-wrap {
@@ -168,7 +196,7 @@
         }
 
         &-added {
-          animation: inout 3s 1 ease-in-out;
+          animation: inout 2s 1 linear;
         }
       }
 
@@ -208,6 +236,26 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: flex-start;
+        max-height: 400rpx;
+        opacity: 1;
+
+        &-removed {
+          // animation: outin 3s 1 linear;
+          // animation-fill-mode: forwards;
+          opacity: 0;
+          padding: 0;
+          margin: 0;
+          border-bottom: none;
+          max-height: 0;
+          overflow: hidden;
+          transition-property: opacity, max-height, margin, border-bottom, padding;
+          transition-duration: 0.8s;
+          transition-timing-function: linear;
+        }
+
+        &-added {
+          animation: inout 2s 1 linear;
+        }
       }
 
       &-text {

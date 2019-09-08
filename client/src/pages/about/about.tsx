@@ -4,7 +4,9 @@ import { View, Swiper, SwiperItem, Image } from '@tarojs/components';
 // import Tips from '@/utils/tips'
 // import {  } from '@/components'
 import { IAboutProps, IAboutState } from './about.interface';
-import photo1 from '@/assets/images/ad1.jpg';
+import ad1 from '@/assets/images/ad1.jpg';
+import ad2 from '@/assets/images/ad2.jpg';
+import ad3 from '@/assets/images/ad3.jpg';
 
 import './about.scss';
 
@@ -15,6 +17,24 @@ class About extends Component<IAboutProps, IAboutState> {
     navigationBarTextStyle: 'white',
     navigationStyle: 'default'
   };
+
+  ads = [
+    {
+      id: 1,
+      alt: 'Nyanko',
+      src: ad1
+    },
+    {
+      id: 2,
+      alt: 'Nice Mood',
+      src: ad2
+    },
+    {
+      id: 3,
+      alt: 'Strawberry',
+      src: ad3
+    }
+  ];
   constructor(props: IAboutProps) {
     super(props);
     this.state = {};
@@ -31,11 +51,35 @@ class About extends Component<IAboutProps, IAboutState> {
       });
     });
   };
+
+  previewAds = current => e => {
+    e.stopPropagation();
+    e.preventDefault();
+    return;
+    const urls = this.ads.map(p => {
+      return `../..${p.src}`;
+    });
+    Taro.previewImage({
+      urls,
+      current: `../..${current}`
+    });
+  };
   render() {
     const repository = 'https://github.com/suchenrain/taro-ts-dva';
     const github = 'https://github.com/suchenrain';
     const email = '769118228@qq.com';
     const qq = '769118228';
+
+    const swiperList = this.ads.map(ad => {
+      return (
+        <SwiperItem key={ad.id}>
+          <View className="info" onClick={this.previewAds(ad.src)}>
+            <Image className="image" src={ad.src} mode="aspectFill" />
+            <View className="alt">{ad.alt}</View>
+          </View>
+        </SwiperItem>
+      );
+    });
 
     return (
       <View className="fx-about">
@@ -49,18 +93,7 @@ class About extends Component<IAboutProps, IAboutState> {
           previous-margin="0px"
           next-margin="0px"
         >
-          <SwiperItem>
-            <View className="info">
-              <Image className="image" src={photo1} mode="aspectFill" />
-              <View className="alt">Nice Mood</View>
-            </View>
-          </SwiperItem>
-          <SwiperItem>
-            <View className="info">
-              <Image className="image" src={photo1} mode="aspectFill" />
-              <View className="alt">Nice Mood</View>
-            </View>
-          </SwiperItem>
+          {swiperList}
         </Swiper>
         <View className="panel">
           <View className="panel-title">项目地址</View>
@@ -102,9 +135,15 @@ class About extends Component<IAboutProps, IAboutState> {
         <View className="panel">
           <View className="panel-title">感谢</View>
           <View className="panel-content">
+            <View className="panel-content-icon iconfont icon-fasong" />
+            <View className="panel-content-text">
+              <View>灵感：Momentum</View>
+            </View>
+          </View>
+          <View className="panel-content">
             <View className="panel-content-icon iconfont icon-cloud" />
             <View className="panel-content-text">
-              <View>气象数据源：和风天气</View>
+              <View>气象数据：和风天气</View>
             </View>
           </View>
           <View className="panel-content">
@@ -116,7 +155,7 @@ class About extends Component<IAboutProps, IAboutState> {
           <View className="panel-content">
             <View className="panel-content-icon iconfont icon-camera" />
             <View className="panel-content-text">
-              <View>图片来源：Unsplash</View>
+              <View>图片：Unsplash</View>
             </View>
           </View>
         </View>

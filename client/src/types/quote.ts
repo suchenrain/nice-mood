@@ -6,4 +6,6 @@ export interface IQuote {
   creator?: string;
   created_at?: number;
   fond?:boolean;
+  removed?: boolean;
+  isNew?: boolean;
 }

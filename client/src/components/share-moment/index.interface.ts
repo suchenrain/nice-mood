@@ -19,6 +19,7 @@ export interface IShareMomentState {
  */
 export interface IShareMomentProps {
   isOpened: boolean;
+  isLocal:boolean;
   src: string;
   quote: IQuote;
   onClose: any;

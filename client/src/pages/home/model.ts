@@ -14,8 +14,8 @@ const defaultPhoto: IPhoto = {
   pid: '',
   profile: '',
   url: '',
-  localPath: '',
-  tempFileURL: '',
+  localPath: '../../assets/bg/default.jpg',
+  tempFileURL: '../../assets/bg/default.jpg',
   color: '',
   alt: '',
   id: ''
@@ -37,7 +37,7 @@ export default {
         ...payload
       });
       console.log('天气接口返回', result);
-      if (!error) {
+      if (!error && result) {
         yield put({
           type: 'save',
           payload: {

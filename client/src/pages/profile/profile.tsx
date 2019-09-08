@@ -21,8 +21,8 @@ class Profile extends Component<IProfileProps, IProfileState> {
     enablePullDownRefresh: false,
     onReachBottomDistance: 15
   };
-  removedPhotos:[];
-  addedPhotos:[];
+
+  swiping: boolean;
 
   constructor(props: IProfileProps) {
     super(props);
@@ -36,24 +36,30 @@ class Profile extends Component<IProfileProps, IProfileState> {
       nomorePhoto: false,
       nomoreQuote: false,
       photoConfirmRemove: false,
-      photoToBeRemove: ''
+      photoToBeRemove: '',
+      tabTopHeight: 0,
+      tabHeight: 0,
+      reachTop: false
     };
   }
   componentDidMount() {
+    this.setTabTopHeight();
     this.loadData();
   }
 
-  // componentWillReceiveProps(nextProps: IProfileProps) {
-  //   const { quotes } = this.props;
-  //   const { quotes: nextQuotes } = nextProps;
-  //   const diffCount = nextQuotes.length - quotes.length;
-  //   // 新增
-  //   if (diffCount > 0) {
-  //   }
-  //   // 移除
-  //   if (diffCount < 0) {
-  //   }
-  // }
+  setTabTopHeight = () => {
+    Taro.createSelectorQuery()
+      .select('.tabswiper')
+      .boundingClientRect((rect: any) => {
+        // console.log(rect);
+        this.setState({
+          tabTopHeight: rect.top,
+          tabHeight: rect.height
+        });
+      })
+      .exec();
+  };
+
   onReachBottom() {
     const { current, quotePageIndex, photoPageIndex } = this.state;
     const { totalQuotePage, totalPhotoPage, loading } = this.props;
@@ -78,6 +84,24 @@ class Profile extends Component<IProfileProps, IProfileState> {
       }
     }
   }
+
+  onPageScroll = e => {
+    if (this.swiping) return;
+    const { tabTopHeight } = this.state;
+    if (e.scrollTop >= tabTopHeight) {
+      this.setState({ reachTop: true });
+    } else if (e.scrollTop < tabTopHeight) {
+      this.setState({ reachTop: false });
+    }
+  };
+
+  swipeStart = () => {
+    this.swiping = true;
+  };
+
+  swipeEnd = () => {
+    this.swiping = false;
+  };
 
   loadData = () => {
     this.fetchPhotos();
@@ -147,6 +171,9 @@ class Profile extends Component<IProfileProps, IProfileState> {
       if (current == 1 && !this.state.quoteInited) {
         this.fetchQuotes();
       }
+      if (current == 0 && !this.state.photoInited) {
+        this.fetchPhotos();
+      }
     });
   };
 
@@ -159,6 +186,11 @@ class Profile extends Component<IProfileProps, IProfileState> {
   // 关闭所有
   handleResetSingle = () => {
     this.setState({ activeQuoteId: 0 });
+  };
+
+  stopMove = e => {
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   // 移除photo 确认
@@ -198,7 +230,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
       success: () => {
         Tips.success('图片已移除');
       },
-      fail: err => {
+      fail: (err: any) => {
         Tips.toast('移除失败');
       }
     });
@@ -207,6 +239,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
   //移除quote
   handleQuoteRemove = (id: number) => e => {
     // e: {text:"移除",style:{}}
+    Taro.vibrateShort();
     this.props.dispatch({
       type: 'profile/upsertFondQuote',
       payload: {
@@ -214,6 +247,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
         fond: false
       },
       success: () => {
+        this.handleResetSingle();
         Tips.success('移除成功');
       },
       fail: err => {
@@ -223,7 +257,9 @@ class Profile extends Component<IProfileProps, IProfileState> {
   };
 
   handlePreview = (current: string) => e => {
-    const urls = this.props.photos.map(p => p.tempFileURL);
+    const urls = this.props.photos
+      .filter(i => !i.removed)
+      .map(p => p.tempFileURL);
     Taro.previewImage({
       urls,
       current: current
@@ -239,7 +275,9 @@ class Profile extends Component<IProfileProps, IProfileState> {
       nomoreQuote,
       photoInited,
       nomorePhoto,
-      photoConfirmRemove
+      photoConfirmRemove,
+      reachTop,
+      tabHeight
     } = this.state;
 
     const { quotes, photos, loading } = this.props;
@@ -249,7 +287,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
       return (
         <View
           className={`photo-item ${photo.removed ? 'photo-item-removed' : ''} ${
-            photo.isNew ? 'photo-item-added' : ''
+            photo.isNew && !photo.removed ? 'photo-item-added' : ''
           }`}
           key={photo._id}
         >
@@ -287,8 +325,15 @@ class Profile extends Component<IProfileProps, IProfileState> {
           isOpened={activeQuoteId == quote.id}
           onClosed={this.handleResetSingle}
           onClick={this.handleQuoteRemove(quote.id)}
+          // className={`${quote.removed ? 'quote-item-removed' : ''}`}
         >
-          <View className="quote-item">
+          <View
+            className={`quote-item ${
+              quote.removed ? 'quote-item-removed' : ''
+            } ${quote.isNew && !quote.removed ? 'quote-item-added' : ''}`}
+            onTouchStart={this.swipeStart}
+            onTouchEnd={this.swipeEnd}
+          >
             <View className="quote-text">&#8220;{quote.hitokoto}&#8221;</View>
             <Text className="quote-author">&#761;{quote.from}&#764;</Text>
             {/* <Text className="quote-author">｢{quote.from}｣</Text> */}
@@ -296,6 +341,8 @@ class Profile extends Component<IProfileProps, IProfileState> {
         </AtSwipeAction>
       );
     });
+
+    const avaiablePhoto = photos.find(p => !p.removed);
 
     return (
       <View className="profile">
@@ -305,7 +352,10 @@ class Profile extends Component<IProfileProps, IProfileState> {
         ></View>
         <View
           className="profile-userinfo"
-          style={{ backgroundImage: `url("${headerBg}")` }}
+          style={{
+            backgroundImage: `url("${avaiablePhoto &&
+              avaiablePhoto.tempFileURL}")`
+          }}
         >
           <View className="profile-avatar">
             <OpenData type="userAvatarUrl"></OpenData>
@@ -314,7 +364,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
             <OpenData type="userNickName"></OpenData>
           </View>
         </View>
-        <View className="tabswiper">
+        <View className={`tabswiper ${reachTop ? 'tabswiper-fixed' : ''}`}>
           <View
             className={`tabswiper-tab ${
               current == 0 ? 'tabswiper-tab--active' : ''
@@ -332,7 +382,10 @@ class Profile extends Component<IProfileProps, IProfileState> {
             一言
           </View>
         </View>
-        <View className="content-wrap">
+        <View
+          className="content-wrap"
+          style={{ marginTop: reachTop ? tabHeight + 15 + 'px' : '0px' }}
+        >
           <View className={`photo ${current == 0 ? 'display' : 'hidden'}`}>
             {photoInited && photos.length == 0 && (
               <View className="no-data">空空如也，快去收藏吧</View>
