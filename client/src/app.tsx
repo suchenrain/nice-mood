@@ -67,7 +67,7 @@ class App extends Component {
     // 初始化云开发
     if (process.env.TARO_ENV === 'weapp') {
       Taro.cloud.init({
-        env: 'dev-nicemood',
+        env: 'pro-nicemood',
         traceUser: true
       });
     }

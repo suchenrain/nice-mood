@@ -3,11 +3,11 @@ const cloud = require('wx-server-sdk')
 const request = require('request');
 
 cloud.init({
-  env: 'dev-nicemood'
+  env: 'pro-nicemood'
 })
 
 const db = cloud.database({
-  env: 'dev-nicemood'
+  env: 'pro-nicemood'
 })
 
 const max = 5;
