@@ -65,7 +65,7 @@ class About extends Component<IAboutProps, IAboutState> {
     });
   };
   render() {
-    const repository = 'https://github.com/suchenrain/taro-ts-dva';
+    const repository = 'https://github.com/suchenrain/nice-mood';
     const github = 'https://github.com/suchenrain';
     const email = '769118228@qq.com';
     const qq = '769118228';
