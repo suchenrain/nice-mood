@@ -58,7 +58,7 @@ $sparkle-r: .5*$sparkle-d;
 .toggle-heart {
   align-self: center;
   position: absolute;
-  color: #888;
+  color: rgb(190, 188, 188);
   filter: grayscale(1);
   user-select: none;
   cursor: pointer;
@@ -93,7 +93,7 @@ $sparkle-r: .5*$sparkle-d;
   }
 
   &--active {
-    color: #e2264d;
+    color: #ee2a51;
     filter: none;
     will-change: font-size;
     animation: heart 1s cubic-bezier(.17, .89, .32, 1.49);

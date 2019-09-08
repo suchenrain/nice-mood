@@ -14,8 +14,8 @@ const defaultPhoto: IPhoto = {
   pid: '',
   profile: '',
   url: '',
-  localPath: '../../assets/bg/default.jpg',
-  tempFileURL: '../../assets/bg/default.jpg',
+  localPath: '',
+  tempFileURL: '',
   color: '',
   alt: '',
   id: ''
