@@ -103,8 +103,8 @@ class Home extends Component<IHomeProps, IHomeState> {
    * * daily photo 加载完成
    */
   onBackgroundLoad = () => {
-    show(this, 'defaultBg', 0, 800, 4000);
-    show(this, 'bg', 1, 800, 4000);
+    show(this, 'defaultBg', 0, 300, 3000);
+    show(this, 'bg', 1, 300, 3000);
     this.setState({
       bgLoaded: true
     });
@@ -380,7 +380,7 @@ class Home extends Component<IHomeProps, IHomeState> {
       this.props.dispatch({
         type: 'home/getQuote',
         payload: {
-          c: 'g'
+          // c: 'k'
         },
         callback: () => {
           // preset like status

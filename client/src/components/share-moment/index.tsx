@@ -148,7 +148,7 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
         const canvasWidth = Rpx2px(300 * 2 * 3);
         const canvasHeight = Rpx2px(450 * 2 * 3);
         // 绘制背景，填充满整个canvas画布
-        const bg = `${this.props.isLocal ? '../../' : ''}${background.path}`;
+        const bg = `${this.props.isLocal ? '../../assets/bg/default.jpg' : ''}${background.path}`;
         ctx.drawImage(`${bg}`, 0, 0, canvasWidth, canvasHeight);
 
         // 添加一层遮罩
