@@ -267,7 +267,6 @@ class Profile extends Component<IProfileProps, IProfileState> {
   };
 
   render() {
-    const headerBg = demoBg;
     const {
       current,
       activeQuoteId,
@@ -353,8 +352,9 @@ class Profile extends Component<IProfileProps, IProfileState> {
         <View
           className="profile-userinfo"
           style={{
-            backgroundImage: `url("${avaiablePhoto &&
-              avaiablePhoto.tempFileURL}")`
+            backgroundImage: `url("${
+              avaiablePhoto ? avaiablePhoto.tempFileURL : ''
+            }")`
           }}
         >
           <View className="profile-avatar">
