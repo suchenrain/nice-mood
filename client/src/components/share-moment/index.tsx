@@ -111,7 +111,7 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   };
 
   buildPrintArray = (text: string): Array<string> => {
-    let quotes = text.split(/[,，.。！!"“”'‘’？?;；:：、\s]/g);
+    let quotes = text.split(/[,，.。！!"“”'‘’？?;；:：、…\s]/g);
     let res: Array<string> = [];
     quotes = quotes.filter(q => q.length > 0);
     let lastCount = 0;
@@ -119,15 +119,25 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
     for (let i = 0; i < quotes.length; i++) {
       let curStr = quotes[i];
       let curCount = getStrLength(curStr);
-      if (i > 0 && lastCount < 26 && lastCount + curCount <= 26) {
+      if (i > 0 && lastCount < 30 && lastCount + curCount <= 30) {
         res.pop();
         res.push(`${lastStr} ${curStr}`);
         lastStr = `${lastStr} ${curStr}`;
         lastCount = getStrLength(lastStr);
       } else {
-        res.push(curStr);
-        lastCount = curCount;
-        lastStr = curStr;
+        if (curCount > 30) {
+          let split = curStr.length < curCount ? 15 : 30;
+          let tmp1 = curStr.substr(0, split);
+          let tmp2 = curStr.substr(split, curStr.length);
+          res.push(tmp1);
+          res.push(tmp2)
+          lastCount = getStrLength(tmp2);
+          lastStr = tmp2;
+        } else {
+          res.push(curStr);
+          lastCount = curCount;
+          lastStr = curStr;
+        }
       }
     }
     return res;
@@ -139,6 +149,9 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
     this.setState({ isDrawing: true });
     Tips.loading('准备图片中...');
 
+    if (!src || src == '') {
+      src = '../../assets/bg/default.jpg';
+    }
     const qrcodePromise = Taro.getImageInfo({ src: qrcode });
     const backgroundPromise = Taro.getImageInfo({ src: src });
 
@@ -148,7 +161,9 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
         const canvasWidth = Rpx2px(300 * 2 * 3);
         const canvasHeight = Rpx2px(450 * 2 * 3);
         // 绘制背景，填充满整个canvas画布
-        const bg = `${this.props.isLocal ? '../../assets/bg/default.jpg' : ''}${background.path}`;
+        const bg = `${this.props.isLocal ? '../../' : ''}${
+          background.path
+        }`;
         ctx.drawImage(`${bg}`, 0, 0, canvasWidth, canvasHeight);
 
         // 添加一层遮罩
@@ -172,7 +187,7 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
         ctx.setFillStyle('rgba(256, 256, 256, 0.75)');
         // author
         let author = quote.from;
-        ctx.setFontSize(Rpx2px(12 * 2 * 3));
+        ctx.setFontSize(Rpx2px(11 * 2 * 3));
         author = `「 ${author} 」`;
         ctx.fillText(
           author,
