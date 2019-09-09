@@ -1,0 +1,98 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+.#{$prefix} {
+  &-share-moment {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-height: 100vh;
+    width: 100%;
+    background: rgba(20, 20, 20, 0.5);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 9999;
+
+    &__container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      transform: translate3d(0, 100%, 0);
+      transition: transform 0.5s ease-in-out;
+    }
+
+    &__content {
+      width: 620rpx;
+      margin: 0 auto;
+
+    }
+
+    &__canvas {
+      display: inline-block;
+      background: #fff;
+      width: 600rpx;
+      height: 900rpx;
+      border: 10rpx solid rgba($color: #fff, $alpha: 0.8);
+      border-radius: 10rpx
+    }
+
+    &__canvas-hide {
+      position: fixed;
+      top: 0;
+      left: 0;
+      transform: translateX(-100%);
+      width: 600*3rpx;
+      height: 900*3rpx;
+    }
+
+    &__footer {
+      display: inline-flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      font-size: 32rpx;
+      margin-top: 25rpx;
+      color: #fff;
+    }
+
+    &__save {
+      background: transparent;
+      border: 2rpx solid rgba($color: #fff, $alpha: 0.8);
+
+      border-radius: 40rpx;
+      padding: 16rpx 36rpx;
+
+
+    }
+
+    &__close {
+      background: transparent;
+      border: 2rpx solid rgba($color: #fff, $alpha: 0.8);
+      border-radius: 40rpx;
+      padding: 16rpx 36rpx;
+    }
+
+
+    /* modifiers */
+
+    &--active {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity 1s linear 0.3s;
+
+      .#{$prefix} {
+        &-share-moment {
+
+          &__container {
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.5s linear 0.3s;
+          }
+        }
+      }
+    }
+  }
+}

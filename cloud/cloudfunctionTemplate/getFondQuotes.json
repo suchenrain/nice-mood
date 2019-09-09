@@ -1,0 +1,9 @@
+[
+  {
+    "name": "getFondQuotes",
+    "value": {
+      "pageIndex": 1,
+      "pageSize": 50
+    }
+  }
+]

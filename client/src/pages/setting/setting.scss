@@ -1,0 +1,69 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+.#{$prefix} {
+  &-setting {
+    width: 100%;
+    min-height: 100vh;
+    font-size: 30rpx;
+    color: #666;
+
+    background-color: #eee6;
+  }
+}
+
+.panel {
+  padding: 40rpx 26rpx;
+  margin-bottom: 20rpx;
+  background: #fff;
+
+
+
+  &-title {
+    font-size: 36rpx;
+    color: #40a7e7
+  }
+
+  &-subtitle {
+    padding: 24rpx 0;
+    color: #40a7e7;
+    font-size: 30rpx;
+  }
+
+  &-content {}
+
+  &-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16rpx 0;
+
+    &-sub {
+      padding-left: 18rpx;
+    }
+
+    &-tip-icon {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      font-size: 1em;
+      color: #999;
+    }
+    &-tip-icon.icon-warning {
+      color:rgb(206, 18, 18);
+      font-size: 22rpx;
+    }
+
+    &-tip-text {
+      font-size: 24rpx;
+      color: #aaa;
+    }
+
+  }
+
+  .right {
+    font-size: 1.2em;
+    color: #888;
+
+  }
+}

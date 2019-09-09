@@ -1,0 +1,12 @@
+{
+  "triggers": [{
+    "name": "syncPhotoDaily",
+    "type": "timer",
+    "config": "0 1 0 * * * *"
+  }],
+  "permissions": {
+    "openapi": [
+      "uniformMessage.send"
+    ]
+  }
+}

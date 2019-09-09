@@ -1,0 +1,41 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+.#{$prefix} {
+  &-systeminfo {
+    width: 100%;
+    min-height: 100Vh;
+    font-size: 32rpx;
+    color: #333;
+    background-color: #fff;
+
+    &-brand {
+      text-align: center;
+      font-size: 100rpx;
+      padding: 50rpx 0;
+      display: block;
+      height: 100rpx;
+      
+    }
+
+    &-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      line-height: 100rpx;
+      border-top: 1px solid #27272716;
+      width: 92%;
+      margin: 0 auto;
+
+
+      &-title {}
+
+      &-value {
+        font-size: 28rpx;
+        color: #0006;
+
+      }
+
+    }
+  }
+}
