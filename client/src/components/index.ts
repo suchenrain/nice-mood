@@ -7,6 +7,7 @@ import Heart from './heart';
 import LoginWeapp from './login/index.weapp';
 import OpenSetting from './open-setting';
 import ShareMoment from './share-moment';
+import SearchBar from './search-bar';
 
 export {
   OpenSetting,
@@ -17,5 +18,6 @@ export {
   ActionPanel,
   ShareMoment,
   TouchBall,
-  Heart
+  Heart,
+  SearchBar
 };

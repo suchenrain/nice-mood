@@ -17,13 +17,13 @@ class SearchBar extends Component<ISearchBarProps, ISearchBarState> {
   };
   static defaultProps: ISearchBarProps = {
     value: '',
-    placeholder: '搜索',
+    placeholder: '输入城市或地区查询天气信息',
     maxLength: 140,
     fixed: false,
     focus: false,
     disabled: false,
     showActionButton: false,
-    actionName: '搜索',
+    actionName: '搜一下',
     className: '',
     customStyle: {},
     onChange: () => {},
@@ -141,7 +141,7 @@ class SearchBar extends Component<ISearchBarProps, ISearchBarState> {
             style={clearIconStyle}
             onTouchStart={this.handleClear}
           >
-            <Text className="iconfont icon-close-circle"></Text>
+            <Text className="iconfont icon-clear_circle_outlined"></Text>
           </View>
         </View>
         <View

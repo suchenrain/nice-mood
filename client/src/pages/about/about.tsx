@@ -99,7 +99,7 @@ class About extends Component<IAboutProps, IAboutState> {
           <View className="panel-title">项目地址</View>
           <View
             className="panel-content"
-            onClick={this.copy('项目地址', repository)}
+            onClick={this.copy('项目已开源', repository)}
           >
             <View className="panel-content-icon iconfont icon-github" />
             <View className="panel-content-text">
@@ -135,9 +135,9 @@ class About extends Component<IAboutProps, IAboutState> {
         <View className="panel">
           <View className="panel-title">感谢</View>
           <View className="panel-content">
-            <View className="panel-content-icon iconfont icon-fasong" />
+            <View className="panel-content-icon iconfont icon-lamp" />
             <View className="panel-content-text">
-              <View>灵感：Momentum</View>
+              <View>Inspiration：Momentum</View>
             </View>
           </View>
           <View className="panel-content">

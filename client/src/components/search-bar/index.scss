@@ -1,22 +1,22 @@
 @import "@/styles/variables.scss";
 @import "@/styles/mixins/index.scss";
 
-$fx-search-bar-font-size: 14PX;
+$fx-search-bar-font-size: 15PX;
 $fx-search-bar-input-height: 30PX;
 $fx-search-bar-input-padding: 25PX;
 $fx-search-bar-btn-padding: 10PX;
 $fx-search-bar-placeholder-padding: 12PX;
-$fx-search-bar-input-bg-color: $color-bg-grey;
-$fx-search-bar-input-color: $color-black-0;
-$fx-search-bar-placholder-color: $color-grey-2;
+$fx-search-bar-input-bg-color: none;
+$fx-search-bar-input-color: #222;
+$fx-search-bar-placholder-color: #fffc;
 
 
 .#{$prefix} {
   &-search-bar {
     display: flex;
     align-items: center;
-    padding: $spacing-v-sm $spacing-v-md;
-    background-color: $color-bg;
+    padding: 10rpx 15rpx;
+    background-color: none;
     overflow: hidden;
     box-sizing: border-box;
 
@@ -27,7 +27,9 @@ $fx-search-bar-placholder-color: $color-grey-2;
       width: 100%;
       height: $fx-search-bar-input-height;
       background-color: $fx-search-bar-input-bg-color;
-      border-radius: $fx-search-bar-input-height / 2;
+      // border-radius: $fx-search-bar-input-height / 2;
+      border-radius: 26rpx;
+      border: 2rpx solid #fff8;
       overflow: hidden;
       display: flex;
     }
@@ -50,7 +52,7 @@ $fx-search-bar-placholder-color: $color-grey-2;
       transition: flex 0.3s;
       // background: #0084ff;
 
-      .fx-icon {
+      .iconfont {
         color: $fx-search-bar-placholder-color;
         font-size: $fx-search-bar-font-size;
         flex-shrink: 0;
@@ -101,11 +103,11 @@ $fx-search-bar-placholder-color: $color-grey-2;
       margin-left: 10PX;
       padding: 0 $fx-search-bar-btn-padding;
       height: $fx-search-bar-input-height;
-      color: $fx-search-bar-btn-color;
+      color: #fff;
       font-size: $fx-search-bar-font-size;
       line-height: $fx-search-bar-input-height;
       border-radius: 4PX;
-      background-color: $fx-search-bar-btn-bg-color;
+      background-color: rgb(1, 103, 236);
       transition: margin-right 0.3s, opacity 0.3s;
       opacity: 0;
     }
@@ -116,6 +118,7 @@ $fx-search-bar-placholder-color: $color-grey-2;
       top: 0;
       left: 0;
       right: 0;
-      z-index: $zindex-search-bar;
+      z-index: 999;
     }
   }
+}
