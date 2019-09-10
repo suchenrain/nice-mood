@@ -17,7 +17,7 @@ class SearchBar extends Component<ISearchBarProps, ISearchBarState> {
   };
   static defaultProps: ISearchBarProps = {
     value: '',
-    placeholder: '输入城市或地区查询天气信息',
+    placeholder: '输入城市或地区',
     maxLength: 140,
     fixed: false,
     focus: false,
@@ -30,7 +30,6 @@ class SearchBar extends Component<ISearchBarProps, ISearchBarState> {
     onFocus: () => {},
     onBlur: () => {},
     onConfirm: () => {},
-    onClear: () => {},
     onActionClick: () => {}
   };
 

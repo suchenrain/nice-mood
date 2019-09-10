@@ -55,6 +55,7 @@ class Home extends Component<IHomeProps, IHomeState> {
       showShareMoment: false,
       greeting: 'Have a nice day:)',
       located: false,
+      searchText: '',
       bgLoaded: false,
       likeQuote: false,
       likePhoto: false,
@@ -191,6 +192,16 @@ class Home extends Component<IHomeProps, IHomeState> {
         this.upsertFondPhoto(fond);
       }
     );
+  };
+
+  handleSearchTextChange = value => {
+    this.setState({ searchText: value });
+  };
+
+  handleSearch = () => {
+    const { searchText } = this.state;
+    if (!searchText) return;
+    this.searchWeather(searchText);
   };
 
   // 初始化
@@ -338,15 +349,33 @@ class Home extends Component<IHomeProps, IHomeState> {
     if (this.weatherTimeId) clearTimeout(this.weatherTimeId);
     show(this, 'weather', 0, 0, 1000);
     this.weatherTimeId = setTimeout(() => {
-      Taro.vibrateShort();
+      // Taro.vibrateShort();
       this.props.dispatch({
         type: 'home/getWeather',
         payload: { location, key: globalData.weatherKey },
-        callback: () => {
+        callback: status => {
           show(this, 'weather', 0.8, 0, 1500);
         }
       });
     }, 1000);
+  };
+
+  searchWeather = (location: string) => {
+    Taro.vibrateShort();
+    Tips.loading('查询中...');
+    this.props.dispatch({
+      type: 'home/getWeather',
+      payload: { location, key: globalData.weatherKey },
+      callback: status => {
+        Tips.loaded();
+        if (status === 'ok') {
+          Tips.success('天气信息已更新');
+        } else {
+          Tips.toast('未检索到结果');
+        }
+        show(this, 'weather', 0.8, 0, 1500);
+      }
+    });
   };
 
   getGreeting = () => {
@@ -425,7 +454,8 @@ class Home extends Component<IHomeProps, IHomeState> {
       greeting,
       likePhoto,
       likeQuote,
-      ani
+      ani,
+      searchText
     } = this.state;
     const code = weather && weather.now.cond_code;
     const hasNight = weather && this.hasNightIcon(code);
@@ -467,9 +497,16 @@ class Home extends Component<IHomeProps, IHomeState> {
         <View className="mask-layer" />
         <View className="content-wrap">
           <Text className="index-title">每天好心情</Text>
-          <View className="search-bar-wrap">
-            <SearchBar></SearchBar>
-          </View>
+          {setting.enableWeatherSearch && (
+            <View className="search-bar-wrap">
+              <SearchBar
+                value={searchText}
+                onChange={this.handleSearchTextChange}
+                onActionClick={this.handleSearch}
+                onBlur={this.handleSearch}
+              ></SearchBar>
+            </View>
+          )}
           <View className="top-wrap">
             {setting.enableGreeting && (
               <View className="user-wrap" onClick={this.navigate2Profile}>

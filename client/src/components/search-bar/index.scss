@@ -6,9 +6,9 @@ $fx-search-bar-input-height: 30PX;
 $fx-search-bar-input-padding: 25PX;
 $fx-search-bar-btn-padding: 10PX;
 $fx-search-bar-placeholder-padding: 12PX;
-$fx-search-bar-input-bg-color: none;
-$fx-search-bar-input-color: #222;
-$fx-search-bar-placholder-color: #fffc;
+$fx-search-bar-input-bg-color: rgba(228, 228, 228, 0.05);
+$fx-search-bar-input-color: rgba(248, 248, 248, 0.897);
+$fx-search-bar-placholder-color: #fffa;
 
 
 .#{$prefix} {
@@ -27,9 +27,9 @@ $fx-search-bar-placholder-color: #fffc;
       width: 100%;
       height: $fx-search-bar-input-height;
       background-color: $fx-search-bar-input-bg-color;
-      // border-radius: $fx-search-bar-input-height / 2;
-      border-radius: 26rpx;
-      border: 2rpx solid #fff8;
+      border-radius: $fx-search-bar-input-height / 2;
+      // border-radius: 26rpx;
+      border: 2rpx solid rgba(255, 255, 255, 0.2);
       overflow: hidden;
       display: flex;
     }
@@ -57,12 +57,19 @@ $fx-search-bar-placholder-color: #fffc;
         font-size: $fx-search-bar-font-size;
         flex-shrink: 0;
       }
+
+
+
+      .icon-search {
+        font-size: 34rpx;
+      }
     }
 
     &__placeholder {
-      margin-left: $fx-search-bar-placeholder-padding;
+      // margin-left: $fx-search-bar-placeholder-padding;
+      margin-left: 10rpx;
       color: $fx-search-bar-placholder-color;
-      font-size: $fx-search-bar-font-size;
+      font-size: $fx-search-bar-font-size - 2;
       flex-shrink: 0;
     }
 
@@ -95,6 +102,10 @@ $fx-search-bar-placholder-color: #fffc;
       font-size: $fx-search-bar-font-size;
       line-height: 0;
       vertical-align: middle;
+
+      .icon-clear_circle_outlined {
+        font-size: 34rpx;
+      }
     }
 
     &__action {
@@ -107,7 +118,7 @@ $fx-search-bar-placholder-color: #fffc;
       font-size: $fx-search-bar-font-size;
       line-height: $fx-search-bar-input-height;
       border-radius: 4PX;
-      background-color: rgb(1, 103, 236);
+      background-color: #40a7e7dc;
       transition: margin-right 0.3s, opacity 0.3s;
       opacity: 0;
     }

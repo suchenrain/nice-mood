@@ -37,16 +37,17 @@ export default {
         ...payload
       });
       console.log('天气接口返回', result);
-      if (!error && result) {
+      const data = result.HeWeather6[0];
+      if (!error && data.status == 'ok') {
         yield put({
           type: 'save',
           payload: {
-            weather: result.HeWeather6[0]
+            weather: data
           }
         });
-        if (callback && typeof callback === 'function') {
-          yield callback();
-        }
+      }
+      if (callback && typeof callback === 'function') {
+        yield callback(data.status);
       }
     },
     *getDailyPhoto({}, { call, put }) {
