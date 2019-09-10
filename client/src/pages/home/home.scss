@@ -101,13 +101,18 @@ $icon-wh:50rpx;
         font-size: 38rpx;
       }
 
+      >.search-bar-wrap {
+        width: 95%;
+        margin-top: 180rpx;
+      }
+
       >.top-wrap {
         width: 90%;
         height: 200rpx;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-top: 150rpx;
+        margin-top: 80rpx;
 
 
         .user-wrap {
@@ -290,11 +295,11 @@ $icon-wh:50rpx;
       bottom: 0;
       width: 100%;
       margin-bottom: 15px;
-      
+
       font-size: 28rpx;
       text-align: center;
       z-index: 999;
-  
+
       &__link {
         display: inline-block;
         vertical-align: top;
@@ -303,7 +308,7 @@ $icon-wh:50rpx;
         color: #6190e8;
         display: none;
       }
-  
+
       &__text {
         padding: 0 0.34em;
         font-size: 24rpx;

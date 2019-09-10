@@ -22,7 +22,8 @@ import {
   ShareMoment,
   Clock,
   TouchBall,
-  Heart
+  Heart,
+  SearchBar
 } from '@/components';
 import { show } from '@/utils/animation';
 import { ISetting } from '@/types';
@@ -466,6 +467,9 @@ class Home extends Component<IHomeProps, IHomeState> {
         <View className="mask-layer" />
         <View className="content-wrap">
           <Text className="index-title">每天好心情</Text>
+          <View className="search-bar-wrap">
+            <SearchBar></SearchBar>
+          </View>
           <View className="top-wrap">
             {setting.enableGreeting && (
               <View className="user-wrap" onClick={this.navigate2Profile}>
