@@ -90,6 +90,7 @@ $icon-wh:50rpx;
       flex-direction: column;
       justify-content: first baseline;
       align-items: center;
+      padding-top: 140rpx;
 
       >.index-title {
         text-align: center;
@@ -102,17 +103,16 @@ $icon-wh:50rpx;
       }
 
       >.search-bar-wrap {
-        width: 95%;
-        margin-top: 180rpx;
+        width: 90%;
       }
 
       >.top-wrap {
         width: 90%;
-        height: 200rpx;
+        height: 170rpx;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-top: 80rpx;
+        margin-top: 40rpx;
 
 
         .user-wrap {
@@ -216,7 +216,7 @@ $icon-wh:50rpx;
 
 
       >.clock-wrap {
-        margin-top: 110rpx;
+        margin-top: 40rpx;
         opacity: 0;
       }
 

@@ -12,6 +12,7 @@ export interface IHomeState {
   showShareMoment: boolean;
   greeting: string;
   located: boolean;
+  searchText:string;
   bgLoaded: boolean;
   likeQuote: boolean;
   likePhoto: boolean;

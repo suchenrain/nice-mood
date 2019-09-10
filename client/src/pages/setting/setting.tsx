@@ -105,6 +105,14 @@ class Setting extends Component<ISettingProps, ISettingState> {
           <View className="panel-title">自定义</View>
           <View className="panel-content">
             <View className="panel-item">
+              <View>开启首页搜索栏</View>
+              <Switch
+                color="#40a7e7"
+                checked={setting.enableWeatherSearch}
+                onChange={this.handleSwithChange('enableWeatherSearch')}
+              />
+            </View>
+            <View className="panel-item">
               <View>显示头像及问候语</View>
               <Switch
                 color="#40a7e7"
@@ -117,7 +125,7 @@ class Setting extends Component<ISettingProps, ISettingState> {
               <Switch
                 checked={true}
                 disabled={true}
-                color="#40a7e7"
+                color="#ccc"
                 onChange={this.handleSwithChange('touchBallFixed')}
               />
             </View>

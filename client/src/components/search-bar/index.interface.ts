@@ -29,5 +29,5 @@ export interface ISearchBarProps {
   onBlur: () => any;
   onConfirm: () => any;
   onActionClick: () => any;
-  onClear: () => any;
+  onClear?: () => any;
 }
