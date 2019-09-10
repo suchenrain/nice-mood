@@ -1,0 +1,121 @@
+@import "@/styles/variables.scss";
+@import "@/styles/mixins/index.scss";
+
+$fx-search-bar-font-size: 14PX;
+$fx-search-bar-input-height: 30PX;
+$fx-search-bar-input-padding: 25PX;
+$fx-search-bar-btn-padding: 10PX;
+$fx-search-bar-placeholder-padding: 12PX;
+$fx-search-bar-input-bg-color: $color-bg-grey;
+$fx-search-bar-input-color: $color-black-0;
+$fx-search-bar-placholder-color: $color-grey-2;
+
+
+.#{$prefix} {
+  &-search-bar {
+    display: flex;
+    align-items: center;
+    padding: $spacing-v-sm $spacing-v-md;
+    background-color: $color-bg;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    /* elements */
+    &__input-cnt {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      height: $fx-search-bar-input-height;
+      background-color: $fx-search-bar-input-bg-color;
+      border-radius: $fx-search-bar-input-height / 2;
+      overflow: hidden;
+      display: flex;
+    }
+
+    &__placeholder-wrap {
+      // position: absolute;
+      // top: 0;
+      // left: 0;
+
+      display: flex;
+      align-self: center;
+      align-items: center;
+      justify-content: center;
+      padding: 0 $fx-search-bar-placeholder-padding;
+      // width: 100%;
+      height: $fx-search-bar-input-height;
+      line-height: 0;
+      vertical-align: middle;
+      opacity: 1;
+      transition: flex 0.3s;
+      // background: #0084ff;
+
+      .fx-icon {
+        color: $fx-search-bar-placholder-color;
+        font-size: $fx-search-bar-font-size;
+        flex-shrink: 0;
+      }
+    }
+
+    &__placeholder {
+      margin-left: $fx-search-bar-placeholder-padding;
+      color: $fx-search-bar-placholder-color;
+      font-size: $fx-search-bar-font-size;
+      flex-shrink: 0;
+    }
+
+    &__input {
+      position: absolute;
+      display: block;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: $fx-search-bar-input-height !important;
+      padding: 0 $fx-search-bar-input-padding + $fx-search-bar-placeholder-padding;
+      color: $fx-search-bar-input-color;
+      font-size: $fx-search-bar-font-size !important;
+      text-align: left;
+      background-color: transparent;
+      transition: width 0.3s;
+      box-sizing: border-box;
+    }
+
+    &__clear {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      right: $fx-search-bar-placeholder-padding;
+      height: $fx-search-bar-input-height;
+      width: $fx-search-bar-input-padding;
+      color: $fx-search-bar-placholder-color;
+      font-size: $fx-search-bar-font-size;
+      line-height: 0;
+      vertical-align: middle;
+    }
+
+    &__action {
+      flex: none;
+      display: block;
+      margin-left: 10PX;
+      padding: 0 $fx-search-bar-btn-padding;
+      height: $fx-search-bar-input-height;
+      color: $fx-search-bar-btn-color;
+      font-size: $fx-search-bar-font-size;
+      line-height: $fx-search-bar-input-height;
+      border-radius: 4PX;
+      background-color: $fx-search-bar-btn-bg-color;
+      transition: margin-right 0.3s, opacity 0.3s;
+      opacity: 0;
+    }
+
+    /* modifiers */
+    &--fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: $zindex-search-bar;
+    }
+  }
