@@ -29,13 +29,13 @@ Copyright (C) 2019 suchenrain
 ## 运行截图
 
 <div>
-<img src="https://user-images.githubusercontent.com/7972688/64686852-f1ab0280-d4bb-11e9-970e-9e03b573daeb.png" style="width:400px;"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687484-2e2b2e00-d4bd-11e9-8023-3c48e1be010d.png" style="width:400px;"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687485-2e2b2e00-d4bd-11e9-9c52-3ce770f23905.png" style="width:400px;"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687486-2e2b2e00-d4bd-11e9-8cb4-382770b66691.png" style="width:400px;"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687487-2ec3c480-d4bd-11e9-8bd7-18c411f3f2d9.png" style="width:400px;"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687488-2ec3c480-d4bd-11e9-93c7-0147bfa1660c.png" style="width:400px;"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687489-2ec3c480-d4bd-11e9-9bee-d8574fb5add7.png" style="width:400px;"/>
+<img src="https://user-images.githubusercontent.com/7972688/64686852-f1ab0280-d4bb-11e9-970e-9e03b573daeb.png" width="400px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687484-2e2b2e00-d4bd-11e9-8023-3c48e1be010d.png" width="400px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687485-2e2b2e00-d4bd-11e9-9c52-3ce770f23905.png" width="400px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687486-2e2b2e00-d4bd-11e9-8cb4-382770b66691.png" width="400px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687487-2ec3c480-d4bd-11e9-8bd7-18c411f3f2d9.png" width="400px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687488-2ec3c480-d4bd-11e9-93c7-0147bfa1660c.png" width="400px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687489-2ec3c480-d4bd-11e9-9bee-d8574fb5add7.png" width="400px"/>
 
 </div>
 
@@ -48,14 +48,14 @@ Copyright (C) 2019 suchenrain
 ### 支付宝
 
 <div>
-<img src="https://user-images.githubusercontent.com/7972688/64688457-f624ea80-d4be-11e9-9acf-bed36180dfe1.jpg" style="width:300px;"/>
-<img src="https://user-images.githubusercontent.com/7972688/64688455-f58c5400-d4be-11e9-8395-cc8ab1e56194.jpg" style="width:300px;"/>
+<img src="https://user-images.githubusercontent.com/7972688/64688457-f624ea80-d4be-11e9-9acf-bed36180dfe1.jpg" width="300px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64688455-f58c5400-d4be-11e9-8395-cc8ab1e56194.jpg" width="300px"/>
 </div>
 
 ### 微信
 
 <div>
-<img src="https://user-images.githubusercontent.com/7972688/64688456-f58c5400-d4be-11e9-9989-a296187d4887.jpg" style="width:300px;")
+<img src="https://user-images.githubusercontent.com/7972688/64688456-f58c5400-d4be-11e9-9989-a296187d4887.jpg" width="300px")
 />
 </div>
 ## 参考&感谢
