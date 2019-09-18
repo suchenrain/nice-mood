@@ -23,7 +23,7 @@
       justify-content: space-between;
       align-items: center;
       line-height: 100rpx;
-      border-top: 1px solid #27272716;
+      border-top: 1px solid rgba(54, 54, 54, 0.07);
       width: 92%;
       margin: 0 auto;
 
@@ -32,7 +32,7 @@
 
       &-value {
         font-size: 28rpx;
-        color: #0006;
+        color: rgba(3, 3, 3, 0.4);
 
       }
 

@@ -311,7 +311,8 @@ class Profile extends Component<IProfileProps, IProfileState> {
       {
         text: '不感兴趣',
         style: {
-          backgroundColor: '#FF4949'
+          backgroundColor: '#FF4949',
+          fontSize:'17px'
         }
       }
     ];

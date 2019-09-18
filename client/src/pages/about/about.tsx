@@ -96,10 +96,10 @@ class About extends Component<IAboutProps, IAboutState> {
           {swiperList}
         </Swiper>
         <View className="panel">
-          <View className="panel-title">项目地址</View>
+          <View className="panel-title">项目已开源</View>
           <View
             className="panel-content"
-            onClick={this.copy('项目已开源', repository)}
+            onClick={this.copy('项目地址', repository)}
           >
             <View className="panel-content-icon iconfont icon-github" />
             <View className="panel-content-text">

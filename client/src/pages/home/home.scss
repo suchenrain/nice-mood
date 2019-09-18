@@ -88,14 +88,15 @@ $icon-wh:50rpx;
       color: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: first baseline;
+      justify-content: space-between;
       align-items: center;
-      padding-top: 140rpx;
+      padding-top: 11vh;
+      height: 84vh;
 
       >.index-title {
         text-align: center;
         position: fixed;
-        top: 64rpx;
+        top: 5.2vh;
         width: 100%;
         line-height: 35rpx;
         display: block;
@@ -229,7 +230,8 @@ $icon-wh:50rpx;
         width: 40vw;
         height: 80rpx;
         opacity: 0.75;
-        margin-top: 66rpx;
+        margin-top: 40rpx;
+        margin-bottom: 26rpx;
         position: relative;
         z-index: 2;
 
@@ -251,7 +253,7 @@ $icon-wh:50rpx;
         max-width: 85vw;
         margin-top: 100rpx;
         opacity: 0;
-        min-height: 200rpx;
+        height: 300rpx;
 
 
         .quote-info {

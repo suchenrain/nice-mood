@@ -307,6 +307,7 @@ class Home extends Component<IHomeProps, IHomeState> {
           Taro.vibrateShort();
           Taro.authorize({ scope: permisson })
             .then(() => {
+              cb();
               this.setState(
                 {
                   located: true
@@ -322,6 +323,7 @@ class Home extends Component<IHomeProps, IHomeState> {
             });
         } else {
           // 已授权过
+          cb();
           this.setState(
             {
               located: true
