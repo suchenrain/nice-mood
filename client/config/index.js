@@ -29,7 +29,7 @@ const sassImporter = function (url) {
 const config = {
   projectName: 'taro-ts-dva',
   date: '2019-7-29',
-  designWidth: 375,
+  designWidth: 640,
   deviceRatio: {
     '640': 2.34 / 2,
     '750': 1,

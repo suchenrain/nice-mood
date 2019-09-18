@@ -312,7 +312,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
         text: '不感兴趣',
         style: {
           backgroundColor: '#FF4949',
-          fontSize:'17px'
+          fontSize: '17px'
         }
       }
     ];
@@ -417,9 +417,10 @@ class Profile extends Component<IProfileProps, IProfileState> {
           cancelText="取消"
           title="移除收藏后，该图片将不再显示"
           onClose={this.handleCloseConfirm}
+          customStyle={{ fontSize: '16px' }}
         >
           <AtActionSheetItem onClick={this.handlePhotoRemove}>
-            <Text style={{ color: 'red' }}>不再收藏</Text>
+            <Text style={{ color: 'red', fontSize: '16px' }}>不再收藏</Text>
           </AtActionSheetItem>
         </AtActionSheet>
       </View>
