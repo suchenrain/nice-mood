@@ -62,16 +62,19 @@ export default {
         });
       }
     },
-    *getRandomPhotos({}, { call, put }) {
+    *getRandomPhotos({ success }, { call, put }) {
       const { error, result } = yield call(homeApi.getRandomPhotos, {});
-      console.log('图片接口返回', result);
-      if (!error) {
+      console.log('随机图片接口返回', result);
+      if (!error && result) {
         yield put({
           type: 'save',
           payload: {
             dailyPhoto: result
           }
         });
+        if (success && typeof success === 'function') {
+          yield success();
+        }
       }
     },
     *getGreeting({ callback }, { call, put }) {

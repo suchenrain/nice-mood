@@ -26,9 +26,10 @@ const randomPhoto = () => {
       fileList: [photo.fileID]
     })
     .then(res => {
+      photo.tempFileURL = res.fileList[0].tempFileURL;
       //缓存图片到本地
       return Taro.getImageInfo({
-        src: res.fileList[0].tempFileURL
+        src: photo.tempFileURL
       })
         .then(localImage => {
           // 本地缓存路径

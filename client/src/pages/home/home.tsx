@@ -25,7 +25,7 @@ import {
   Heart,
   SearchBar
 } from '@/components';
-import { show } from '@/utils/animation';
+import { show, fadeIn } from '@/utils/animation';
 import { ISetting } from '@/types';
 import Tips from '@/utils/tips';
 import { PAGES } from '@/config/weappConfig';
@@ -44,6 +44,7 @@ class Home extends Component<IHomeProps, IHomeState> {
   //定时器
   weatherTimeId: any;
   quoteTimeId: any;
+  photoTimeID: any;
   greetingTimeId: any;
   greetingIntvalId: any;
 
@@ -81,6 +82,7 @@ class Home extends Component<IHomeProps, IHomeState> {
     this.quoteTimeId && clearTimeout(this.quoteTimeId);
     this.greetingTimeId && clearTimeout(this.greetingTimeId);
     this.greetingIntvalId && clearInterval(this.greetingIntvalId);
+    this.photoTimeID && clearTimeout(this.photoTimeID);
   }
 
   onShareAppMessage() {
@@ -123,6 +125,7 @@ class Home extends Component<IHomeProps, IHomeState> {
    */
   handleRefreshQuote = () => {
     this.setQuote();
+    this.setRandomPhoto();
   };
 
   /**
@@ -436,8 +439,25 @@ class Home extends Component<IHomeProps, IHomeState> {
     });
   };
   getRandomPhoto = () => {
+    this.photoTimeID && clearTimeout(this.photoTimeID);
+
     this.props.dispatch({
-      type: 'home/getRandomPhotos'
+      type: 'home/getRandomPhotos',
+      success: () => {
+        if (!this.state.bgLoaded) {
+          this.photoTimeID = setTimeout(() => {
+            fadeIn(this, 'defaultBg', 300, 2000);
+            this.setState({
+              bgLoaded: true,
+              likePhoto: this.props.dailyPhoto.fond || false
+            });
+          }, 2500);
+        } else {
+          this.setState({
+            likePhoto: this.props.dailyPhoto.fond || false
+          });
+        }
+      }
     });
   };
 
@@ -464,7 +484,8 @@ class Home extends Component<IHomeProps, IHomeState> {
       likePhoto,
       likeQuote,
       ani,
-      searchText
+      searchText,
+      bgLoaded
     } = this.state;
     const code = weather && weather.now.cond_code;
     const hasNight = weather && this.hasNightIcon(code);
@@ -495,13 +516,19 @@ class Home extends Component<IHomeProps, IHomeState> {
             mode="aspectFill"
             animation={ani.defaultBg}
           />
-          <Image
+          <View
+            className={`daily-image ${bgLoaded ? 'show' : ''}`}
+            style={{
+              backgroundImage: `url("${dailyPhoto.tempFileURL}")`
+            }}
+          ></View>
+          {/* <Image
             className="daily-image"
             src={dailyPhoto.localPath}
             mode="aspectFill"
             onLoad={this.onBackgroundLoad}
             animation={ani.bg}
-          />
+          /> */}
         </View>
         <View className="mask-layer" />
         <View className="content-wrap">

@@ -14,7 +14,7 @@ exports.main = async (event, context) => {
   return db.collection('dailyPhoto')
     .aggregate()
     .sample({
-      size: 15
+      size: 40
     })
     .end();
 }

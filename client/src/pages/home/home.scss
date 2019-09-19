@@ -42,7 +42,9 @@ $icon-wh:50rpx;
     width: 100%;
     min-height: 100vh;
 
-
+    .show {
+      opacity: 1 !important;
+    }
 
     .daily-image-wrap {
       position: fixed;
@@ -58,14 +60,21 @@ $icon-wh:50rpx;
         height: 100%;
         width: 100%;
         opacity: 0;
-        // z-index: 2;
+        z-index: 2;
         position: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        transition-property: background-image, opacity;
+        transition-duration: 3s;
+        transition-timing-function: ease-in-out;
+        transition-delay: 500ms;
 
         &-default {
           opacity: 1;
           height: 100%;
           width: 100%;
-          // z-index: 1;
+          z-index: 1;
           position: fixed;
         }
       }
