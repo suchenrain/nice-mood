@@ -220,7 +220,8 @@ class Home extends Component<IHomeProps, IHomeState> {
     this.setWeather();
     this.setGreeting();
     this.setQuote();
-    this.setDailyPhoto();
+    this.getRandomPhoto();
+    // this.setDailyPhoto();
   };
 
   setWeather = () => {
@@ -239,6 +240,9 @@ class Home extends Component<IHomeProps, IHomeState> {
     if (!this.state.bgLoaded) {
       this.getDailyPhoto();
     }
+  };
+  setRandomPhoto = () => {
+    this.getRandomPhoto();
   };
 
   /**
@@ -429,6 +433,11 @@ class Home extends Component<IHomeProps, IHomeState> {
   getDailyPhoto = () => {
     this.props.dispatch({
       type: 'home/getDailyPhoto'
+    });
+  };
+  getRandomPhoto = () => {
+    this.props.dispatch({
+      type: 'home/getRandomPhotos'
     });
   };
 

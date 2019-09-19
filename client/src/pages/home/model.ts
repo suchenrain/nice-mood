@@ -62,6 +62,18 @@ export default {
         });
       }
     },
+    *getRandomPhotos({}, { call, put }) {
+      const { error, result } = yield call(homeApi.getRandomPhotos, {});
+      console.log('图片接口返回', result);
+      if (!error) {
+        yield put({
+          type: 'save',
+          payload: {
+            dailyPhoto: result
+          }
+        });
+      }
+    },
     *getGreeting({ callback }, { call, put }) {
       const { error, result } = yield call(homeApi.getGreeting, {});
       console.log('返回Greeting', result);
