@@ -34,7 +34,9 @@ exports.main = async (event, context) => {
     // 计算需分几次取
     const totalPage = Math.ceil(total / pageSize)
     if (pageIndex > totalPage) {
-      return Promise.reject({ error: "invalid page index" })
+      return Promise.reject({
+        error: "invalid page index"
+      })
     }
 
     const result = await db.collection('favorites-photo')
@@ -52,19 +54,26 @@ exports.main = async (event, context) => {
 
     const res = await db.collection('dailyPhoto').where({
       pid: _.in(pidArray)
-    }).orderBy('id', 'desc').field({
+    }).field({
       pid: true,
       fileID: true,
       alt: true,
       color: true
     }).get();
 
+    //sort
+    res.data.sort((a, b) => {
+      return pidArray.indexOf(a.pid) - pidArray.indexOf(b.pid);
+    })
+
     const fileList = res.data.map(item => item.fileID);
     const fileListResult = await cloud.getTempFileURL({
       fileList: fileList,
     });
     res.data.forEach(p => {
-      const tmp = fileListResult.fileList.find((file) => { return file.fileID == p.fileID });
+      const tmp = fileListResult.fileList.find((file) => {
+        return file.fileID == p.fileID
+      });
       if (tmp) {
         p.tempFileURL = tmp.tempFileURL;
       }
@@ -76,8 +85,7 @@ exports.main = async (event, context) => {
       data: res.data
 
     })
-  }
-  catch (error) {
+  } catch (error) {
     return Promise.reject(error)
   }
 }

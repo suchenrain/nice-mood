@@ -83,7 +83,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
     }
     // photo tab
     if (current == 0) {
-      const loadingPhoto = loading.effects['profile/getFondQuotes'];
+      const loadingPhoto = loading.effects['profile/getFondPhotos'];
       if (!loadingPhoto && photoPageIndex <= totalPhotoPage) {
         this.fetchPhotos();
       }
@@ -427,10 +427,9 @@ class Profile extends Component<IProfileProps, IProfileState> {
           cancelText="取消"
           title="移除收藏后，该图片将不再显示"
           onClose={this.handleCloseConfirm}
-          customStyle={{ fontSize: '16px' }}
         >
           <AtActionSheetItem onClick={this.handlePhotoRemove}>
-            <Text style={{ color: 'red', fontSize: '16px' }}>不再收藏</Text>
+            <Text style={{ color: 'red', fontSize: '18px' }}>不再收藏</Text>
           </AtActionSheetItem>
         </AtActionSheet>
       </View>
