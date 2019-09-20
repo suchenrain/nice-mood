@@ -6,9 +6,9 @@ import { IProfileProps, IProfileState } from './profile.interface';
 
 import './profile.scss';
 
-import demoBg from '@/assets/bg/default.jpg';
 import { AtSwipeAction, AtActionSheet, AtActionSheetItem } from 'taro-ui';
 import Tips from '@/utils/tips';
+import { getGlobalData } from '@/utils/common';
 
 @connect(({ loading, profile }) => ({
   loading,
@@ -23,6 +23,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
   };
 
   swiping: boolean;
+  blankHeight: number;
 
   constructor(props: IProfileProps) {
     super(props);
@@ -44,9 +45,16 @@ class Profile extends Component<IProfileProps, IProfileState> {
   }
   componentDidMount() {
     this.setTabTopHeight();
+    this.setBlankHeight();
     this.loadData();
   }
 
+  // 设置需要填充的高度
+  setBlankHeight = () => {
+    const systeminfo = getGlobalData('systemInfo');
+    const windowHeight = systeminfo.windowHeight || 0;
+    this.blankHeight = (6 * windowHeight) / 100;
+  };
   setTabTopHeight = () => {
     Taro.createSelectorQuery()
       .select('.tabswiper')
@@ -385,7 +393,9 @@ class Profile extends Component<IProfileProps, IProfileState> {
         </View>
         <View
           className="content-wrap"
-          style={{ marginTop: reachTop ? tabHeight + 15 + 'px' : '0px' }}
+          style={{
+            marginTop: reachTop ? tabHeight + this.blankHeight + 'px' : '0px'
+          }}
         >
           <View className={`photo ${current == 0 ? 'display' : 'hidden'}`}>
             {photoInited && photos.length == 0 && (

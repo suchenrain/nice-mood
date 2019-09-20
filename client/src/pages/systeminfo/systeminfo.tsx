@@ -3,7 +3,7 @@ import { View } from '@tarojs/components';
 import { ISysteminfoProps, ISysteminfoState } from './systeminfo.interface';
 
 import './systeminfo.scss';
-import { globalData, getGlobalData } from '@/utils/common';
+import { getGlobalData } from '@/utils/common';
 
 import classNames from 'classnames';
 

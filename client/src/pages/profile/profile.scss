@@ -90,13 +90,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 30rpx;
+    margin-top: 6vh;
 
     &-fixed {
       position: fixed;
       width: 100%;
-      top: -40rpx;
-      padding: 140rpx 0 20rpx 0;
+      top: -6vh;
+      padding: 13vh 0 2vh 0;
       background-color: rgba(0, 0, 0, 0.7);
       z-index: 999;
       transition: all 1s ease-out;
