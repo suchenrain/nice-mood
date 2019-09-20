@@ -25,6 +25,18 @@
 }
 
 
+.fadeIn {
+  transition: opacity 3000ms linear 300ms !important;
+  opacity: 1 !important;
+
+}
+
+.fadeOut {
+  transition: opacity 3000ms linear 300ms;
+  opacity: 0 !important;
+}
+
+
 $icon-wh:50rpx;
 
 .twink {
@@ -65,10 +77,10 @@ $icon-wh:50rpx;
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
-        transition-property: background-image, opacity;
+        transition-property: background-image;
         transition-duration: 3s;
         transition-timing-function: ease-in-out;
-        transition-delay: 500ms;
+        transition-delay: 100ms;
 
         &-default {
           opacity: 1;

@@ -25,7 +25,7 @@ import {
   Heart,
   SearchBar
 } from '@/components';
-import { show, fadeIn } from '@/utils/animation';
+import { show } from '@/utils/animation';
 import { ISetting } from '@/types';
 import Tips from '@/utils/tips';
 import { PAGES } from '@/config/weappConfig';
@@ -44,7 +44,6 @@ class Home extends Component<IHomeProps, IHomeState> {
   //定时器
   weatherTimeId: any;
   quoteTimeId: any;
-  photoTimeID: any;
   greetingTimeId: any;
   greetingIntvalId: any;
 
@@ -58,6 +57,8 @@ class Home extends Component<IHomeProps, IHomeState> {
       located: false,
       searchText: '',
       bgLoaded: false,
+      firstLoad: true,
+      bgPhotoUrl: '',
       likeQuote: false,
       likePhoto: false,
       ani: {}
@@ -82,7 +83,6 @@ class Home extends Component<IHomeProps, IHomeState> {
     this.quoteTimeId && clearTimeout(this.quoteTimeId);
     this.greetingTimeId && clearTimeout(this.greetingTimeId);
     this.greetingIntvalId && clearInterval(this.greetingIntvalId);
-    this.photoTimeID && clearTimeout(this.photoTimeID);
   }
 
   onShareAppMessage() {
@@ -107,11 +107,15 @@ class Home extends Component<IHomeProps, IHomeState> {
    * * daily photo 加载完成
    */
   onBackgroundLoad = () => {
-    show(this, 'defaultBg', 0, 300, 3000);
-    show(this, 'bg', 1, 300, 3000);
-    this.setState({
-      bgLoaded: true
-    });
+    const tempFileURL = this.props.dailyPhoto.tempFileURL;
+    if (!this.state.bgLoaded) {
+      this.setState({
+        bgLoaded: true,
+        bgPhotoUrl: tempFileURL
+      });
+    } else {
+      this.setState({ bgPhotoUrl: tempFileURL, firstLoad: false });
+    }
   };
 
   /**
@@ -439,24 +443,12 @@ class Home extends Component<IHomeProps, IHomeState> {
     });
   };
   getRandomPhoto = () => {
-    this.photoTimeID && clearTimeout(this.photoTimeID);
-
     this.props.dispatch({
       type: 'home/getRandomPhotos',
       success: () => {
-        if (!this.state.bgLoaded) {
-          this.photoTimeID = setTimeout(() => {
-            fadeIn(this, 'defaultBg', 300, 2000);
-            this.setState({
-              bgLoaded: true,
-              likePhoto: this.props.dailyPhoto.fond || false
-            });
-          }, 2500);
-        } else {
-          this.setState({
-            likePhoto: this.props.dailyPhoto.fond || false
-          });
-        }
+        this.setState({
+          likePhoto: this.props.dailyPhoto.fond || false
+        });
       }
     });
   };
@@ -485,7 +477,9 @@ class Home extends Component<IHomeProps, IHomeState> {
       likeQuote,
       ani,
       searchText,
-      bgLoaded
+      bgPhotoUrl,
+      bgLoaded,
+      firstLoad
     } = this.state;
     const code = weather && weather.now.cond_code;
     const hasNight = weather && this.hasNightIcon(code);
@@ -511,24 +505,23 @@ class Home extends Component<IHomeProps, IHomeState> {
       <View className="fx-index-wrap">
         <View className="daily-image-wrap">
           <Image
-            className="daily-image-default"
+            className={`daily-image-default  ${bgLoaded ? 'fadeOut' : ''}`}
             src={defaultBg}
             mode="aspectFill"
-            animation={ani.defaultBg}
           />
           <View
-            className={`daily-image ${bgLoaded ? 'show' : ''}`}
+            className={`daily-image  ${bgLoaded && firstLoad ? 'fadeIn' : ''} ${
+              bgLoaded && !firstLoad ? 'show' : ''
+            }`}
             style={{
-              backgroundImage: `url("${dailyPhoto.tempFileURL}")`
+              backgroundImage: `url("${bgPhotoUrl}")`
             }}
           ></View>
-          {/* <Image
-            className="daily-image"
-            src={dailyPhoto.localPath}
-            mode="aspectFill"
+          <Image
+            style={{ display: 'none' }}
+            src={dailyPhoto.tempFileURL}
             onLoad={this.onBackgroundLoad}
-            animation={ani.bg}
-          /> */}
+          />
         </View>
         <View className="mask-layer" />
         <View className="content-wrap">
