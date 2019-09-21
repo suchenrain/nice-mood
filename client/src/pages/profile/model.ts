@@ -7,8 +7,8 @@ export default {
   state: {
     quotes: [],
     photos: [],
-    totalQuotePage: 1,
-    totalPhotoPage: 1
+    nomorePhoto: false,
+    nomoreQuote: false
   },
 
   effects: {
@@ -62,7 +62,7 @@ export default {
 
       if (!error && result) {
         let data;
-        if (result.pageIndex === 1) {
+        if (payload.isFirst) {
           const newData = result.data.map(item => {
             item.isNew = true;
             item.removed = false;
@@ -84,7 +84,7 @@ export default {
           type: 'save',
           payload: {
             photos: data,
-            totalPhotoPage: result.totalPage
+            nomorePhoto: result.nomore
           }
         });
         if (success && typeof success === 'function') {

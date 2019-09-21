@@ -4,13 +4,13 @@ import Taro from '@tarojs/taro';
  * 获取喜欢的quote列表
  */
 export const getFondQuotes = async payload => {
-  const pageIndex: number = payload.pageIndex || 1;
+  const timeLine: string = payload.isFirst ? '' : payload.timeLine;
   const pageSize: number = payload.pageSize || 50;
   return await Taro.cloud
     .callFunction({
       name: 'getFondQuotes',
       data: {
-        pageIndex,
+        timeLine,
         pageSize
       }
     })
@@ -25,13 +25,13 @@ export const getFondQuotes = async payload => {
  * 获取喜欢的图片列表
  */
 export const getFondPhotos = async payload => {
-  const pageIndex: number = payload.pageIndex || 1;
+  const timeLine: string = payload.isFirst ? '' : payload.timeLine;
   const pageSize: number = payload.pageSize || 5;
   return await Taro.cloud
     .callFunction({
       name: 'getFondPhotos',
       data: {
-        pageIndex,
+        timeLine,
         pageSize
       }
     })

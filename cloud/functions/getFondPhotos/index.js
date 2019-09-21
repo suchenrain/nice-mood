@@ -13,7 +13,13 @@ const _ = db.command;
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   try {
-    const timeLine = event.timeLine || new Date();
+    let timeLine;
+    if (event.timeLine) {
+      timeLine = new Date(event.timeLine)
+    }
+    else
+      timeLine = new Date();
+
     const pageSize = event.pageSize || 5;
 
     const result = await db.collection('favorites-photo')
@@ -22,14 +28,16 @@ exports.main = async (event, context) => {
         createtime: _.lt(timeLine)
       }).orderBy('createtime', 'desc')
       .field({
-        pid: true
+        pid: true,
+        createtime: true,
       })
       .limit(pageSize)
       .get();
 
     if (!result.data.length > 0) {
       return Promise.resolve({
-        data: []
+        data: [],
+        nomore: true
       })
     }
 
@@ -60,10 +68,17 @@ exports.main = async (event, context) => {
       if (tmp) {
         p.tempFileURL = tmp.tempFileURL;
       }
+      const record = result.data.find((r) => {
+        return r.pid == p.pid
+      });
+      if (record) {
+        p.fondTime = record.createtime
+      }
     })
 
     return Promise.resolve({
-      data: res.data
+      data: res.data,
+      nomore: res.data.length < pageSize
     })
   } catch (error) {
     return Promise.reject(error)
