@@ -9,7 +9,7 @@ import { IQuote, DvaLoading, IPhoto } from '@/types';
 export interface IProfileState {
   current: number;
   quotePageIndex: number;
-  photoPageIndex: number;
+  photoTimeLine: any;
   activeQuoteId: number;
   quoteInited: boolean;
   photoInited: boolean;
@@ -30,7 +30,6 @@ export interface IProfileState {
 export interface IProfileProps {
   quotes: Array<IQuote>;
   photos: Array<IPhoto>;
-  totalPhotoPage: number;
   totalQuotePage: number;
   dispatch: any;
   loading: DvaLoading;

@@ -33,7 +33,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
       quoteInited: false,
       activeQuoteId: 0,
       photoInited: false,
-      photoPageIndex: 1,
+      photoTimeLine: new Date(),
       nomorePhoto: false,
       nomoreQuote: false,
       photoConfirmRemove: false,
@@ -118,15 +118,14 @@ class Profile extends Component<IProfileProps, IProfileState> {
    * * 拉取photos 分页
    */
   fetchPhotos = () => {
-    const { photoPageIndex } = this.state;
+    const { photoTimeLine } = this.state;
     this.props.dispatch({
       type: 'profile/getFondPhotos',
       payload: {
-        pageIndex: photoPageIndex
+        timeLine: photoTimeLine
       },
       success: () => {
-        const nextPage = photoPageIndex + 1;
-
+        const timeLine=this.props.photos
         this.setState(
           {
             photoPageIndex: nextPage,
