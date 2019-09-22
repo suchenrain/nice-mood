@@ -2,11 +2,11 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init({
-  env: 'dev-nicemood'
+  env: 'pro-nicemood'
 })
 
 const db = cloud.database({
-  env: 'dev-nicemood'
+  env: 'pro-nicemood'
 })
 
 // 云函数入口函数

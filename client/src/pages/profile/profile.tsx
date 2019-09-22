@@ -118,8 +118,10 @@ class Profile extends Component<IProfileProps, IProfileState> {
         isFirst: !photoInited
       },
       success: () => {
-        const timeLine = this.props.photos[this.props.photos.length - 1]
-          .fondTime;
+        const timeLine =
+          this.props.photos.length > 0
+            ? this.props.photos[this.props.photos.length - 1].fondTime
+            : '';
         this.setState(
           {
             photoTimeLine: timeLine,
@@ -146,8 +148,10 @@ class Profile extends Component<IProfileProps, IProfileState> {
         isFirst: !quoteInited
       },
       success: () => {
-        const timeLine = this.props.quotes[this.props.quotes.length - 1]
-          .fondTime;
+        const timeLine =
+          this.props.quotes.length > 0
+            ? this.props.quotes[this.props.quotes.length - 1].fondTime
+            : '';
         this.setState(
           {
             quoteTimeLine: timeLine,
