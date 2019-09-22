@@ -20,7 +20,7 @@ export default {
 
       if (!error && result) {
         let data;
-        if (result.pageIndex === 1) {
+        if (payload.isFirst) {
           const newData = result.data.map(item => {
             item.isNew = true;
             item.removed = false;
@@ -42,7 +42,7 @@ export default {
           type: 'save',
           payload: {
             quotes: data,
-            totalQuotePage: result.totalPage
+            nomoreQuote: result.nomore
           }
         });
         if (success && typeof success === 'function') {
