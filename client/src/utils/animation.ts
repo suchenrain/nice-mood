@@ -36,7 +36,7 @@ const fadeIn = (
     timingFunction: 'ease',
     delay: delay
   });
-  animation.opacity(0.3).step();
+  animation.opacity(0.1).step();
   animation.opacity(1).step();
   that.setState(prevState => {
     return { ani: { ...prevState.ani, [ele]: animation.export() } };

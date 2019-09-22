@@ -8,7 +8,7 @@ $fx-search-bar-btn-padding: 10PX;
 $fx-search-bar-placeholder-padding: 12PX;
 $fx-search-bar-input-bg-color: rgba(228, 228, 228, 0.05);
 $fx-search-bar-input-color: rgba(248, 248, 248, 0.897);
-$fx-search-bar-placholder-color: #fffa;
+$fx-search-bar-placholder-color: rgba(255, 255, 255, 0.644);
 
 
 .#{$prefix} {
@@ -118,7 +118,7 @@ $fx-search-bar-placholder-color: #fffa;
       font-size: $fx-search-bar-font-size;
       line-height: $fx-search-bar-input-height;
       border-radius: 4PX;
-      background-color: #40a7e7dc;
+      background-color: rgba(51, 180, 240, 0.89);
       transition: margin-right 0.3s, opacity 0.3s;
       opacity: 0;
     }

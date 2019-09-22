@@ -191,6 +191,7 @@ class Setting extends Component<ISettingProps, ISettingState> {
             </View>
           </View>
         </View>
+        <View className="footer">Copyright © 2019 suchenrain</View>
       </View>
     );
   }

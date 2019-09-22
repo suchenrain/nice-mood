@@ -5,7 +5,8 @@ import { IQuote, IPhoto } from '@/types';
 const defaultQuote: IQuote = {
   id: 0,
   hitokoto: '世界很美，你也是。',
-  from: 'Nice Mood'
+  from: 'Nice Mood',
+  fondTime: ''
 };
 const defaultPhoto: IPhoto = {
   _id: '',
@@ -18,7 +19,8 @@ const defaultPhoto: IPhoto = {
   tempFileURL: '',
   color: '',
   alt: '',
-  id: ''
+  id: '',
+  fondTime: ''
 };
 
 export default {
@@ -60,6 +62,21 @@ export default {
             dailyPhoto: result
           }
         });
+      }
+    },
+    *getRandomPhotos({ success }, { call, put }) {
+      const { error, result } = yield call(homeApi.getRandomPhotos, {});
+      console.log('随机图片接口返回', result);
+      if (!error && result) {
+        yield put({
+          type: 'save',
+          payload: {
+            dailyPhoto: result
+          }
+        });
+        if (success && typeof success === 'function') {
+          yield success();
+        }
       }
     },
     *getGreeting({ callback }, { call, put }) {

@@ -57,6 +57,8 @@ class Home extends Component<IHomeProps, IHomeState> {
       located: false,
       searchText: '',
       bgLoaded: false,
+      firstLoad: true,
+      bgPhotoUrl: '',
       likeQuote: false,
       likePhoto: false,
       ani: {}
@@ -105,11 +107,15 @@ class Home extends Component<IHomeProps, IHomeState> {
    * * daily photo 加载完成
    */
   onBackgroundLoad = () => {
-    show(this, 'defaultBg', 0, 300, 3000);
-    show(this, 'bg', 1, 300, 3000);
-    this.setState({
-      bgLoaded: true
-    });
+    const tempFileURL = this.props.dailyPhoto.tempFileURL;
+    if (!this.state.bgLoaded) {
+      this.setState({
+        bgLoaded: true,
+        bgPhotoUrl: tempFileURL
+      });
+    } else {
+      this.setState({ bgPhotoUrl: tempFileURL, firstLoad: false });
+    }
   };
 
   /**
@@ -123,6 +129,7 @@ class Home extends Component<IHomeProps, IHomeState> {
    */
   handleRefreshQuote = () => {
     this.setQuote();
+    this.setRandomPhoto();
   };
 
   /**
@@ -220,7 +227,8 @@ class Home extends Component<IHomeProps, IHomeState> {
     this.setWeather();
     this.setGreeting();
     this.setQuote();
-    this.setDailyPhoto();
+    this.getRandomPhoto();
+    // this.setDailyPhoto();
   };
 
   setWeather = () => {
@@ -239,6 +247,9 @@ class Home extends Component<IHomeProps, IHomeState> {
     if (!this.state.bgLoaded) {
       this.getDailyPhoto();
     }
+  };
+  setRandomPhoto = () => {
+    this.getRandomPhoto();
   };
 
   /**
@@ -431,6 +442,16 @@ class Home extends Component<IHomeProps, IHomeState> {
       type: 'home/getDailyPhoto'
     });
   };
+  getRandomPhoto = () => {
+    this.props.dispatch({
+      type: 'home/getRandomPhotos',
+      success: () => {
+        this.setState({
+          likePhoto: this.props.dailyPhoto.fond || false
+        });
+      }
+    });
+  };
 
   /**
    * 是否有夜间天气图标
@@ -455,7 +476,10 @@ class Home extends Component<IHomeProps, IHomeState> {
       likePhoto,
       likeQuote,
       ani,
-      searchText
+      searchText,
+      bgPhotoUrl,
+      bgLoaded,
+      firstLoad
     } = this.state;
     const code = weather && weather.now.cond_code;
     const hasNight = weather && this.hasNightIcon(code);
@@ -481,17 +505,22 @@ class Home extends Component<IHomeProps, IHomeState> {
       <View className="fx-index-wrap">
         <View className="daily-image-wrap">
           <Image
-            className="daily-image-default"
+            className={`daily-image-default  ${bgLoaded ? 'fadeOut' : ''}`}
             src={defaultBg}
             mode="aspectFill"
-            animation={ani.defaultBg}
           />
+          <View
+            className={`daily-image  ${bgLoaded && firstLoad ? 'fadeIn' : ''} ${
+              bgLoaded && !firstLoad ? 'show' : ''
+            }`}
+            style={{
+              backgroundImage: `url("${bgPhotoUrl}")`
+            }}
+          ></View>
           <Image
-            className="daily-image"
-            src={dailyPhoto.localPath}
-            mode="aspectFill"
+            style={{ display: 'none' }}
+            src={dailyPhoto.tempFileURL}
             onLoad={this.onBackgroundLoad}
-            animation={ani.bg}
           />
         </View>
         <View className="mask-layer" />
