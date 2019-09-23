@@ -10,6 +10,7 @@ export interface IPhoto {
   color: string;
   alt: string;
   id: string;
+  fondTime: string;
   fond?: boolean;
   removed?: boolean;
   isNew?: boolean;

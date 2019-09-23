@@ -8,55 +8,44 @@ const db = cloud.database({
   env: 'YOUR CLOUD ENV ID'
 })
 
+const _ = db.command;
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   try {
-    const pageIndex = event.pageIndex || 1;
+    let timeLine;
+    if (event.timeLine) {
+      timeLine = new Date(event.timeLine)
+    } else
+      timeLine = new Date();
     const pageSize = event.pageSize || 50;
-    const skipCount = (pageIndex - 1) * pageSize;
 
-    // 先取出集合记录总数
-    const countResult = await db.collection('favorites-quote').where({
-      openid: wxContext.OPENID,
-    }).count();
-    const total = countResult.total
-
-    if (total <= 0) {
-      return Promise.resolve({
-        totalPage: 0,
-        pageIndex,
-        data: []
-      })
-    }
-
-    // 计算需分几次取
-    const totalPage = Math.ceil(total / pageSize)
-    if (pageIndex > totalPage) {
-      return Promise.reject({ error: "invalid page index" })
-    }
 
     const result = await db.collection('favorites-quote')
       .where({
         openid: wxContext.OPENID,
+        createtime: _.lt(timeLine)
       }).orderBy('createtime', 'desc')
-      .skip(skipCount)
       .field({
         id: true,
         hitokoto: true,
-        from: true
+        from: true,
+        createtime: true,
       })
       .limit(pageSize)
       .get();
 
-    return Promise.resolve({
-      totalPage,
-      pageIndex,
-      data: result.data
+    result.data.forEach(element => {
+      element.fondTime = element.createtime;
+    });
 
+    return Promise.resolve({
+      data: result.data,
+      nomore: result.data.length < pageSize
     })
-  }
-  catch (error) {
+
+  } catch (error) {
     return Promise.reject(error)
   }
 }

@@ -8,10 +8,17 @@
     font-size: 30rpx;
     color: #666;
 
-    background-color: #eee6;
+    background-color: rgba(230, 230, 230, 0.4);
   }
 }
-
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 80rpx;
+  font-size: 22rpx;
+  color: #666;
+}
 .panel {
   padding: 40rpx 26rpx;
   margin-bottom: 20rpx;

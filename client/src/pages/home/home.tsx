@@ -22,7 +22,8 @@ import {
   ShareMoment,
   Clock,
   TouchBall,
-  Heart
+  Heart,
+  SearchBar
 } from '@/components';
 import { show } from '@/utils/animation';
 import { ISetting } from '@/types';
@@ -54,7 +55,10 @@ class Home extends Component<IHomeProps, IHomeState> {
       showShareMoment: false,
       greeting: 'Have a nice day:)',
       located: false,
+      searchText: '',
       bgLoaded: false,
+      firstLoad: true,
+      bgPhotoUrl: '',
       likeQuote: false,
       likePhoto: false,
       ani: {}
@@ -103,11 +107,15 @@ class Home extends Component<IHomeProps, IHomeState> {
    * * daily photo 加载完成
    */
   onBackgroundLoad = () => {
-    show(this, 'defaultBg', 0, 800, 4000);
-    show(this, 'bg', 1, 800, 4000);
-    this.setState({
-      bgLoaded: true
-    });
+    const tempFileURL = this.props.dailyPhoto.tempFileURL;
+    if (!this.state.bgLoaded) {
+      this.setState({
+        bgLoaded: true,
+        bgPhotoUrl: tempFileURL
+      });
+    } else {
+      this.setState({ bgPhotoUrl: tempFileURL, firstLoad: false });
+    }
   };
 
   /**
@@ -121,6 +129,7 @@ class Home extends Component<IHomeProps, IHomeState> {
    */
   handleRefreshQuote = () => {
     this.setQuote();
+    this.setRandomPhoto();
   };
 
   /**
@@ -192,6 +201,16 @@ class Home extends Component<IHomeProps, IHomeState> {
     );
   };
 
+  handleSearchTextChange = value => {
+    this.setState({ searchText: value });
+  };
+
+  handleSearch = () => {
+    const { searchText } = this.state;
+    if (!searchText) return;
+    this.searchWeather(searchText);
+  };
+
   // 初始化
   init = () => {
     this.reloadData();
@@ -208,7 +227,8 @@ class Home extends Component<IHomeProps, IHomeState> {
     this.setWeather();
     this.setGreeting();
     this.setQuote();
-    this.setDailyPhoto();
+    this.getRandomPhoto();
+    // this.setDailyPhoto();
   };
 
   setWeather = () => {
@@ -227,6 +247,9 @@ class Home extends Component<IHomeProps, IHomeState> {
     if (!this.state.bgLoaded) {
       this.getDailyPhoto();
     }
+  };
+  setRandomPhoto = () => {
+    this.getRandomPhoto();
   };
 
   /**
@@ -337,15 +360,33 @@ class Home extends Component<IHomeProps, IHomeState> {
     if (this.weatherTimeId) clearTimeout(this.weatherTimeId);
     show(this, 'weather', 0, 0, 1000);
     this.weatherTimeId = setTimeout(() => {
-      Taro.vibrateShort();
+      // Taro.vibrateShort();
       this.props.dispatch({
         type: 'home/getWeather',
         payload: { location, key: globalData.weatherKey },
-        callback: () => {
+        callback: status => {
           show(this, 'weather', 0.8, 0, 1500);
         }
       });
     }, 1000);
+  };
+
+  searchWeather = (location: string) => {
+    Taro.vibrateShort();
+    Tips.loading('查询中...');
+    this.props.dispatch({
+      type: 'home/getWeather',
+      payload: { location, key: globalData.weatherKey },
+      callback: status => {
+        Tips.loaded();
+        if (status === 'ok') {
+          Tips.success('天气信息已更新');
+        } else {
+          Tips.toast('未检索到结果');
+        }
+        show(this, 'weather', 0.8, 0, 1500);
+      }
+    });
   };
 
   getGreeting = () => {
@@ -380,7 +421,7 @@ class Home extends Component<IHomeProps, IHomeState> {
       this.props.dispatch({
         type: 'home/getQuote',
         payload: {
-          c: 'g'
+          // c: 'k'
         },
         callback: () => {
           // preset like status
@@ -399,6 +440,16 @@ class Home extends Component<IHomeProps, IHomeState> {
   getDailyPhoto = () => {
     this.props.dispatch({
       type: 'home/getDailyPhoto'
+    });
+  };
+  getRandomPhoto = () => {
+    this.props.dispatch({
+      type: 'home/getRandomPhotos',
+      success: () => {
+        this.setState({
+          likePhoto: this.props.dailyPhoto.fond || false
+        });
+      }
     });
   };
 
@@ -424,7 +475,11 @@ class Home extends Component<IHomeProps, IHomeState> {
       greeting,
       likePhoto,
       likeQuote,
-      ani
+      ani,
+      searchText,
+      bgPhotoUrl,
+      bgLoaded,
+      firstLoad
     } = this.state;
     const code = weather && weather.now.cond_code;
     const hasNight = weather && this.hasNightIcon(code);
@@ -450,22 +505,37 @@ class Home extends Component<IHomeProps, IHomeState> {
       <View className="fx-index-wrap">
         <View className="daily-image-wrap">
           <Image
-            className="daily-image-default"
+            className={`daily-image-default  ${bgLoaded ? 'fadeOut' : ''}`}
             src={defaultBg}
             mode="aspectFill"
-            animation={ani.defaultBg}
           />
+          <View
+            className={`daily-image  ${bgLoaded && firstLoad ? 'fadeIn' : ''} ${
+              bgLoaded && !firstLoad ? 'show' : ''
+            }`}
+            style={{
+              backgroundImage: `url("${bgPhotoUrl}")`
+            }}
+          ></View>
           <Image
-            className="daily-image"
-            src={dailyPhoto.localPath}
-            mode="aspectFill"
+            style={{ display: 'none' }}
+            src={dailyPhoto.tempFileURL}
             onLoad={this.onBackgroundLoad}
-            animation={ani.bg}
           />
         </View>
         <View className="mask-layer" />
         <View className="content-wrap">
           <Text className="index-title">每天好心情</Text>
+          {setting.enableWeatherSearch && (
+            <View className="search-bar-wrap">
+              <SearchBar
+                value={searchText}
+                onChange={this.handleSearchTextChange}
+                onActionClick={this.handleSearch}
+                onBlur={this.handleSearch}
+              ></SearchBar>
+            </View>
+          )}
           <View className="top-wrap">
             {setting.enableGreeting && (
               <View className="user-wrap" onClick={this.navigate2Profile}>

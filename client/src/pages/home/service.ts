@@ -2,6 +2,7 @@ import Api from '@/utils/httpRequest';
 import Taro from '@tarojs/taro';
 import { getDateString } from '@/utils/common';
 
+let cachedPhotos: any[] = [];
 /**
  * 获取天气数据（和风天气）
  * @param data 请求参数
@@ -18,6 +19,51 @@ export const getQuote = data => {
   return Api.getQuote(data);
 };
 
+const randomPhoto = () => {
+  let photo = cachedPhotos[Math.floor(Math.random() * cachedPhotos.length)];
+  return Taro.cloud
+    .getTempFileURL({
+      fileList: [photo.fileID]
+    })
+    .then(res => {
+      photo.tempFileURL = res.fileList[0].tempFileURL;
+      //缓存图片到本地
+      return Taro.getImageInfo({
+        src: photo.tempFileURL
+      })
+        .then(localImage => {
+          // 本地缓存路径
+          photo.localPath = localImage.path;
+          return { result: photo };
+        })
+        .catch(error => {
+          return { error };
+        });
+    })
+    .catch(error => {
+      return { error };
+    });
+};
+/**
+ * 获取随机图片集
+ */
+export const getRandomPhotos = async () => {
+  if (cachedPhotos.length > 0) {
+    return randomPhoto();
+  } else {
+    return await Taro.cloud
+      .callFunction({
+        name: 'getRandomPhotos'
+      })
+      .then((res: any) => {
+        cachedPhotos = res.result.list;
+        return randomPhoto();
+      })
+      .catch(error => {
+        return { error };
+      });
+  }
+};
 /**
  * 获取每日图片
  */

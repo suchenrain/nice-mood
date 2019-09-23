@@ -12,7 +12,10 @@ export interface IHomeState {
   showShareMoment: boolean;
   greeting: string;
   located: boolean;
+  searchText: string;
   bgLoaded: boolean;
+  firstLoad: boolean;
+  bgPhotoUrl: string;
   likeQuote: boolean;
   likePhoto: boolean;
   ani: any;
@@ -24,7 +27,6 @@ export interface IHomeState {
  * @interface IHomeProps
  */
 export interface IHomeProps {
-  
   weather: IWeather;
   quote: IQuote;
   dailyPhoto: IPhoto;

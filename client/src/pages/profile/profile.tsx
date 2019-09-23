@@ -6,9 +6,9 @@ import { IProfileProps, IProfileState } from './profile.interface';
 
 import './profile.scss';
 
-import demoBg from '@/assets/bg/default.jpg';
 import { AtSwipeAction, AtActionSheet, AtActionSheetItem } from 'taro-ui';
 import Tips from '@/utils/tips';
+import { getGlobalData } from '@/utils/common';
 
 @connect(({ loading, profile }) => ({
   loading,
@@ -23,18 +23,17 @@ class Profile extends Component<IProfileProps, IProfileState> {
   };
 
   swiping: boolean;
+  blankHeight: number;
 
   constructor(props: IProfileProps) {
     super(props);
     this.state = {
       current: 0, //active tab
-      quotePageIndex: 1,
       quoteInited: false,
       activeQuoteId: 0,
       photoInited: false,
-      photoPageIndex: 1,
-      nomorePhoto: false,
-      nomoreQuote: false,
+      photoTimeLine: '',
+      quoteTimeLine: '',
       photoConfirmRemove: false,
       photoToBeRemove: '',
       tabTopHeight: 0,
@@ -44,9 +43,16 @@ class Profile extends Component<IProfileProps, IProfileState> {
   }
   componentDidMount() {
     this.setTabTopHeight();
+    this.setBlankHeight();
     this.loadData();
   }
 
+  // 设置需要填充的高度
+  setBlankHeight = () => {
+    const systeminfo = getGlobalData('systemInfo');
+    const windowHeight = systeminfo.windowHeight || 0;
+    this.blankHeight = (6 * windowHeight) / 100;
+  };
   setTabTopHeight = () => {
     Taro.createSelectorQuery()
       .select('.tabswiper')
@@ -61,26 +67,20 @@ class Profile extends Component<IProfileProps, IProfileState> {
   };
 
   onReachBottom() {
-    const { current, quotePageIndex, photoPageIndex } = this.state;
-    const { totalQuotePage, totalPhotoPage, loading } = this.props;
+    const { current } = this.state;
+    const { loading, nomorePhoto, nomoreQuote } = this.props;
     // quote tab
     if (current == 1) {
       const loadingQuote = loading.effects['profile/getFondQuotes'];
-      if (!loadingQuote && quotePageIndex <= totalQuotePage) {
+      if (!loadingQuote && !nomoreQuote) {
         this.fetchQuotes();
-      }
-      if (quotePageIndex > totalQuotePage) {
-        this.setState({ nomoreQuote: true });
       }
     }
     // photo tab
     if (current == 0) {
-      const loadingPhoto = loading.effects['profile/getFondQuotes'];
-      if (!loadingPhoto && photoPageIndex <= totalPhotoPage) {
+      const loadingPhoto = loading.effects['profile/getFondPhotos'];
+      if (!loadingPhoto && !nomorePhoto) {
         this.fetchPhotos();
-      }
-      if (photoPageIndex > totalPhotoPage) {
-        this.setState({ nomorePhoto: true });
       }
     }
   }
@@ -110,18 +110,21 @@ class Profile extends Component<IProfileProps, IProfileState> {
    * * 拉取photos 分页
    */
   fetchPhotos = () => {
-    const { photoPageIndex } = this.state;
+    const { photoTimeLine, photoInited } = this.state;
     this.props.dispatch({
       type: 'profile/getFondPhotos',
       payload: {
-        pageIndex: photoPageIndex
+        timeLine: photoTimeLine,
+        isFirst: !photoInited
       },
       success: () => {
-        const nextPage = photoPageIndex + 1;
-
+        const timeLine =
+          this.props.photos.length > 0
+            ? this.props.photos[this.props.photos.length - 1].fondTime
+            : '';
         this.setState(
           {
-            photoPageIndex: nextPage,
+            photoTimeLine: timeLine,
             photoInited: true
           },
           () => {
@@ -137,18 +140,21 @@ class Profile extends Component<IProfileProps, IProfileState> {
    * * 拉取quotes 分页
    */
   fetchQuotes = () => {
-    const { quotePageIndex } = this.state;
+    const { quoteInited, quoteTimeLine } = this.state;
     this.props.dispatch({
       type: 'profile/getFondQuotes',
       payload: {
-        pageIndex: quotePageIndex
+        timeLine: quoteTimeLine,
+        isFirst: !quoteInited
       },
       success: () => {
-        const nextPage = quotePageIndex + 1;
-
+        const timeLine =
+          this.props.quotes.length > 0
+            ? this.props.quotes[this.props.quotes.length - 1].fondTime
+            : '';
         this.setState(
           {
-            quotePageIndex: nextPage,
+            quoteTimeLine: timeLine,
             quoteInited: true
           },
           () => {
@@ -267,20 +273,17 @@ class Profile extends Component<IProfileProps, IProfileState> {
   };
 
   render() {
-    const headerBg = demoBg;
     const {
       current,
       activeQuoteId,
       quoteInited,
-      nomoreQuote,
       photoInited,
-      nomorePhoto,
       photoConfirmRemove,
       reachTop,
       tabHeight
     } = this.state;
 
-    const { quotes, photos, loading } = this.props;
+    const { quotes, photos, loading, nomorePhoto, nomoreQuote } = this.props;
 
     // photo
     const photoList = photos.map(photo => {
@@ -312,7 +315,8 @@ class Profile extends Component<IProfileProps, IProfileState> {
       {
         text: '不感兴趣',
         style: {
-          backgroundColor: '#FF4949'
+          backgroundColor: '#FF4949',
+          fontSize: '17px'
         }
       }
     ];
@@ -353,8 +357,9 @@ class Profile extends Component<IProfileProps, IProfileState> {
         <View
           className="profile-userinfo"
           style={{
-            backgroundImage: `url("${avaiablePhoto &&
-              avaiablePhoto.tempFileURL}")`
+            backgroundImage: `url("${
+              avaiablePhoto ? avaiablePhoto.tempFileURL : ''
+            }")`
           }}
         >
           <View className="profile-avatar">
@@ -384,7 +389,9 @@ class Profile extends Component<IProfileProps, IProfileState> {
         </View>
         <View
           className="content-wrap"
-          style={{ marginTop: reachTop ? tabHeight + 15 + 'px' : '0px' }}
+          style={{
+            marginTop: reachTop ? tabHeight + this.blankHeight + 'px' : '0px'
+          }}
         >
           <View className={`photo ${current == 0 ? 'display' : 'hidden'}`}>
             {photoInited && photos.length == 0 && (
@@ -394,7 +401,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
             {loading.effects['profile/getFondPhotos'] && (
               <View className="loading-data">加载中...</View>
             )}
-            {nomorePhoto && (
+            {photos.length > 0 && nomorePhoto && (
               <View className="nomore-data">{`没有更多啦>_<`}</View>
             )}
           </View>
@@ -406,7 +413,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
             {loading.effects['profile/getFondQuotes'] && (
               <View className="loading-data">加载中...</View>
             )}
-            {nomoreQuote && (
+            {quotes.length > 0 && nomoreQuote && (
               <View className="nomore-data">{`没有更多啦>_<`}</View>
             )}
           </View>
@@ -418,7 +425,7 @@ class Profile extends Component<IProfileProps, IProfileState> {
           onClose={this.handleCloseConfirm}
         >
           <AtActionSheetItem onClick={this.handlePhotoRemove}>
-            <Text style={{ color: 'red' }}>不再收藏</Text>
+            <Text style={{ color: 'red', fontSize: '18px' }}>不再收藏</Text>
           </AtActionSheetItem>
         </AtActionSheet>
       </View>

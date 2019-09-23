@@ -13,50 +13,38 @@ const db = cloud.database({
 const max = 5;
 let cur = 0;
 
-const generateID = () => {
-  const date = new Date();
-  //设置为 UTC+8
-  date.setHours(date.getHours() + 8);
-  let year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  let day = date.getDate();
-  if (month < 10) {
-    month = "0" + month;
-  }
-  if (day < 10) {
-    day = "0" + day;
-  }
-  return `${year}${month}${day}`;
-}
-
-const generateFileName = () => {
-  const id = generateID();
-  const fileName = `DailyPhoto/${id}.jpg`
+const generateFileName = (pid) => {
+  const fileName = `DailyPhoto/${pid}.jpg`
   return fileName;
 }
 
 
-getRandomPhoto = () => {
-  const url = 'https://api.unsplash.com/photos/random/'
-
+getRandomPhoto = async () => {
+  const pointerDoc = db.collection('pointer').doc('1');
+  const pointerData = await pointerDoc.get();
+  const cursor = pointerData.data.cursor;
+  const page = cursor / 10 + 1;
+  const itemIndex = cursor % 10;
+  const url = `https://api.unsplash.com/users/suchenrain/likes?order_by=oldest&per_page=10&client_id=YOUR_CLIENTID&page=${page}`;
   return new Promise((resolve, reject) => {
     request(url, (err, res, body) => {
       if (err) reject(err);
-      resolve(JSON.parse(body))
+      const bodyData = JSON.parse(body);
+      const result = bodyData[itemIndex];
+      resolve(result)
     })
   });
 }
 
-checkExisting = (pid) => {
-  return db.collection('dailyPhoto').where({
+checkExisting = async (pid) => {
+  return await db.collection('dailyPhoto').where({
     pid: pid
   }).count()
 }
 
-addDailyPhotoRecord = (photo) => {
-  return db.collection('dailyPhoto').add({
+addDailyPhotoRecord = async (photo, fileID) => {
+  return await db.collection('dailyPhoto').add({
     data: {
-      id: generateID(),
       pid: photo.id,
       url: photo.urls.raw,
       color: photo.color,
@@ -64,7 +52,7 @@ addDailyPhotoRecord = (photo) => {
       alt: photo.alt_description,
       author: photo.user.name,
       profile: photo.user.links.html,
-      fileID: ''
+      fileID: fileID
     }
   })
 }
@@ -91,20 +79,10 @@ getPhotpBuffer = (url) => {
   })
 }
 
-uploadFile = (buffer) => {
+uploadFile = (buffer, pid) => {
   return cloud.uploadFile({
-    cloudPath: generateFileName(),
+    cloudPath: generateFileName(pid),
     fileContent: buffer,
-  })
-}
-
-updateDailyPhotoRecord = (pid, fileID) => {
-  return db.collection('dailyPhoto').where({
-    pid: pid
-  }).update({
-    data: {
-      fileID: fileID
-    }
   })
 }
 
@@ -116,15 +94,21 @@ syncPhoto = async () => {
       total
     } = await checkExisting(photo.id);
     if (total === 0) {
-      let _id = await addDailyPhotoRecord(photo);
       const buffer = await getPhotpBuffer(photo.urls.raw)
       if (buffer) {
         const {
           fileID
-        } = await uploadFile(buffer)
+        } = await uploadFile(buffer, photo.id)
         if (fileID) {
-          const res = await updateDailyPhotoRecord(photo.id, fileID);
-          if (res.stats) {
+          const _id = await addDailyPhotoRecord(photo, fileID);
+          if (_id) {
+            const _ = db.command;
+            const pointerDoc = db.collection('pointer').doc('1');
+            pointerDoc.update({
+              data: {
+                cursor: _.inc(1)
+              }
+            })
             console.log('ok');
             //sendNotification('success');
           } else {
@@ -136,73 +120,18 @@ syncPhoto = async () => {
     } else {
       if (cur < max) {
         cur++;
-        syncPhoto();
-      }
-    }
-  }
+        const _ = db.command;
+        const pointerDoc = db.collection('pointer').doc('1');
+        await pointerDoc.update({
+          data: {
+            cursor: _.inc(1)
 }
-
-sendNotification = async (status) => {
-  try {
-    const result = await cloud.openapi.uniformMessage.send({
-      touser: '',
-      // 需要formID
-      // weappTemplateMsg: {
-      //   page: 'page/page/index',
-      //   data: {
-      //     keyword1: {
-      //       value: '每日图片更新状态'
-      //     },
-      //     keyword2: {
-      //       value: status
-      //     },
-      //     keyword3: {
-      //       value: new Date()
-      //     }
-      //   },
-      //   templateId: 'ZZs_yBUv1EBvKpavn7MZwUFxZ5m6AhqB_bVCC8UksrA',
-      //   formId: 'FORMID',
-      //   emphasisKeyword: 'keyword2.DATA'
-      // }
-      // 需要同主体。。
-      mpTemplateMsg: {
-        appid: '',
-        url: 'http://weixin.qq.com/download',
-        miniprogram: {
-          appid: '',
-          pagepath: 'index'
-        },
-        data: {
-          first: {
-            value: 'NiceMood运行状态通知！',
-            color: '#173177'
-          },
-          keyword1: {
-            value: '每日图片自动更新',
-            color: '#173177'
-          },
-          keyword2: {
-            value: new Date(),
-            color: '#173177'
-          },
-          keyword3: {
-            value: status,
-            color: '#173177'
-          },
-          remark: {
-            value: '如有疑问请进入云开发后台查看详情',
-            color: '#173177'
+        })
+        return await syncPhoto();
           }
-        },
-        templateId: ''
       }
-    })
-    console.log(result)
-  } catch (err) {
-    console.log(err);
   }
 }
-
 // 云函数入口函数
 exports.main = async (event, context) => {
   await syncPhoto();

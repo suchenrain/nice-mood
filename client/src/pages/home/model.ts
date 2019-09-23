@@ -5,7 +5,8 @@ import { IQuote, IPhoto } from '@/types';
 const defaultQuote: IQuote = {
   id: 0,
   hitokoto: '世界很美，你也是。',
-  from: 'Nice Mood'
+  from: 'Nice Mood',
+  fondTime: ''
 };
 const defaultPhoto: IPhoto = {
   _id: '',
@@ -14,11 +15,12 @@ const defaultPhoto: IPhoto = {
   pid: '',
   profile: '',
   url: '',
-  localPath: '../../assets/bg/default.jpg',
-  tempFileURL: '../../assets/bg/default.jpg',
+  localPath: '',
+  tempFileURL: '',
   color: '',
   alt: '',
-  id: ''
+  id: '',
+  fondTime: ''
 };
 
 export default {
@@ -37,16 +39,17 @@ export default {
         ...payload
       });
       console.log('天气接口返回', result);
-      if (!error && result) {
+      const data = result.HeWeather6[0];
+      if (!error && data.status == 'ok') {
         yield put({
           type: 'save',
           payload: {
-            weather: result.HeWeather6[0]
+            weather: data
           }
         });
-        if (callback && typeof callback === 'function') {
-          yield callback();
-        }
+      }
+      if (callback && typeof callback === 'function') {
+        yield callback(data.status);
       }
     },
     *getDailyPhoto({}, { call, put }) {
@@ -59,6 +62,21 @@ export default {
             dailyPhoto: result
           }
         });
+      }
+    },
+    *getRandomPhotos({ success }, { call, put }) {
+      const { error, result } = yield call(homeApi.getRandomPhotos, {});
+      console.log('随机图片接口返回', result);
+      if (!error && result) {
+        yield put({
+          type: 'save',
+          payload: {
+            dailyPhoto: result
+          }
+        });
+        if (success && typeof success === 'function') {
+          yield success();
+        }
       }
     },
     *getGreeting({ callback }, { call, put }) {

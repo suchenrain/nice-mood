@@ -11,7 +11,7 @@ import { IQuote } from '@/types';
 
 class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   _quoteID: number;
-
+  ctx: any;
   constructor(props: IShareMomentProps) {
     super(props);
     this.state = {
@@ -111,7 +111,7 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
   };
 
   buildPrintArray = (text: string): Array<string> => {
-    let quotes = text.split(/[,，.。！!"“”'‘’？?;；:：、\s]/g);
+    let quotes = text.split(/[,，.。！!"“”'‘’？?;；:：、…\s]/g);
     let res: Array<string> = [];
     quotes = quotes.filter(q => q.length > 0);
     let lastCount = 0;
@@ -119,15 +119,25 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
     for (let i = 0; i < quotes.length; i++) {
       let curStr = quotes[i];
       let curCount = getStrLength(curStr);
-      if (i > 0 && lastCount < 26 && lastCount + curCount <= 26) {
+      if (i > 0 && lastCount < 30 && lastCount + curCount <= 30) {
         res.pop();
         res.push(`${lastStr} ${curStr}`);
         lastStr = `${lastStr} ${curStr}`;
         lastCount = getStrLength(lastStr);
       } else {
-        res.push(curStr);
-        lastCount = curCount;
-        lastStr = curStr;
+        if (curCount > 30) {
+          let split = curStr.length < curCount ? 15 : 30;
+          let tmp1 = curStr.substr(0, split);
+          let tmp2 = curStr.substr(split, curStr.length);
+          res.push(tmp1);
+          res.push(tmp2);
+          lastCount = getStrLength(tmp2);
+          lastStr = tmp2;
+        } else {
+          res.push(curStr);
+          lastCount = curCount;
+          lastStr = curStr;
+        }
       }
     }
     return res;
@@ -139,25 +149,36 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
     this.setState({ isDrawing: true });
     Tips.loading('准备图片中...');
 
+    if (!src || src == '') {
+      src = '../../assets/bg/default.jpg';
+    }
     const qrcodePromise = Taro.getImageInfo({ src: qrcode });
     const backgroundPromise = Taro.getImageInfo({ src: src });
 
     Promise.all([qrcodePromise, backgroundPromise]).then(
       ([qrcode, background]) => {
-        const ctx = Taro.createCanvasContext('share', this.$scope);
+        if (!this.ctx) {
+          this.ctx = Taro.createCanvasContext('share', this.$scope);
+        }
         const canvasWidth = Rpx2px(300 * 2 * 3);
         const canvasHeight = Rpx2px(450 * 2 * 3);
+
+        this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
         // 绘制背景，填充满整个canvas画布
         const bg = `${this.props.isLocal ? '../../' : ''}${background.path}`;
-        ctx.drawImage(`${bg}`, 0, 0, canvasWidth, canvasHeight);
+        this.ctx.drawImage(`${bg}`, 0, 0, canvasWidth, canvasHeight);
 
+        this.ctx.save()
         // 添加一层遮罩
-        ctx.setFillStyle('rgba(0, 0, 0, 0.15)');
+        this.ctx.setFillStyle('rgba(0, 0, 0, 0.25)');
+        this.ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
         // 绘制二维码
+        this.ctx.restore()
         const qrWidth = Rpx2px(35 * 2 * 3);
         const qrHeight = Rpx2px(35 * 2 * 3);
-        ctx.drawImage(
+        this.ctx.drawImage(
           `../../${qrcode.path}`,
           canvasWidth - qrWidth - Rpx2px(10 * 2 * 3),
           canvasHeight - qrHeight - Rpx2px(10 * 2 * 3),
@@ -165,38 +186,36 @@ class ShareMoment extends Component<IShareMomentProps, IShareMomentState> {
           qrHeight
         );
 
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
         // 绘制text 从下往上
-        ctx.setTextAlign('center');
-        ctx.setFillStyle('rgba(256, 256, 256, 0.75)');
+        this.ctx.setTextAlign('center');
+        this.ctx.setFillStyle('rgba(256, 256, 256, 0.8)');
         // author
         let author = quote.from;
-        ctx.setFontSize(Rpx2px(12 * 2 * 3));
+        this.ctx.setFontSize(Rpx2px(11 * 2 * 3));
         author = `「 ${author} 」`;
-        ctx.fillText(
+        this.ctx.fillText(
           author,
           canvasWidth / 2,
           canvasHeight - Rpx2px(40 * 2 * 3)
         );
-        ctx.setFillStyle('rgba(256, 256, 256, 0.85)');
-        ctx.setFontSize(Rpx2px(15 * 2 * 3));
+        // this.ctx.setFillStyle('rgba(256, 256, 256, 0.85)');
+        this.ctx.setFontSize(Rpx2px(15 * 2 * 3));
         text2print.reverse();
         text2print.forEach((t, index) => {
           if (index == 0) t = `${t} ”`;
           if (index == text2print.length - 1) {
             t = `“ ${t}`;
           }
-          ctx.fillText(
+          this.ctx.fillText(
             t,
             canvasWidth / 2,
             canvasHeight - Rpx2px((index * 20 + 80) * 2 * 3)
           );
         });
 
-        ctx.stroke();
+        // this.ctx.stroke();
         // 完成作画
-        ctx.draw(false, () => {
+        this.ctx.draw(false, () => {
           this.canvasToTempFilePath(
             {
               canvasId: 'share'

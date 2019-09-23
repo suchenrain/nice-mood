@@ -25,6 +25,18 @@
 }
 
 
+.fadeIn {
+  transition: opacity 3000ms linear 300ms !important;
+  opacity: 1 !important;
+
+}
+
+.fadeOut {
+  transition: opacity 3000ms linear 300ms;
+  opacity: 0 !important;
+}
+
+
 $icon-wh:50rpx;
 
 .twink {
@@ -42,7 +54,9 @@ $icon-wh:50rpx;
     width: 100%;
     min-height: 100vh;
 
-
+    .show {
+      opacity: 1 !important;
+    }
 
     .daily-image-wrap {
       position: fixed;
@@ -58,14 +72,21 @@ $icon-wh:50rpx;
         height: 100%;
         width: 100%;
         opacity: 0;
-        // z-index: 2;
+        z-index: 2;
         position: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        transition-property: background-image;
+        transition-duration: 3s;
+        transition-timing-function: ease-in-out;
+        transition-delay: 100ms;
 
         &-default {
           opacity: 1;
           height: 100%;
           width: 100%;
-          // z-index: 1;
+          z-index: 1;
           position: fixed;
         }
       }
@@ -88,26 +109,32 @@ $icon-wh:50rpx;
       color: #fff;
       display: flex;
       flex-direction: column;
-      justify-content: first baseline;
+      justify-content: space-between;
       align-items: center;
+      padding-top: 11vh;
+      height: 84vh;
 
       >.index-title {
         text-align: center;
         position: fixed;
-        top: 64rpx;
+        top: 5.2vh;
         width: 100%;
         line-height: 35rpx;
         display: block;
         font-size: 38rpx;
       }
 
+      >.search-bar-wrap {
+        width: 90%;
+      }
+
       >.top-wrap {
         width: 90%;
-        height: 200rpx;
+        height: 170rpx;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        margin-top: 150rpx;
+        margin-top: 40rpx;
 
 
         .user-wrap {
@@ -211,7 +238,7 @@ $icon-wh:50rpx;
 
 
       >.clock-wrap {
-        margin-top: 110rpx;
+        margin-top: 40rpx;
         opacity: 0;
       }
 
@@ -224,7 +251,8 @@ $icon-wh:50rpx;
         width: 40vw;
         height: 80rpx;
         opacity: 0.75;
-        margin-top: 66rpx;
+        margin-top: 40rpx;
+        margin-bottom: 26rpx;
         position: relative;
         z-index: 2;
 
@@ -246,7 +274,7 @@ $icon-wh:50rpx;
         max-width: 85vw;
         margin-top: 100rpx;
         opacity: 0;
-        min-height: 200rpx;
+        height: 300rpx;
 
 
         .quote-info {
@@ -290,11 +318,11 @@ $icon-wh:50rpx;
       bottom: 0;
       width: 100%;
       margin-bottom: 15px;
-      
+
       font-size: 28rpx;
       text-align: center;
       z-index: 999;
-  
+
       &__link {
         display: inline-block;
         vertical-align: top;
@@ -303,7 +331,7 @@ $icon-wh:50rpx;
         color: #6190e8;
         display: none;
       }
-  
+
       &__text {
         padding: 0 0.34em;
         font-size: 24rpx;

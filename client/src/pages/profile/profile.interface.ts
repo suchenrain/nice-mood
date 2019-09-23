@@ -8,13 +8,11 @@ import { IQuote, DvaLoading, IPhoto } from '@/types';
  */
 export interface IProfileState {
   current: number;
-  quotePageIndex: number;
-  photoPageIndex: number;
+  photoTimeLine: string;
+  quoteTimeLine:string;
   activeQuoteId: number;
   quoteInited: boolean;
   photoInited: boolean;
-  nomoreQuote: boolean;
-  nomorePhoto: boolean;
   photoToBeRemove:string;
   photoConfirmRemove:boolean;
   tabTopHeight:number;
@@ -30,8 +28,8 @@ export interface IProfileState {
 export interface IProfileProps {
   quotes: Array<IQuote>;
   photos: Array<IPhoto>;
-  totalPhotoPage: number;
-  totalQuotePage: number;
+  nomorePhoto:boolean;
+  nomoreQuote: boolean;
   dispatch: any;
   loading: DvaLoading;
 }
