@@ -21,7 +21,7 @@ Copyright (C) 2019 suchenrain
 - 24 小时问候语
 - 实时天气数据：由[和风天气](http://www.heweather.com/)提供数据，需要提前注册获取`key`。
 - 随机一言：[Hitokoto](https://hitokoto.cn/)提供数据。
-- 每日一图：图片源自全球知名的[Unsplash](https://unsplash.com)。因为微信小程序 request 合法域名限制(最多 5 个且国内备案)，如何解决这个问题可以查看本应用的[开发总结系列]()文章。
+- 随机一图：图片源自全球知名的[Unsplash](https://unsplash.com)。因为微信小程序 request 合法域名限制(最多 5 个且国内备案)，如何解决这个问题可以查看本应用的[开发总结系列]()文章。
 - 收藏：喜欢的文字和图片可以加入个人收藏，并在收藏页管理。
 
 如果想了解更多，请移步[NiceMood 开发总结系列]()
@@ -29,13 +29,13 @@ Copyright (C) 2019 suchenrain
 ## 运行截图
 
 <div>
-<img src="https://user-images.githubusercontent.com/7972688/64686852-f1ab0280-d4bb-11e9-970e-9e03b573daeb.png" width="400px"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687484-2e2b2e00-d4bd-11e9-8023-3c48e1be010d.png" width="400px"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687485-2e2b2e00-d4bd-11e9-9c52-3ce770f23905.png" width="400px"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687486-2e2b2e00-d4bd-11e9-8cb4-382770b66691.png" width="400px"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687487-2ec3c480-d4bd-11e9-8bd7-18c411f3f2d9.png" width="400px"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687488-2ec3c480-d4bd-11e9-93c7-0147bfa1660c.png" width="400px"/>
-<img src="https://user-images.githubusercontent.com/7972688/64687489-2ec3c480-d4bd-11e9-9bee-d8574fb5add7.png" width="400px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64686852-f1ab0280-d4bb-11e9-970e-9e03b573daeb.png" width="300px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687484-2e2b2e00-d4bd-11e9-8023-3c48e1be010d.png" width="300px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687485-2e2b2e00-d4bd-11e9-9c52-3ce770f23905.png" width="300px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687486-2e2b2e00-d4bd-11e9-8cb4-382770b66691.png" width="300px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687487-2ec3c480-d4bd-11e9-8bd7-18c411f3f2d9.png" width="300px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687488-2ec3c480-d4bd-11e9-93c7-0147bfa1660c.png" width="300px"/>
+<img src="https://user-images.githubusercontent.com/7972688/64687489-2ec3c480-d4bd-11e9-9bee-d8574fb5add7.png" width="300px"/>
 
 </div>
 
